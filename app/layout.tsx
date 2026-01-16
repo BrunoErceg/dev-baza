@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { getServerSession } from "next-auth";
 import SessionProvider from "../components/SessionProvider";
-import { NavMenu } from "@/layout/NavMenu";
 import { authOptions } from "./api/auth/[...nextauth]/route";
 
 export const metadata: Metadata = {
@@ -19,11 +18,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`antialiased`}>
-        {" "}
-        <SessionProvider session={session}>
-          <NavMenu />
-          <main>{children}</main>
-        </SessionProvider>
+        <SessionProvider session={session}>{children}</SessionProvider>
       </body>
     </html>
   );
