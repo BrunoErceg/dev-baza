@@ -9,6 +9,7 @@ const AuthButton = () => {
         Not signed in <br />
         <button onClick={() => signIn("github")}>Github Sign in</button>
         <button onClick={() => signIn("google")}>Google Sign in</button>
+        <button onClick={() => signIn("email")}>Email Sign in</button>
       </>
     );
   }
