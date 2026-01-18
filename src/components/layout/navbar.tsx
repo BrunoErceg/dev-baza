@@ -1,10 +1,10 @@
-import { Button } from "@/src/components/ui/button";
-import { Logo } from "@/src/components/logo";
-import { NavMenu } from "@/src/components/nav-menu";
-import { NavigationSheet } from "@/src/components/navigation-sheet";
+import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/logo";
+import { NavMenu } from "@/components/nav-menu";
+import { NavigationSheet } from "@/components/navigation-sheet";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { signIn } from "@/src/auth";
+import { signIn } from "@/auth";
 const Navbar = () => {
   /*
   const { data: session } = useSession();

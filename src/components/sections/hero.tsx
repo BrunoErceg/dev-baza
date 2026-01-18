@@ -1,7 +1,7 @@
-import AnimatedGridPattern from "@/src/components/ui/animated-grid-pattern";
-import { Badge } from "@/src/components/ui/badge";
-import { Button } from "@/src/components/ui/button";
-import { cn } from "@/src/lib/utils";
+import AnimatedGridPattern from "@/components/ui/animated-grid-pattern";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { ArrowUpRight, CirclePlay } from "lucide-react";
 import Link from "next/link";
 
