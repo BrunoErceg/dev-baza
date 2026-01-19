@@ -13,20 +13,22 @@ import { signIn, useSession } from "next-auth/react";
 
 const formSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(8, "Password must be at least 8 characters long"),
 });
 const Login = () => {
   const { data: session } = useSession();
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
       email: "",
-      password: "",
     },
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    // Dodajemo email iz forme u signIn metodu
+    await signIn("resend", {
+      email: data.email,
+      callbackUrl: "/profile",
+    });
   };
 
   return (
