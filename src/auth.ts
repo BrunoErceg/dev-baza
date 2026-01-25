@@ -10,6 +10,10 @@ import NextAuth from "next-auth";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
+  pages: {
+    signIn: "/login", // Preusmjeri na tvoju stranicu
+    newUser: "/register", // Ako želiš poseban page za nove korisnike
+  },
   callbacks: {
     async jwt({ token, user, trigger, session }: { token: JWT; user: any; trigger: string; session: any }) {
       if (user) {
