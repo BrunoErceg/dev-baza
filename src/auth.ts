@@ -11,10 +11,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   callbacks: {
-    async jwt({ token, user }: { token: JWT; user: any }) {
+    async jwt({ token, user, trigger, session }: { token: JWT; user: any; trigger: string; session: any }) {
       if (user) {
         token.role = (user as any).role;
         return token;
+      }
+
+      if (trigger === "update" && session?.name) {
+        token.name = session.name;
       }
 
       if (!token.role && token.email) {
@@ -32,6 +36,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async session({ session, token }: { session: any; token: JWT }) {
       if (token.role && session.user) {
         session.user.role = token.role as "ADMIN" | "USER";
+      }
+      if (token.sub && session.user) {
+        session.user.id = token.sub; // 'sub' je ID korisnika iz baze/tokena
       }
       return session;
     },

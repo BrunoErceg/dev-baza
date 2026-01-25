@@ -19,12 +19,39 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  websites      Website[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
   role          Role            @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+enum WebsiteStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum WebsiteType {
+  PORTFOLIO
+  WORK
+}
+
+model Website {
+  id        String        @id @default(cuid())
+  url       String
+  name      String
+  userId    String
+  type      WebsiteType
+  image     String
+  likes     Int           @default(0)
+  status    WebsiteStatus @default(PENDING)
+
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime      @default(now())
+}
+
  
 model Account {
   userId            String
