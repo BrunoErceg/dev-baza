@@ -9,9 +9,14 @@ import { Input } from "@/components/ui/input";
 import { updateUsername } from "@/actions/update-user";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters.").max(32, "Name must be at most 32 characters."),
+  name: z
+    .string()
+    .min(3, "Ime mora imati barem 3 znaka.")
+    .max(32, "Ime može imati najviše 32 znaka.")
+    .regex(/^[a-zA-ZčćžšđČĆŽŠĐ]+\s+[a-zA-ZčćžšđČĆŽŠĐ]+.*$/, "Unesite ispravno ime i prezime (razmak između)."),
 });
 
 export function NameForm() {
@@ -28,40 +33,34 @@ export function NameForm() {
     const name = data.name;
     const result = await updateUsername(name);
     if (result.success) {
-      update({ name: data.name });
+      await update({ name: data.name });
       router.refresh();
+      toast.success(result.success);
     }
-    if (result.error) alert(result.error);
+    if (result.error) toast.error(result.error);
   }
 
   return (
-    <>
-      <form id="form-rhf-demo" onSubmit={form.handleSubmit(onSubmit)}>
-        <FieldGroup>
-          <Controller
-            name="name"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="form-rhf-demo-title">Change Name</FieldLabel>
-                <Input
-                  {...field}
-                  id="form-rhf-demo-title"
-                  aria-invalid={fieldState.invalid}
-                  placeholder="Enter new name"
-                  autoComplete="off"
-                />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-              </Field>
-            )}
-          />
-        </FieldGroup>
+    <form id="form-change-name" onSubmit={form.handleSubmit(onSubmit)}>
+      <FieldGroup>
+        <Controller
+          name="name"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="form-change-name">Promijeni ime</FieldLabel>
+              <Input {...field} id="form-change-name" aria-invalid={fieldState.invalid} placeholder="Unesite novo ime" autoComplete="off" />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+
         <Field orientation="horizontal">
-          <Button type="submit" form="form-rhf-demo">
-            Save
+          <Button type="submit" form="form-change-name">
+            Spremi
           </Button>
         </Field>
-      </form>
-    </>
+      </FieldGroup>
+    </form>
   );
 }

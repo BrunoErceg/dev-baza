@@ -16,7 +16,7 @@ model User {
   name          String?
   email         String          @unique
   emailVerified DateTime?
-  image         String?
+  image         String?         @default("https://jrgxq33rwp.ufs.sh/f/BNaNzrQS3KNeOIpQ9sfX6YjFCOQ0PUb84RtzAZJkh3B95pvN")
   accounts      Account[]
   sessions      Session[]
   websites      Website[]
@@ -43,8 +43,9 @@ model Website {
   url       String
   name      String
   userId    String
+  author    String
   type      WebsiteType
-  image     String
+  imageUrl  String
   likes     Int           @default(0)
   status    WebsiteStatus @default(PENDING)
 

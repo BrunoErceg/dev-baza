@@ -10,7 +10,6 @@ import { LogoutButton } from "@/components/navigation/logout-button";
 
 export async function Navbar() {
   const session = await auth();
-  console.log(session);
   return (
     <nav className="h-16 bg-[#f7f7f7]">
       <div className="mx-auto flex h-full max-w-(--breakpoint-xl) items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -26,9 +25,9 @@ export async function Navbar() {
         <div className="flex items-center gap-3">
           {session ? (
             <>
-              <Link href="/profile">
+              <Link href="/dashboard">
                 <Avatar>
-                  <AvatarImage src="./default-avatar.jpg" />
+                  <AvatarImage src="https://jrgxq33rwp.ufs.sh/f/BNaNzrQS3KNeOIpQ9sfX6YjFCOQ0PUb84RtzAZJkh3B95pvN" />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
               </Link>

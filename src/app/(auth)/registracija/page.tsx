@@ -28,7 +28,7 @@ const Register = () => {
     // Dodajemo email iz forme u signIn metodu
     await signIn("resend", {
       email: data.email,
-      callbackUrl: "/profile",
+      callbackUrl: "/dashboard",
     });
   };
 
@@ -37,11 +37,11 @@ const Register = () => {
       <div className="max-w-xs m-auto w-full flex flex-col items-center">
         <Logo />
         <Large className="mt-4">Registriraj se u Dev Bazu</Large>
-        <Button onClick={() => signIn("google", { redirectTo: "/profile" })} className="mt-8 w-full gap-3">
+        <Button onClick={() => signIn("google", { redirectTo: "/dashboard" })} className="mt-8 w-full gap-3">
           <GoogleLogo />
           Nastavi putem Googlea
         </Button>
-        <Button onClick={() => signIn("github", { redirectTo: "/profile" })} className="mt-3 w-full gap-3">
+        <Button onClick={() => signIn("github", { redirectTo: "/dashboard" })} className="mt-3 w-full gap-3">
           <GitHubLogo />
           Nastavi putem GitHuba
         </Button>
