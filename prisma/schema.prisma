@@ -13,18 +13,23 @@ enum Role {
  
 model User {
   id            String          @id @default(cuid())
-  name          String?
+  name          String
   email         String          @unique
   emailVerified DateTime?
-  image         String?         @default("https://jrgxq33rwp.ufs.sh/f/BNaNzrQS3KNeOIpQ9sfX6YjFCOQ0PUb84RtzAZJkh3B95pvN")
+  image         String         @default("https://jrgxq33rwp.ufs.sh/f/BNaNzrQS3KNeOIpQ9sfX6YjFCOQ0PUb84RtzAZJkh3B95pvN")
+  number        String?
+  emailContact  String?
+  website       String?
+  company       String?
   accounts      Account[]
   sessions      Session[]
   websites      Website[]
+  likes         Like[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
   role          Role            @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
 }
 
 enum WebsiteStatus {
@@ -33,20 +38,25 @@ enum WebsiteStatus {
   REJECTED
 }
 
-enum WebsiteType {
-  PORTFOLIO
-  WORK
+ 
+
+model Like {
+  id        String        @id @default(cuid())
+  userId    String
+  websiteId String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  website   Website       @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  createdAt DateTime      @default(now())
 }
 
 model Website {
   id        String        @id @default(cuid())
   url       String
   name      String
-  userId    String
-  author    String
-  type      WebsiteType
+  userId    String 
   imageUrl  String
-  likes     Int           @default(0)
+  views     Int           @default(0)
+  likedBy   Like[]
   status    WebsiteStatus @default(PENDING)
 
   user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)

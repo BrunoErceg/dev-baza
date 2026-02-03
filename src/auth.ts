@@ -38,6 +38,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async session({ session, token }: { session: Session; token: JWT }) {
       session.user.id = token.id;
+      session.user.role = token.role;
       delete session.user.image;
       return session;
     },

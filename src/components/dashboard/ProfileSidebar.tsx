@@ -1,3 +1,4 @@
+import { Separator } from "../ui/separator";
 import { Muted, H2, H3 } from "../ui/typography";
 
 export async function ProfileSidebar({ name }: { name?: string | null }) {

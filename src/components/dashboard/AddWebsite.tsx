@@ -7,7 +7,7 @@ export function AddWebsite() {
       <DialogTrigger asChild>
         <Button>Dodaj web-stranicu</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[925px] flex flex-col gap-10">
+      <DialogContent className="max-w-125 flex flex-col gap-10">
         <DialogHeader>
           <DialogTitle>Dodaj web-stranicu</DialogTitle>
           <DialogDescription>Popunite sva polja u nastavku kako biste dodali novu web stranicu.</DialogDescription>

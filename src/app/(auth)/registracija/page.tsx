@@ -12,6 +12,7 @@ import { z } from "zod";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { Large } from "@/components/ui/typography";
+import { Card } from "@/components/ui/card";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -33,20 +34,20 @@ const Register = () => {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center">
-      <div className="max-w-xs m-auto w-full flex flex-col items-center">
+    <div className="py-[10%] flex items-center justify-center">
+      <Card className="max-w-md m-auto w-full flex flex-col items-center px-10">
         <Logo />
-        <Large className="mt-4">Registriraj se u Dev Bazu</Large>
-        <Button onClick={() => signIn("google", { redirectTo: "/dashboard" })} className="mt-8 w-full gap-3">
+        <Large>Registriraj se u Dev Bazu</Large>
+        <Button onClick={() => signIn("google", { redirectTo: "/dashboard" })} className=" w-full gap-3">
           <GoogleLogo />
           Nastavi putem Googlea
         </Button>
-        <Button onClick={() => signIn("github", { redirectTo: "/dashboard" })} className="mt-3 w-full gap-3">
+        <Button onClick={() => signIn("github", { redirectTo: "/dashboard" })} className="  w-full gap-3">
           <GitHubLogo />
           Nastavi putem GitHuba
         </Button>
 
-        <div className="my-7 w-full flex items-center justify-center overflow-hidden">
+        <div className="w-full flex items-center justify-center overflow-hidden">
           <Separator />
           <span className="text-sm px-2">ili</span>
           <Separator />
@@ -81,7 +82,7 @@ const Register = () => {
             </Link>
           </p>
         </div>
-      </div>
+      </Card>
     </div>
   );
 };

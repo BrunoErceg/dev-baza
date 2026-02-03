@@ -1,7 +1,8 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
-export const updateUsername = async (newName: string) => {
+import { profileFormValues } from "@/components/blocks/ProfileForm";
+export const updateProfile = async (data: profileFormValues) => {
   const session = await auth();
   if (!session?.user?.id) {
     return { error: "Niste prijavljeni!" };
@@ -10,9 +11,9 @@ export const updateUsername = async (newName: string) => {
   try {
     await prisma.user.update({
       where: { id: session.user.id },
-      data: { name: newName },
+      data: { name: data.name, number: data.phone, emailContact: data.email, website: data.website, company: data.company },
     });
-    return { success: "Ime uspješno ažurirano!" };
+    return { success: "Profil uspješno ažurirano!" };
   } catch (error) {
     return { error: "Greška pri spremanju u bazu." };
   }

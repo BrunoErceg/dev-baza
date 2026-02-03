@@ -9,10 +9,13 @@ import { TableCaption, Table, TableHeader, TableRow, TableHead, TableBody, Table
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import Link from "next/link";
 import { DeleteWebsiteButton } from "./DeleteWebsiteButton";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "../ui/hover-card";
+import { P } from "../ui/typography";
+import Image from "next/image";
 
 export async function YourWebsites({ userid }: { userid: string }) {
   const websites = await getUserWebsites(userid);
-  console.log(websites);
+
   return (
     <>
       {websites.length == 0 ? (
@@ -33,10 +36,13 @@ export async function YourWebsites({ userid }: { userid: string }) {
           </Empty>
         </Card>
       ) : (
-        <Card className="relative rounded-4xl">
+        <Card key={websites.length} className="relative rounded-4xl">
           <CardHeader>
-            <CardTitle>Login to your account</CardTitle>
-            <CardDescription>Enter your email below to login to your account</CardDescription>
+            <CardTitle>Vaše web stranice</CardTitle>
+            <CardDescription>Upravljajte svojim projektima.</CardDescription>
+            <CardAction>
+              <AddWebsite />
+            </CardAction>
           </CardHeader>
           <CardContent>
             <Table>
@@ -51,7 +57,23 @@ export async function YourWebsites({ userid }: { userid: string }) {
               <TableBody>
                 {websites.map((website) => (
                   <TableRow key={website.id}>
-                    <TableCell className="font-medium">{website.name}</TableCell>
+                    <TableCell className="font-medium">
+                      <HoverCard openDelay={10} closeDelay={100}>
+                        <HoverCardTrigger asChild>
+                          <P className="cursor-pointer w-fit">{website.name}</P>
+                        </HoverCardTrigger>
+                        <HoverCardContent side="top" className="flex   w-80 h-64">
+                          <Image
+                            src={website.imageUrl}
+                            alt="Website"
+                            width={320}
+                            height={256}
+                            priority
+                            className="rounded-lg w-80 h-56 object-cover "
+                          />
+                        </HoverCardContent>
+                      </HoverCard>
+                    </TableCell>
                     <TableCell>
                       <Link href={website.url} target="_blank">
                         {website.url}

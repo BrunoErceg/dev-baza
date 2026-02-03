@@ -1,4 +1,5 @@
 "use client";
+import deleteWebsite from "@/actions/delete-website";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -10,10 +11,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export function DeleteWebsiteButton({ id, name }: { id: string; name: string }) {
-  const handelDelete = () => {
-    console.log("deleted website " + name + " sa id " + id);
+  const router = useRouter();
+  const handelDelete = async () => {
+    const result = await deleteWebsite(id);
+    if (result.success) {
+      toast.success(result.success);
+      router.refresh();
+    }
+    if (result.error) toast.error(result.error);
   };
   return (
     <Dialog>

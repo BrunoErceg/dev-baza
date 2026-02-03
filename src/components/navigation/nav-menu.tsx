@@ -12,26 +12,26 @@ import {
 
 export const NavMenu = (props: ComponentProps<typeof NavigationMenu>) => (
   <NavigationMenu {...props}>
-    <NavigationMenuList className="data-[orientation=vertical]:-ms-2 data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-start data-[orientation=vertical]:justify-start">
+    <NavigationMenuList className="flex gap-5 data-[orientation=vertical]:-ms-2 data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-start data-[orientation=vertical]:justify-start">
       <NavigationMenuItem>
-        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-          <Link href="/">Početna</Link>
-        </NavigationMenuLink>
+        <Link className="text-gray-900 font-semibold hover:text-gray-500 duration-150" href="/">
+          Početna
+        </Link>
       </NavigationMenuItem>
       <NavigationMenuItem>
-        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-          <Link href="#">Istraži</Link>
-        </NavigationMenuLink>
+        <Link className="text-gray-900 font-semibold hover:text-gray-500 duration-150" href="#">
+          Istraži
+        </Link>
       </NavigationMenuItem>
       <NavigationMenuItem>
-        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-          <Link href="#">O nama</Link>
-        </NavigationMenuLink>
+        <Link className="text-gray-900 font-semibold hover:text-gray-500 duration-150" href="#">
+          O nama
+        </Link>
       </NavigationMenuItem>
       <NavigationMenuItem>
-        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-          <Link href="#">Kontakt</Link>
-        </NavigationMenuLink>
+        <Link className="text-gray-900 font-semibold hover:text-gray-500 duration-150" href="#">
+          Kontakt
+        </Link>
       </NavigationMenuItem>
     </NavigationMenuList>
   </NavigationMenu>
