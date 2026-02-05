@@ -1,7 +1,7 @@
-import { AddWebsiteForm } from "../blocks/AddWebsiteForm";
+import { AddWebsiteForm } from "../forms/AddWebsiteForm";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-export function AddWebsite() {
+export function DashboardAddWebsite() {
   return (
     <Dialog>
       <DialogTrigger asChild>

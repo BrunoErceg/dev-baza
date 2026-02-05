@@ -1,16 +1,16 @@
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../ui/card";
-import { TableHeader, TableRow, TableHead, TableBody, TableCell, Table } from "../ui/table";
-import { P } from "../ui/typography";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../../ui/card";
+import { TableHeader, TableRow, TableHead, TableBody, TableCell, Table } from "../../ui/table";
+import { P } from "../../ui/typography";
 import Link from "next/link";
 import Image from "next/image";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "../ui/hover-card";
-import { ButtonReject } from "./ButtonReject";
-import { ButtonAccept } from "./ButtonAccept";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "../../ui/hover-card";
 import { Website } from "@prisma/client";
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "../ui/empty";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "../../ui/empty";
 import { MdWebAsset } from "react-icons/md";
+import { DashboardApprovedWebsiteButton } from "./dashboard-approved-website-button";
+import { DashboardRejectWebsiteButton } from "./dashboard-reject-website-button";
 
-export function WebsitesApproval({ websites }: { websites: Website[] }) {
+export function DashboardAdmin({ websites }: { websites: Website[] }) {
   return (
     <>
       {websites.length == 0 ? (
@@ -69,8 +69,8 @@ export function WebsitesApproval({ websites }: { websites: Website[] }) {
                     </TableCell>
 
                     <TableCell className="text-right">
-                      <ButtonAccept websiteId={website.id} />
-                      <ButtonReject websiteId={website.id} />
+                      <DashboardApprovedWebsiteButton websiteId={website.id} />
+                      <DashboardRejectWebsiteButton websiteId={website.id} />
                     </TableCell>
                   </TableRow>
                 ))}

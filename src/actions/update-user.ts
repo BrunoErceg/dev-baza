@@ -1,7 +1,7 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
-import { profileFormValues } from "@/components/blocks/ProfileForm";
+import { profileFormValues } from "@/components/forms/ProfileForm";
 export const updateProfile = async (data: profileFormValues) => {
   const session = await auth();
   if (!session?.user?.id) {

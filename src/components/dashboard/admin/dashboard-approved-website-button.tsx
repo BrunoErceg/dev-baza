@@ -1,10 +1,10 @@
 "use client";
 import { acceptWebsite } from "@/actions/accept-website";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-export function ButtonAccept({ websiteId }: { websiteId: string }) {
+export function DashboardApprovedWebsiteButton({ websiteId }: { websiteId: string }) {
   const router = useRouter();
   const handleAccept = async (websiteId: string) => {
     const results = await acceptWebsite(websiteId);

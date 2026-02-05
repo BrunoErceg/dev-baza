@@ -22,7 +22,7 @@ export function Lead({ children }: { children: ReactNode }) {
 }
 
 export function Large({ children, className }: { children: ReactNode; className?: string }) {
-  return <div className={cn("text-lg font-semibold", className)}>{children}</div>;
+  return <p className={cn("text-lg font-semibold", className)}>{children}</p>;
 }
 
 export function Small({ children }: { children: ReactNode }) {

@@ -26,7 +26,6 @@ const formSchema = z.object({
 export type profileFormValues = z.infer<typeof formSchema>;
 export function ProfileForm({ user }: { user: User }) {
   const { update } = useSession();
-  console.log(user);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({

@@ -38,7 +38,29 @@ enum WebsiteStatus {
   REJECTED
 }
 
- 
+enum Category {
+  TURIZAM
+  GASTRONOMIJA
+  TEHNOLOGIJA
+  NEKRETNINE
+  ZDRAVLJE
+  TRGOVINA
+  OBRAZOVANJE
+  SPORT
+  USLUGE
+  AUTOMOTO
+  OSTALO
+}
+
+enum Style {
+  MINIMALISTICKI
+  MODERAN
+  RETRO
+  ELEGANTAN
+  KORPORATIVNI
+  KREATIVAN
+  OSTALO
+}
 
 model Like {
   id        String        @id @default(cuid())
@@ -55,6 +77,8 @@ model Website {
   name      String
   userId    String 
   imageUrl  String
+  category  Category      @default(OSTALO)
+  style     Style         @default(OSTALO)
   views     Int           @default(0)
   likedBy   Like[]
   status    WebsiteStatus @default(PENDING)

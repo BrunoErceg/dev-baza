@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { rejectWebsite } from "@/actions/reject-website";
 
-export function ButtonReject({ websiteId }: { websiteId: string }) {
+export function DashboardRejectWebsiteButton({ websiteId }: { websiteId: string }) {
   const router = useRouter();
   const handleReject = async (websiteId: string) => {
     const results = await rejectWebsite(websiteId);

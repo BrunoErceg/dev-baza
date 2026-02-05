@@ -1,7 +1,7 @@
-import { Large, Muted } from "../ui/typography";
+import { Large, Muted } from "../../ui/typography";
 import { IoEyeSharp } from "react-icons/io5";
 import { VscHeartFilled } from "react-icons/vsc";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import Link from "next/link";
 
 export function WebsiteFooter({ author, avatar, likes, views }: { author: string; avatar: string; likes: number; views: number }) {

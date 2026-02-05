@@ -1,9 +1,9 @@
 import { User } from "@prisma/client";
-import { ProfileForm } from "../blocks/ProfileForm";
+import { ProfileForm } from "../forms/ProfileForm";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { P, Muted } from "../ui/typography";
-import { ProfileAvatar } from "./ProfileAvatar";
-export default function ProfileSettings({ user }: { user: User }) {
+import { DashboardAvatar } from "./dashboard-avatar";
+export default function DashboardSettings({ user }: { user: User }) {
   return (
     <Card className="flex gap-5 flex-col">
       <CardHeader>
@@ -13,7 +13,7 @@ export default function ProfileSettings({ user }: { user: User }) {
 
       <CardContent className="flex flex-col gap-5">
         <div className="flex gap-7 items-center">
-          <ProfileAvatar image={user.image} />
+          <DashboardAvatar image={user.image} />
           <div>
             <P>{user.name}</P>
             <Muted>{user.email}</Muted>

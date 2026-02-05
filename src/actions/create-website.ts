@@ -1,7 +1,7 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
-import { WebsiteValues } from "@/components/blocks/AddWebsiteForm";
+import { WebsiteValues } from "@/components/forms/AddWebsiteForm";
 
 export const createWebsite = async (newWebsite: WebsiteValues) => {
   const session = await auth();
@@ -17,8 +17,8 @@ export const createWebsite = async (newWebsite: WebsiteValues) => {
         name: newWebsite.name,
         url: newWebsite.url,
         imageUrl: newWebsite.image,
-        author: newWebsite.author,
-        type: newWebsite.type,
+        style: newWebsite.style,
+        category: newWebsite.category,
       },
     });
     return { success: "Web stranica je uspješno dodana!" };

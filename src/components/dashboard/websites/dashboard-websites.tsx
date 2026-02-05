@@ -1,19 +1,18 @@
 import { getUserWebsites } from "@/data/websites";
-import { Card, CardHeader, CardTitle, CardDescription, CardFooter, CardAction, CardContent } from "../ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardDescription, CardAction, CardContent } from "../../ui/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { MdWebAsset } from "react-icons/md";
-import { AddWebsite } from "./AddWebsite";
-import { Badge } from "../ui/badge";
-import { TableCaption, Table, TableHeader, TableRow, TableHead, TableBody, TableCell, TableFooter } from "../ui/table";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { DashboardAddWebsite } from "../dashboard-add-website";
+import { Badge } from "../../ui/badge";
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../ui/table";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
 import Link from "next/link";
-import { DeleteWebsiteButton } from "./DeleteWebsiteButton";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "../ui/hover-card";
-import { P } from "../ui/typography";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "../../ui/hover-card";
+import { P } from "../../ui/typography";
 import Image from "next/image";
+import { DashboardDeleteWebsiteButton } from "./dashboard-delete-website-button";
 
-export async function YourWebsites({ userid }: { userid: string }) {
+export async function DashboardWebsites({ userid }: { userid: string }) {
   const websites = await getUserWebsites(userid);
 
   return (
@@ -31,7 +30,7 @@ export async function YourWebsites({ userid }: { userid: string }) {
               </EmptyDescription>
             </EmptyHeader>
             <EmptyContent className="flex-row justify-center gap-2">
-              <AddWebsite />
+              <DashboardAddWebsite />
             </EmptyContent>
           </Empty>
         </Card>
@@ -41,7 +40,7 @@ export async function YourWebsites({ userid }: { userid: string }) {
             <CardTitle>Vaše web stranice</CardTitle>
             <CardDescription>Upravljajte svojim projektima.</CardDescription>
             <CardAction>
-              <AddWebsite />
+              <DashboardAddWebsite />
             </CardAction>
           </CardHeader>
           <CardContent>
@@ -99,7 +98,7 @@ export async function YourWebsites({ userid }: { userid: string }) {
                       </Tooltip>
                     </TableCell>
                     <TableCell className="text-right">
-                      <DeleteWebsiteButton id={website.id} name={website.name} />
+                      <DashboardDeleteWebsiteButton id={website.id} name={website.name} />
                     </TableCell>
                   </TableRow>
                 ))}

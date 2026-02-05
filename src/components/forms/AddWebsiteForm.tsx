@@ -3,8 +3,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import Image from "next/image";
+import { Category, Style } from "@prisma/client";
 import { Button } from "@/components/ui/button";
-import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { UploadButton } from "@/lib/uploadthing";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -16,20 +17,22 @@ import { AspectRatio } from "../ui/aspect-ratio";
 const formSchema = z.object({
   name: z.string().trim().min(2, "Naziv mora imati barem 2 znaka.").max(32, "Naziv može imati najviše 32 znaka."),
   url: z.url({ message: "Unesite ispravnu URL adresu." }),
-  image: z.string().min(1, "Slika je obavezna."), // Uploadthing vraća URL, min(1) je dovoljno
-  author: z.string().trim().min(2, "Ime autora mora imati barem 2 znaka.").max(32, "Ime autora je predugačko."),
-  type: z.enum(["PORTFOLIO", "WORK"]),
+  image: z.string().min(1, "Slika je obavezna."),
+  category: z.enum(Object.values(Category)),
+  style: z.enum(Object.values(Style)),
 });
-
 export type WebsiteValues = z.infer<typeof formSchema>;
 
 export function AddWebsiteForm() {
   const router = useRouter();
+  console.log(Category);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       url: "",
+      category: "OSTALO",
+      style: "OSTALO",
       image: "",
     },
   });
@@ -84,23 +87,69 @@ export function AddWebsiteForm() {
             )}
           />
         </FieldGroup>
-        <Field className="w-full flex flex-col h-full">
+        <FieldGroup>
+          <Controller
+            name="category"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="website-category">Kategorija</FieldLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <SelectTrigger id="website-category">
+                    <SelectValue placeholder="Odaberite kategoriju" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.values(Category).map((category) => (
+                      <SelectItem key={category} value={category}>
+                        {category}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+        </FieldGroup>
+        <FieldGroup>
+          <Controller
+            name="style"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="website-style">Stil dizajna</FieldLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <SelectTrigger id="website-style">
+                    <SelectValue placeholder="Odaberite stil" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.values(Style).map((style) => (
+                      <SelectItem key={style} value={style}>
+                        {style}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+        </FieldGroup>
+        <Field className="w-full">
           {imageUrl ? (
-            <div className="relative flex flex-col grow">
-              <AspectRatio ratio={8 / 6} className="relative bg-muted group ">
-                <Image src={imageUrl} alt="Preview" width={600} height={480} className="rounded-md object-cover w-full grow" />
-                <Button type="button" variant="destructive" onClick={() => form.setValue("image", "")} className="absolute top-2 right-2">
-                  Izbriši
-                </Button>
-              </AspectRatio>
-            </div>
+            <AspectRatio ratio={8 / 6} className="relative bg-muted group ">
+              <Image src={imageUrl} alt="Preview" width={800} height={600} className="rounded-md h-full object-cover" />
+              <Button type="button" variant="destructive" onClick={() => form.setValue("image", "")} className="absolute top-2 right-2">
+                Izbriši
+              </Button>
+            </AspectRatio>
           ) : (
             <>
               <UploadButton
                 endpoint="imageUploader"
                 appearance={{
                   button: "bg-blue-600 cursor-pointer hover:bg-blue-700 text-white font-bold py-2 px-4 rounded", // Stil samog gumba
-                  container: "border-2 grow h-60 bg-gray-50 rounded-lg border-dashed border-gray-200 p-4", // Stil vanjskog kontejnera
+                  container: "border-2 bg-gray-50 rounded-lg border-dashed border-gray-200 p-4", // Stil vanjskog kontejnera
                   allowedContent: "text-xs text-gray-400 uppercase", // Tekst ispod gumba (npr. "Image (4MB)")
                 }}
                 onClientUploadComplete={(res) => {

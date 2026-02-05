@@ -1,9 +1,8 @@
-import { Separator } from "../ui/separator";
 import { Muted, H2, H3 } from "../ui/typography";
 
-export async function ProfileSidebar({ name }: { name?: string | null }) {
+export async function DashboardSidebar({ name }: { name?: string | null }) {
   return (
-    <div className="w-150 flex flex-col gap-5">
+    <div className="w-250 flex flex-col gap-5">
       <div>
         <Muted>Welcome</Muted>
         <H2 className=" text-4xl -translate-x-1">{name}</H2>

@@ -1,13 +1,13 @@
 import { SunIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
-import { NavMenu } from "@/components/navigation/nav-menu";
-import { NavigationSheet } from "@/components/navigation/navigation-sheet";
+import { NavMenu } from "@/components/layout/navigation/nav-menu";
+import { NavigationSheet } from "@/components/layout/navigation/navigation-sheet";
 import { auth } from "@/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
-import { LogoutButton } from "@/components/navigation/logout-button";
-import { Container } from "./container";
+import { LogoutButton } from "@/components/layout/navigation/logout-button";
+import { Container } from "../container";
 
 export async function Navbar() {
   const session = await auth();

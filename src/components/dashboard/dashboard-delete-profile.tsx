@@ -12,10 +12,10 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { Button } from "../ui/button";
-import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { signOut } from "@/auth";
 
-export function DeleteProfile() {
+export function DashboardDeleteProfile() {
   const deleteProfile = async () => {
     const res = await deleteUser();
     if (res.success) {

@@ -1,8 +1,8 @@
-import { AvatarForm } from "../blocks/AvatarForm";
+import { AvatarForm } from "../forms/AvatarForm";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import Image from "next/image";
-export async function ProfileAvatar({ image }: { image: string }) {
+export async function DashboardAvatar({ image }: { image: string }) {
   return (
     <Dialog>
       <DialogTrigger>
