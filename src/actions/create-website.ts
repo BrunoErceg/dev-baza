@@ -1,7 +1,7 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
-import { WebsiteValues } from "@/components/forms/AddWebsiteForm";
+import { WebsiteValues } from "@/app/dashboard/_components/add-website-form";
 
 export const createWebsite = async (newWebsite: WebsiteValues) => {
   const session = await auth();

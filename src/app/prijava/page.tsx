@@ -15,7 +15,7 @@ import { Large } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 
 const formSchema = z.object({
-  email: z.string().email(),
+  email: z.email(),
 });
 const Login = () => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -26,7 +26,6 @@ const Login = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    // Dodajemo email iz forme u signIn metodu
     await signIn("resend", {
       email: data.email,
       callbackUrl: "/dashboard",

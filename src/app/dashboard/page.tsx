@@ -1,33 +1,29 @@
 import { auth } from "@/auth";
-import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
-import { DashboardDeleteProfile } from "@/components/dashboard/dashboard-delete-profile";
-import { DashboardAdmin } from "@/components/dashboard/admin/dashboard-admin";
-import { DashboardWebsites } from "@/components/dashboard/websites/dashboard-websites";
-import { getProfile } from "@/data/profile";
-import { getPendingWebsites } from "@/data/websites";
 import { redirect } from "next/navigation";
-import DashboardSettings from "@/components/dashboard/dashboard-settings";
-import { Container } from "@/components/layout/container";
+
+import { getProfile } from "@/data/profile";
+import { getPendingWebsites, getUserWebsites } from "@/data/websites";
+
+import { UserWebsitesSection } from "./_components/user-websites-section";
+import { AdminSection } from "./_components/admin-section";
+import { UserDeleteSection } from "./_components/user-delete-section";
+import { ProfileSettings } from "./_components/profile-settings";
 
 export default async function dashboard() {
   const session = await auth();
   const user = await getProfile(session.user.id);
+  const pendingWebsites = await getPendingWebsites();
 
   if (!user) {
     redirect("/api/auth/signin");
   }
-  const pendingWebsites = await getPendingWebsites();
-
+  const websites = await getUserWebsites(user.id);
   return (
-    <Container className="mt-15 flex gap-5">
-      <DashboardSidebar name={user.name} key={user.name} />
-
-      <div className="w-full flex flex-col gap-7">
-        <DashboardSettings user={user} />
-        <DashboardWebsites userid={user?.id} />
-        {user?.role === "ADMIN" && <DashboardAdmin websites={pendingWebsites} />}
-        <DashboardDeleteProfile />
-      </div>
-    </Container>
+    <>
+      <ProfileSettings user={user} />
+      <UserWebsitesSection websites={websites} />
+      <AdminSection websites={pendingWebsites} />
+      <UserDeleteSection />{" "}
+    </>
   );
 }

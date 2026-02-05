@@ -1,21 +1,38 @@
 "use client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import * as z from "zod";
+import { useTransition } from "react";
 import Image from "next/image";
-import { Category, Style } from "@prisma/client";
-import { Button } from "@/components/ui/button";
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { UploadButton } from "@/lib/uploadthing";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { createWebsite } from "@/actions/create-website";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { AspectRatio } from "../ui/aspect-ratio";
+import { Controller, useForm } from "react-hook-form";
+import { UploadButton } from "@/lib/uploadthing";
+import { Category, Style } from "@prisma/client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { toast } from "sonner";
+
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { createWebsite } from "@/actions/create-website";
+import { Button } from "@/components/ui/button";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 const formSchema = z.object({
-  name: z.string().trim().min(2, "Naziv mora imati barem 2 znaka.").max(32, "Naziv može imati najviše 32 znaka."),
+  name: z
+    .string()
+    .trim()
+    .min(2, "Naziv mora imati barem 2 znaka.")
+    .max(32, "Naziv može imati najviše 32 znaka."),
   url: z.url({ message: "Unesite ispravnu URL adresu." }),
   image: z.string().min(1, "Slika je obavezna."),
   category: z.enum(Object.values(Category)),
@@ -25,7 +42,8 @@ export type WebsiteValues = z.infer<typeof formSchema>;
 
 export function AddWebsiteForm() {
   const router = useRouter();
-  console.log(Category);
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,20 +57,24 @@ export function AddWebsiteForm() {
   const imageUrl = form.watch("image");
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    alert("working");
-    const result = await createWebsite(data);
-    if (result.success) {
-      toast.success(result.success);
-      router.refresh();
-    }
-    if (result.error) toast.error(result.error);
+    startTransition(async () => {
+      const result = await createWebsite(data);
+      if (result.success) {
+        toast.success(result.success);
+        router.refresh();
+      } else if (result.error) {
+        toast.error(result.error);
+      }
+    });
   }
 
   return (
     <form
       id="form-add-website"
       className="flex flex-col gap-5"
-      onSubmit={form.handleSubmit(onSubmit, (errors) => console.log("Validation Errors:", errors))}
+      onSubmit={form.handleSubmit(onSubmit, (errors) =>
+        console.log("Validation Errors:", errors),
+      )}
     >
       <div className="flex flex-col gap-5">
         <FieldGroup>
@@ -61,7 +83,9 @@ export function AddWebsiteForm() {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="website-name">Naziv web stranice</FieldLabel>
+                <FieldLabel htmlFor="website-name">
+                  Naziv web stranice
+                </FieldLabel>
                 <Input
                   {...field}
                   id="website-name"
@@ -69,7 +93,9 @@ export function AddWebsiteForm() {
                   placeholder="Unesite naziv web stranice"
                   autoComplete="off"
                 />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
               </Field>
             )}
           />
@@ -81,8 +107,16 @@ export function AddWebsiteForm() {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="website-url">URL adresa</FieldLabel>
-                <Input {...field} id="website-url" aria-invalid={fieldState.invalid} placeholder="Unesite URL adresu" autoComplete="off" />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                <Input
+                  {...field}
+                  id="website-url"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="Unesite URL adresu"
+                  autoComplete="off"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
               </Field>
             )}
           />
@@ -94,7 +128,10 @@ export function AddWebsiteForm() {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="website-category">Kategorija</FieldLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <SelectTrigger id="website-category">
                     <SelectValue placeholder="Odaberite kategoriju" />
                   </SelectTrigger>
@@ -106,7 +143,9 @@ export function AddWebsiteForm() {
                     ))}
                   </SelectContent>
                 </Select>
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
               </Field>
             )}
           />
@@ -118,7 +157,10 @@ export function AddWebsiteForm() {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="website-style">Stil dizajna</FieldLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <SelectTrigger id="website-style">
                     <SelectValue placeholder="Odaberite stil" />
                   </SelectTrigger>
@@ -130,7 +172,9 @@ export function AddWebsiteForm() {
                     ))}
                   </SelectContent>
                 </Select>
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
               </Field>
             )}
           />
@@ -138,8 +182,19 @@ export function AddWebsiteForm() {
         <Field className="w-full">
           {imageUrl ? (
             <AspectRatio ratio={8 / 6} className="relative bg-muted group ">
-              <Image src={imageUrl} alt="Preview" width={800} height={600} className="rounded-md h-full object-cover" />
-              <Button type="button" variant="destructive" onClick={() => form.setValue("image", "")} className="absolute top-2 right-2">
+              <Image
+                src={imageUrl}
+                alt="Preview"
+                width={800}
+                height={600}
+                className="rounded-md h-full object-cover"
+              />
+              <Button
+                type="button"
+                variant="destructive"
+                onClick={() => form.setValue("image", "")}
+                className="absolute top-2 right-2"
+              >
                 Izbriši
               </Button>
             </AspectRatio>
@@ -148,9 +203,11 @@ export function AddWebsiteForm() {
               <UploadButton
                 endpoint="imageUploader"
                 appearance={{
-                  button: "bg-blue-600 cursor-pointer hover:bg-blue-700 text-white font-bold py-2 px-4 rounded", // Stil samog gumba
-                  container: "border-2 bg-gray-50 rounded-lg border-dashed border-gray-200 p-4", // Stil vanjskog kontejnera
-                  allowedContent: "text-xs text-gray-400 uppercase", // Tekst ispod gumba (npr. "Image (4MB)")
+                  button:
+                    "bg-blue-600 cursor-pointer hover:bg-blue-700 text-white font-bold py-2 px-4 rounded",
+                  container:
+                    "border-2 bg-gray-50 rounded-lg border-dashed border-gray-200 p-4",
+                  allowedContent: "text-xs text-gray-400 uppercase",
                 }}
                 onClientUploadComplete={(res) => {
                   form.setValue("image", res[0].ufsUrl);
@@ -165,16 +222,22 @@ export function AddWebsiteForm() {
                     </div>
                   ),
                 }}
-                onUploadError={(error) => alert(error.message)}
+                onUploadError={(error) => {
+                  toast.error(error.message);
+                }}
               />
-              {form.formState.errors.image && <p className="text-red-500 text-sm">{form.formState.errors.image.message}</p>}
+              {form.formState.errors.image && (
+                <p className="text-red-500 text-sm">
+                  {form.formState.errors.image.message}
+                </p>
+              )}
             </>
           )}
         </Field>
       </div>
       <div className="flex justify-end">
-        <Button type="submit" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? "Spremanje..." : "Spremi web-stranicu"}
+        <Button type="submit" disabled={isPending}>
+          {isPending ? "Spremanje..." : "Spremi web-stranicu"}
         </Button>
       </div>
     </form>

@@ -13,6 +13,6 @@ export default async function deleteUser() {
     await prisma.user.delete({ where: { id: session.user.id } });
     return { success: "Korisnik uspješno obrisan!" };
   } catch (error) {
-    return { error: "Greška pri spremanju u bazu." + error };
+    return { error: "Greška pri brisanju u bazu." + error };
   }
 }
