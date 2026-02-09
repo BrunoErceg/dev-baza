@@ -2,7 +2,7 @@
 import { useTransition } from "react";
 import { signOut } from "next-auth/react";
 import { toast } from "sonner";
-import deleteUser from "@/actions/delete-user";
+import deleteUser from "@/actions/user-actions";
 
 import { Button } from "@/components/ui/button";
 import { DashboardCard } from "./dashboard-card";

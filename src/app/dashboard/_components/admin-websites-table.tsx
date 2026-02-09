@@ -5,8 +5,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { rejectWebsite } from "@/actions/reject-website";
-import { acceptWebsite } from "@/actions/accept-website";
+import { acceptWebsite, rejectWebsite } from "@/actions/admin-actions";
 
 import {
   Table,
@@ -23,19 +22,15 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { DashboardDialog } from "./dashboard-dialog";
+import { AdminRejectForm } from "./admin-reject-form";
 
 export function AdminWebsitesTable({ websites }: { websites: Website[] }) {
   const router = useRouter();
 
-  const handleAction = async (
-    websiteId: string,
-    action: "accept" | "reject",
-  ) => {
+  const handleAction = async (websiteId: string) => {
     {
-      const result =
-        action === "accept"
-          ? await acceptWebsite(websiteId)
-          : await rejectWebsite(websiteId);
+      const result = await acceptWebsite(websiteId);
       if (result.success) {
         toast.success(result.success);
         router.refresh();
@@ -46,7 +41,7 @@ export function AdminWebsitesTable({ websites }: { websites: Website[] }) {
   };
 
   return (
-    <Table>
+    <Table key={websites.length}>
       <TableHeader>
         <TableRow>
           <TableHead className="">Ime</TableHead>
@@ -80,13 +75,19 @@ export function AdminWebsitesTable({ websites }: { websites: Website[] }) {
               </Link>
             </TableCell>
 
-            <TableCell className="text-right">
-              <Button onClick={() => handleAction(website.id, "accept")}>
-                Odobri
-              </Button>
-              <Button onClick={() => handleAction(website.id, "reject")}>
-                Odbij
-              </Button>
+            <TableCell className="text-right flex gap-2 justify-end">
+              <Button onClick={() => handleAction(website.id)}>Odobri</Button>
+              <DashboardDialog
+                title="Upiši razlog za odbijanje"
+                description=""
+                cta={
+                  <Button variant="destructive" className="w-fit">
+                    Odbij
+                  </Button>
+                }
+              >
+                <AdminRejectForm websiteId={website.id} />
+              </DashboardDialog>
             </TableCell>
           </TableRow>
         ))}

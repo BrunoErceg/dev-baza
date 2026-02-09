@@ -1,10 +1,8 @@
 import { User } from "@prisma/client";
 
-import { Muted, P } from "@/components/ui/typography";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Large, Muted, P } from "@/components/ui/typography";
 import { DashboardCard } from "./dashboard-card";
 import { UpdateProfileForm } from "./update-profile-form";
-import { DashboardDialog } from "./dashboard-dialog";
 import { UpdateAvatarForm } from "./update-avatar-form";
 
 export function ProfileSettings({ user }: { user: User }) {
@@ -14,20 +12,13 @@ export function ProfileSettings({ user }: { user: User }) {
       description="Upravljajte podacima svog računa."
     >
       <div className="flex gap-7 items-center">
-        <DashboardDialog
-          cta={
-            <Avatar className="w-30 h-30 cursor-pointer">
-              <AvatarImage src={user.image} />
-            </Avatar>
-          }
-          title="Promijenite svoju sliku profila."
-          description=" Promjene će biti vidljive na vašim objavama i profilu."
-        >
-          <UpdateAvatarForm />
-        </DashboardDialog>
+        <UpdateAvatarForm userImage={user.image} />
         <div>
-          <P>{user.name}</P>
-          <Muted>{user.email}</Muted>
+          <Large>Profilna Slika</Large>
+          <Muted>
+            Kliknite na avatar za prijenos nove fotografije.
+            <br /> JPG ili PNG. Maksimalno 4 MB.
+          </Muted>
         </div>
       </div>
       <div>

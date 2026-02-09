@@ -1,21 +1,25 @@
-import { Website } from "@prisma/client";
+import { UserWebsitesWithStats } from "@/data/websites";
+import { MdWebAsset } from "react-icons/md";
+
 import { AddWebsiteDialog } from "./add-website-dialog";
 import { DashboardCard } from "./dashboard-card";
 import { ProfileWebsiteTable } from "./profile-websites-table";
-import { Card } from "@/components/ui/card";
 import {
   Empty,
-  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { MdWebAsset } from "react-icons/md";
 
-export function UserWebsitesSection({ websites }: { websites: Website[] }) {
+export function UserWebsitesSection({
+  websites,
+}: {
+  websites: UserWebsitesWithStats[];
+}) {
   return (
     <DashboardCard
+      key={websites.length}
       title="Vaše web stranice"
       description="Upravljajte svojim projektima."
       cta={<AddWebsiteDialog />}

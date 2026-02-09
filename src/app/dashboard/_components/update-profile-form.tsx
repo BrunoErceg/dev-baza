@@ -5,11 +5,10 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { updateProfile } from "@/actions/update-user";
 import { User } from "@prisma/client";
+import { ProfileFormValues, profileSchema } from "@/lib/schemas";
+import { updateUser } from "@/actions/user-actions";
 
-import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldError,
@@ -17,33 +16,15 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
-const formSchema = z.object({
-  name: z
-    .string()
-    .min(3, "Ime mora imati barem 3 znaka.")
-    .max(32, "Ime može imati najviše 32 znaka."),
-  phone: z
-    .string()
-    .min(3, "Broj mora imati barem 3 znaka.")
-    .max(32, "Broj može imati najviše 32 znaka.")
-    .optional(),
-  email: z.email().optional(),
-  website: z.url("Unesite ispravnu URL adresu.").optional(),
-  company: z
-    .string()
-    .min(3, "Ime kompanije mora imati barem 3 znaka.")
-    .max(32, "Ime kompanije može imati najviše 32 znaka.")
-    .optional(),
-});
-export type profileFormValues = z.infer<typeof formSchema>;
 export function UpdateProfileForm({ user }: { user: User }) {
   const { update } = useSession();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileSchema),
     defaultValues: {
       name: user.name ?? "",
       phone: user.number ?? "",
@@ -53,9 +34,9 @@ export function UpdateProfileForm({ user }: { user: User }) {
     },
   });
 
-  async function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: ProfileFormValues) {
     startTransition(async () => {
-      const result = await updateProfile(data);
+      const result = await updateUser(data);
       if (result.success) {
         await update({ name: data.name });
         router.refresh();

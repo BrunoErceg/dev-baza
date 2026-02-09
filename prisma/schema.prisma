@@ -16,7 +16,7 @@ model User {
   name          String
   email         String          @unique
   emailVerified DateTime?
-  image         String         @default("https://jrgxq33rwp.ufs.sh/f/BNaNzrQS3KNeOIpQ9sfX6YjFCOQ0PUb84RtzAZJkh3B95pvN")
+  image         String          @default("https://jrgxq33rwp.ufs.sh/f/BNaNzrQS3KNeOIpQ9sfX6YjFCOQ0PUb84RtzAZJkh3B95pvN")
   number        String?
   emailContact  String?
   website       String?
@@ -40,14 +40,10 @@ enum WebsiteStatus {
 
 enum Category {
   TURIZAM
-  GASTRONOMIJA
-  TEHNOLOGIJA
+  GASTRONOMIJA 
   NEKRETNINE
   ZDRAVLJE
-  TRGOVINA
-  OBRAZOVANJE
-  SPORT
-  USLUGE
+  BIZNIS
   AUTOMOTO
   OSTALO
 }
@@ -69,11 +65,13 @@ model Like {
   user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   website   Website       @relation(fields: [websiteId], references: [id], onDelete: Cascade)
   createdAt DateTime      @default(now())
+  
+  @@unique([userId, websiteId])
 }
 
 model Website {
   id        String        @id @default(cuid())
-  url       String
+  url       String        @unique
   name      String
   userId    String 
   imageUrl  String
@@ -82,7 +80,7 @@ model Website {
   views     Int           @default(0)
   likedBy   Like[]
   status    WebsiteStatus @default(PENDING)
-
+  rejectionReason String?
   user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime      @default(now())
 }

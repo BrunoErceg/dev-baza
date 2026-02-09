@@ -1,35 +1,33 @@
 "use client";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { UploadButton } from "@/lib/uploadthing";
-import * as z from "zod";
-import { updateAvatar } from "@/actions/update-avatar";
+import { updateAvatar } from "@/actions/user-actions";
+import { IoCameraOutline } from "react-icons/io5";
+import { FiUpload } from "react-icons/fi";
 
-import { Button } from "@components/ui/button";
 import { Field } from "@components/ui/field";
 import { Avatar, AvatarImage } from "@components/ui/avatar";
+import { AvatarFormValues, avatarSchema } from "@/lib/schemas";
+import { cn } from "@/lib/utils";
 
-const formSchema = z.object({
-  image: z.string().min(1, "Slika je obavezna."),
-});
-
-export function UpdateAvatarForm() {
+export function UpdateAvatarForm({ userImage }: { userImage: string }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const [isUploading, setIsUploading] = useState(false);
+  const form = useForm<AvatarFormValues>({
+    resolver: zodResolver(avatarSchema),
     defaultValues: {
       image: "",
     },
   });
-  const imageUrl = form.watch("image");
 
-  async function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: AvatarFormValues) {
     startTransition(async () => {
-      const result = await updateAvatar(data.image);
+      const result = await updateAvatar({ image: data.image });
       if (result.success) {
         toast.success(result.success);
         router.refresh();
@@ -49,60 +47,52 @@ export function UpdateAvatarForm() {
     >
       <div className="flex flex-col gap-5">
         <Field className="w-full flex flex-col h-full">
-          {imageUrl ? (
-            <div className="relative flex justify-center">
-              <Avatar className="w-50 h-50">
-                <AvatarImage src={imageUrl} />
-              </Avatar>
-              <Button
-                type="button"
-                variant="destructive"
-                onClick={() => form.setValue("image", "")}
-                className="absolute top-2 right-2"
-              >
-                Izbriši
-              </Button>
-            </div>
-          ) : (
-            <>
-              <UploadButton
-                endpoint="imageUploader"
-                appearance={{
-                  button:
-                    "bg-blue-600 cursor-pointer hover:bg-blue-700 text-white font-bold py-2 px-4 rounded",
-                  container:
-                    "border-2 grow bg-gray-50 rounded-lg border-dashed border-gray-200 p-4",
-                  allowedContent: "text-xs text-gray-400 uppercase",
-                }}
-                onClientUploadComplete={(res) => {
-                  form.setValue("image", res[0].ufsUrl);
-                }}
-                content={{
-                  allowedContent: (
-                    <div className="flex flex-col items-center">
-                      <h2>Nova Slika Profila</h2>
-                      <span>Slike do 4MB.</span>
-                      <span>Aspect ratio 1:1</span>
+          <>
+            <UploadButton
+              endpoint="imageUploader"
+              appearance={{
+                button: "w-25 h-25 cursor-pointer",
+              }}
+              onUploadBegin={() => setIsUploading(true)}
+              onClientUploadComplete={(res) => {
+                form.setValue("image", res[0].ufsUrl);
+                form.handleSubmit(() => onSubmit({ image: res[0].ufsUrl }))();
+                setIsUploading(false);
+              }}
+              content={{
+                button: (
+                  <div className="w-25 h-25 cursor-pointer relative group">
+                    <div
+                      className={cn(
+                        "absolute inset-0 rounded-full z-20 flex items-center justify-center duration-200 bg-black/40 h-25 w-25 opacity-0 group-hover:opacity-100",
+                        (isUploading || isPending) && "opacity-100",
+                      )}
+                    >
+                      {isUploading || isPending ? (
+                        <FiUpload size={35} className="animate-pulse" />
+                      ) : (
+                        <IoCameraOutline size={35} />
+                      )}
                     </div>
-                  ),
-                }}
-                onUploadError={(error) => {
-                  toast.error(error.message);
-                }}
-              />
-              {form.formState.errors.image && (
-                <p className="text-red-500 text-sm">
-                  {form.formState.errors.image.message}
-                </p>
-              )}
-            </>
-          )}
+                    <Avatar className="w-25 h-25 cursor-pointer">
+                      <AvatarImage src={userImage} />
+                    </Avatar>
+                  </div>
+                ),
+                allowedContent: <></>,
+              }}
+              onUploadError={(error) => {
+                setIsUploading(false);
+                toast.error(error.message);
+              }}
+            />
+            {form.formState.errors.image && (
+              <p className="text-red-500 text-sm">
+                {form.formState.errors.image.message}
+              </p>
+            )}
+          </>
         </Field>
-      </div>
-      <div className="flex justify-end">
-        <Button type="submit" disabled={isPending}>
-          {isPending ? "Spremanje..." : "Spremi sliku profila"}
-        </Button>
       </div>
     </form>
   );

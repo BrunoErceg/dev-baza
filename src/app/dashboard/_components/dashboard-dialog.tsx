@@ -26,7 +26,7 @@ export function DashboardDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>{cta}</DialogTrigger>
-      <DialogContent className="max-w-125 flex flex-col gap-10">
+      <DialogContent className=" flex flex-col gap-10">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
