@@ -1,10 +1,11 @@
 "use client";
+import { useRouter, useSearchParams } from "next/navigation";
+
 import { Category } from "@prisma/client";
 
 import { Button } from "../ui/button";
-import { useSearchParams, useRouter } from "next/navigation";
 
-export function WebsiteFilters() {
+export function WebsiteFilter() {
   const router = useRouter();
   const categories = Object.values(Category);
   const searchParams = useSearchParams();

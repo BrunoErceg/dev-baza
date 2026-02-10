@@ -1,6 +1,8 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+
 import {
   Select,
   SelectContent,
@@ -9,9 +11,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { useEffect, useState } from "react";
 
-export function OrderWebsitesCombobox() {
+export function SortWebsitesSelect() {
   const ORDER_BY = ["Datum", "Lajkovi", "Pregledi"] as const;
   const router = useRouter();
   const searchParams = useSearchParams();

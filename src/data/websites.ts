@@ -1,6 +1,6 @@
 "use server";
 import { prisma } from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
+import { WebsiteWithUserAndLikes } from "@/types/websites";
 
 export async function getDashboardData(userId: string) {
   const now = new Date();
@@ -39,13 +39,6 @@ export async function getDashboardData(userId: string) {
     },
   };
 }
-export type DashboardData = Awaited<ReturnType<typeof getDashboardData>>;
-export type UserWebsitesWithStats = Awaited<
-  ReturnType<typeof getDashboardData>
->["websites"][0];
-export type WebsitesStats = Awaited<
-  ReturnType<typeof getDashboardData>
->["stats"];
 
 export async function getPendingWebsites() {
   return await prisma.website.findMany({
@@ -54,15 +47,11 @@ export async function getPendingWebsites() {
   });
 }
 
-export type WebsiteWithExtras = Prisma.WebsiteGetPayload<{
-  include: { user: { select: { name: true; image: true } }; likedBy: true };
-}>;
-
-export async function getAllApprovedWebsites(): Promise<WebsiteWithExtras[]> {
+export async function getAllApprovedWebsites() {
   return await prisma.website.findMany({
     where: { status: "APPROVED" },
-    orderBy: { createdAt: "desc" },
     include: { user: { select: { name: true, image: true } }, likedBy: true },
+    orderBy: { createdAt: "desc" },
   });
 }
 

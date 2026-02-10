@@ -21,9 +21,13 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
+      "@actions/*": ["./src/actions/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@types/*": ["./src/types/*"],
+      "@data/*": ["./src/data/*"],
+      "@context/*": ["./src/context/*"],
       "@ui/*": ["./src/components/ui/*"],
-      "@layout/*": ["./src/components/layout/*"],
-      "@dashboard/*": ["./src/components/dashboard/*"],
       "@components/*": ["./src/components/*"]
     }
   },
