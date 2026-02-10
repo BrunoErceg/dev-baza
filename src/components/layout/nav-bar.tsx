@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { auth } from "@/auth";
-import { SunIcon } from "lucide-react";
+import { KeyRound, LogIn, SunIcon } from "lucide-react";
 
 import { getUser } from "@/data/user";
 
@@ -42,10 +42,10 @@ export async function Navbar() {
             ) : (
               <>
                 <Link href="/prijava">
-                  <Button>Prijava</Button>
+                  <Button> Prijava</Button>
                 </Link>
                 <Link href="/registracija">
-                  <Button variant="outline">Registracija</Button>
+                  <Button variant="outline"> Registracija</Button>
                 </Link>
               </>
             )}

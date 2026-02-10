@@ -1,4 +1,5 @@
 import { DialogTrigger } from "@radix-ui/react-dialog";
+import { LayersPlus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +16,10 @@ export function AddWebsiteDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Dodaj web-stranicu</Button>
+        <Button size="lg">
+          <LayersPlus />
+          Dodaj web-stranicu
+        </Button>
       </DialogTrigger>
       <DialogContent className="lg:max-w-200">
         <DialogHeader>
