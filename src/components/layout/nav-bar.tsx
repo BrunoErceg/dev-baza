@@ -1,13 +1,16 @@
-import { SunIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Logo } from "@/components/logo";
-import { NavMenu } from "@/components/layout/navigation/nav-menu";
-import { NavigationSheet } from "@/components/layout/navigation/navigation-sheet";
-import { auth } from "@/auth";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
-import { LogoutButton } from "@/components/layout/navigation/logout-button";
-import { Container } from "../container";
+
+import { auth } from "@/auth";
+import { SunIcon } from "lucide-react";
+
+import { Logo } from "@/components/logo";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { LogoutButton } from "@/components/ui/logout-button";
+import { NavMenu } from "@/components/ui/nav-menu";
+import { NavigationSheet } from "@/components/ui/navigation-sheet";
+
+import { Container } from "./container";
 
 export async function Navbar() {
   const session = await auth();

@@ -1,9 +1,15 @@
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Menu } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+
 import { Logo } from "@/components/logo";
-import { NavMenu } from "@/components/layout/navigation/nav-menu";
+import { Button } from "@/components/ui/button";
+import { NavMenu } from "@/components/ui/nav-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 export const NavigationSheet = () => {
   return (
