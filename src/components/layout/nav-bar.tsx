@@ -3,6 +3,8 @@ import Link from "next/link";
 import { auth } from "@/auth";
 import { SunIcon } from "lucide-react";
 
+import { getUser } from "@/data/user";
+
 import { Logo } from "@/components/logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -10,12 +12,16 @@ import { LogoutButton } from "@/components/ui/logout-button";
 import { NavMenu } from "@/components/ui/nav-menu";
 import { NavigationSheet } from "@/components/ui/navigation-sheet";
 
+import { AddWebsiteDialog } from "../ui/add-website-dialog";
+import { UserNav } from "../ui/user-nav";
 import { Container } from "./container";
 
 export async function Navbar() {
   const session = await auth();
+  const user = (session && (await getUser(session?.user.id))) || null;
+
   return (
-    <nav className="h-16 bg-[#f7f7f7]">
+    <nav className="py-5">
       <Container>
         <div className="flex h-full items-center justify-between py-4">
           <div className="flex items-center gap-12">
@@ -30,14 +36,8 @@ export async function Navbar() {
           <div className="flex items-center gap-3">
             {session ? (
               <>
-                <Link href="/dashboard">
-                  <Avatar>
-                    <AvatarImage src="https://jrgxq33rwp.ufs.sh/f/BNaNzrQS3KNeOIpQ9sfX6YjFCOQ0PUb84RtzAZJkh3B95pvN" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                </Link>
-                <Button>Dodaj web-stranicu</Button>
-                <LogoutButton />
+                <AddWebsiteDialog />
+                <UserNav userImage={user.image} />
               </>
             ) : (
               <>
@@ -49,10 +49,6 @@ export async function Navbar() {
                 </Link>
               </>
             )}
-
-            <Button size="icon" variant="outline">
-              <SunIcon />
-            </Button>
 
             {/* Mobile Menu */}
             <div className="md:hidden">

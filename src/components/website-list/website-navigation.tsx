@@ -1,11 +1,11 @@
 import { GridToggle } from "./grid-toggle";
-import { SortWebsitesSelect } from "./sort-websites-select";
 import { WebsiteFilter } from "./website-filter";
+import { WebsiteSortSelect } from "./websites-sort-select";
 
 export function WebsiteNavigation() {
   return (
     <div className="flex w-full items-center justify-between gap-5 py-5">
-      <SortWebsitesSelect />
+      <WebsiteSortSelect />
       <WebsiteFilter />
       <GridToggle />
     </div>

@@ -1,9 +1,7 @@
-import { UserWebsitesWithStats } from "@/data/websites";
 import { MdWebAsset } from "react-icons/md";
 
-import { AddWebsiteDialog } from "./add-website-dialog";
-import { DashboardCard } from "./dashboard-card";
-import { ProfileWebsiteTable } from "./profile-websites-table";
+import { UserWebsiteWithCount } from "@/types/websites";
+
 import {
   Empty,
   EmptyDescription,
@@ -12,10 +10,14 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 
+import { AddWebsiteDialog } from "../../../components/ui/add-website-dialog";
+import { DashboardCard } from "./dashboard-card";
+import { ProfileWebsiteTable } from "./profile-websites-table";
+
 export function UserWebsitesSection({
   websites,
 }: {
-  websites: UserWebsitesWithStats[];
+  websites: UserWebsiteWithCount[];
 }) {
   return (
     <DashboardCard

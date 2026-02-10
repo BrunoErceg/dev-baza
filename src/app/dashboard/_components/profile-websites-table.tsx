@@ -1,16 +1,12 @@
 "use client";
-import { useState, useTransition } from "react";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { WebsiteStatus } from "@prisma/client";
-import { cn } from "@/lib/utils";
-import { TrashIcon } from "lucide-react";
+import { useState, useTransition } from "react";
 import { LiaSortSolid } from "react-icons/lia";
-import deleteWebsite from "@/actions/website-actions";
-import { UserWebsitesWithStats } from "@/data/websites";
 
+import deleteWebsite from "@/actions/website-actions";
+import { Badge } from "@components/ui/badge";
 import {
   HoverCard,
   HoverCardContent,
@@ -24,13 +20,19 @@ import {
   TableHeader,
   TableRow,
 } from "@components/ui/table";
-import { P } from "@components/ui/typography";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@components/ui/tooltip";
-import { Badge } from "@components/ui/badge";
+import { P } from "@components/ui/typography";
+import { WebsiteStatus } from "@prisma/client";
+import { TrashIcon } from "lucide-react";
+import { toast } from "sonner";
+
+import { cn } from "@/lib/utils";
+import { UserWebsiteWithCount } from "@/types/websites";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -46,7 +48,7 @@ type SortBy = "likes" | "views" | "name";
 export function ProfileWebsiteTable({
   websites,
 }: {
-  websites: UserWebsitesWithStats[];
+  websites: UserWebsiteWithCount[];
 }) {
   const [sortBy, setSortBy] = useState<SortBy>("name");
   const [order, setOrder] = useState<Order>("asc");
@@ -94,7 +96,7 @@ export function ProfileWebsiteTable({
               Pregledi <LiaSortSolid className="inline-block" />
             </TableHead>
             <TableHead
-              className="text-right cursor-pointer"
+              className="cursor-pointer text-right"
               onClick={() => handelSort("likes")}
             >
               Lajkovi <LiaSortSolid className="inline-block" />
@@ -108,16 +110,16 @@ export function ProfileWebsiteTable({
               <TableCell className="font-medium">
                 <HoverCard openDelay={10} closeDelay={100}>
                   <HoverCardTrigger asChild>
-                    <P className="cursor-pointer w-fit">{website.name}</P>
+                    <P className="w-fit cursor-pointer">{website.name}</P>
                   </HoverCardTrigger>
-                  <HoverCardContent side="top" className="flex   w-80 h-64">
+                  <HoverCardContent side="top" className="flex h-64 w-80">
                     <Image
                       src={website.imageUrl}
                       alt="Website"
                       width={320}
                       height={256}
                       priority
-                      className="rounded-lg w-80 h-56 object-cover "
+                      className="h-56 w-80 rounded-lg object-cover"
                     />
                   </HoverCardContent>
                 </HoverCard>
@@ -138,7 +140,7 @@ export function ProfileWebsiteTable({
                 {website._count.likedBy}
               </TableCell>
               <TableCell className="text-right">
-                <DropdownMenu>
+                <DropdownMenu modal={false}>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost">...</Button>
                   </DropdownMenuTrigger>

@@ -1,7 +1,7 @@
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 
-import { Category } from "@prisma/client";
+import { CATEGORY_MAP } from "@/constants/categories";
 
 import { OrderByOption, WebsiteWithUserAndLikes } from "@/types/websites";
 
@@ -14,12 +14,15 @@ export function useProcessedWebsites({
   websites: WebsiteWithUserAndLikes[];
 }) {
   const params = useSearchParams();
-  const categoryParam = params.get("category") as Category | undefined;
+  const categoryParam = params.get("category");
   const orderByParam = params.get("orderBy") as OrderByOption | undefined;
+  const categoryKey = Object.entries(CATEGORY_MAP).find(
+    ([, v]) => v.slug === categoryParam,
+  )?.[0];
 
   return useMemo(() => {
     let items = websites.filter((website) => {
-      if (categoryParam && website.category !== categoryParam) return false;
+      if (categoryKey && website.category !== categoryKey) return false;
       return true;
     });
     if (orderByParam) {

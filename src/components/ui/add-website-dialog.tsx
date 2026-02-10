@@ -1,5 +1,6 @@
+import { DialogTrigger } from "@radix-ui/react-dialog";
+
 import { Button } from "@/components/ui/button";
-import { AddWebsiteForm } from "./add-website-form";
 import {
   Dialog,
   DialogContent,
@@ -7,7 +8,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { DialogTrigger } from "@radix-ui/react-dialog";
+
+import { AddWebsiteForm } from "../../app/dashboard/_components/add-website-form";
+
 export function AddWebsiteDialog() {
   return (
     <Dialog>

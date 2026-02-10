@@ -1,12 +1,14 @@
 "use client";
 import { EyeIcon, ThumbsUp } from "lucide-react";
-import { WebsitesStats } from "@/data/websites";
+
+import { WebsitesStats } from "@/types/websites";
+
 import { StatsCard } from "@/components/ui/stats-card";
 
 export function DashboardStats({ stats }: { stats: WebsitesStats }) {
   const monthLikesChange = stats.thisMonthLikes - stats.lastMonthLikes;
   return (
-    <div className="flex gap-5 justify-between">
+    <div className="flex justify-between gap-5">
       <StatsCard
         title="Sveukupni pregledi"
         value={stats.totalViews}

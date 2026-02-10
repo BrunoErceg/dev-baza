@@ -37,12 +37,14 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} bg-[#f7f7f7] font-sans antialiased`}
       >
-        <Toaster richColors />
-        <Navbar />
-        <SessionProvider>
-          <main>{children}</main>
-        </SessionProvider>
-        <Footer />
+        <div>
+          <Toaster richColors />
+          <Navbar />
+          <SessionProvider>
+            <main>{children}</main>
+          </SessionProvider>
+          <Footer />
+        </div>
       </body>
     </html>
   );

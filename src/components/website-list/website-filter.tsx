@@ -1,6 +1,7 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
 
+import { CATEGORY_MAP } from "@/constants/categories";
 import { Category } from "@prisma/client";
 
 import { Button } from "../ui/button";
@@ -23,15 +24,16 @@ export function WebsiteFilter() {
 
   return (
     <div className="flex gap-1">
-      {categories.map((category) => (
+      {Object.values(CATEGORY_MAP).map((category) => (
         <Button
-          key={category}
-          variant={category === categoryParam ? "default" : "link"}
-          onClick={() => changeCategory(category)}
+          key={category.slug}
+          variant={category.slug === categoryParam ? "default" : "link"}
+          onClick={() => changeCategory(category.slug)}
         >
-          {category}
+          {category.label}
         </Button>
       ))}
+
       <Button
         variant={!categoryParam ? "default" : "link"}
         onClick={() => changeCategory()}

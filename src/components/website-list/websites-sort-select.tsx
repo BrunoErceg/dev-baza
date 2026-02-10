@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "../ui/select";
 
-export function SortWebsitesSelect() {
+export function WebsiteSortSelect() {
   const ORDER_BY = ["Datum", "Lajkovi", "Pregledi"] as const;
   const router = useRouter();
   const searchParams = useSearchParams();

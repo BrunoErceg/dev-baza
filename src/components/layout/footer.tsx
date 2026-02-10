@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
 
 import { cn } from "@/lib/utils";
 
@@ -36,7 +36,7 @@ interface FooterProps {
   }[];
 }
 
-const Footer = ({
+const Footer = async ({
   className,
 
   copyright = `© ${new Date().getFullYear()} dev-baza.hr. Sva prava pridržana.`,
@@ -45,7 +45,7 @@ const Footer = ({
     { text: "Pravila privatnosti", url: "#" },
   ],
 }: FooterProps) => {
-  const session = auth();
+  const session = await auth();
   return (
     <section className={cn("pt-20 pb-6", className)}>
       <Container>
@@ -55,15 +55,7 @@ const Footer = ({
             <NavMenu />
             <div>
               <div className="flex items-center gap-3">
-                {session?.user?.id ? (
-                  <>
-                    <Button asChild>
-                      <Link href="/dashboard">Dashboard</Link>
-                    </Button>
-
-                    <LogoutButton />
-                  </>
-                ) : (
+                {!session?.user?.id ? (
                   <>
                     <Link href="/prijava">
                       <Button>Prijava</Button>
@@ -71,6 +63,14 @@ const Footer = ({
                     <Link href="/registracija">
                       <Button variant="outline">Registracija</Button>
                     </Link>
+                  </>
+                ) : (
+                  <>
+                    <Button asChild>
+                      <Link href="/dashboard">Dashboard</Link>
+                    </Button>
+
+                    <LogoutButton />
                   </>
                 )}
               </div>
