@@ -7,6 +7,7 @@ import {
   History,
   Home,
   Layers,
+  LucideIcon,
   MousePointer2,
   Paintbrush,
   Palmtree,
@@ -15,7 +16,10 @@ import {
   Zap,
 } from "lucide-react";
 
-export const CATEGORY_MAP = {
+export const CATEGORY_MAP: Record<
+  Category,
+  { icon: LucideIcon; description: string; label: string; slug: string }
+> = {
   TURIZAM: {
     label: "Turizam",
     slug: "turizam",

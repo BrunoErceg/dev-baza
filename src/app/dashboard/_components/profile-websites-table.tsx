@@ -6,6 +6,7 @@ import { useState, useTransition } from "react";
 import { LiaSortSolid } from "react-icons/lia";
 
 import deleteWebsite from "@/actions/website-actions";
+import { WEBSITE_STATUS } from "@/constants/staus";
 import { Badge } from "@components/ui/badge";
 import {
   HoverCard,
@@ -166,21 +167,13 @@ const StatusTooltip = ({
   status: WebsiteStatus;
   rejectReason?: string | null;
 }) => {
+  const Icon = WEBSITE_STATUS[status].Icon;
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Badge
-          variant="secondary"
-          className={cn(
-            "cursor-help",
-            status === "REJECTED"
-              ? "bg-red-300"
-              : status === "PENDING"
-                ? "bg-amber-200"
-                : "bg-green-300",
-          )}
-        >
-          {status}
+        <Badge variant="outline" className={WEBSITE_STATUS[status].color}>
+          <Icon />
+          {WEBSITE_STATUS[status].label}{" "}
         </Badge>
       </TooltipTrigger>
       <TooltipContent>

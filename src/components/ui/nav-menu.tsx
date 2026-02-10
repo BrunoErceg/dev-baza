@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import * as React from "react";
-import { LuHotel } from "react-icons/lu";
 
 import { CATEGORY_MAP } from "@/constants/categories";
 import { LucideIcon } from "lucide-react";
