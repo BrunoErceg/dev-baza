@@ -79,6 +79,7 @@ model Website {
   style     Style         @default(OSTALO)
   views     Int           @default(0)
   likedBy   Like[]
+  award     String?     
   status    WebsiteStatus @default(PENDING)
   rejectionReason String?
   user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)

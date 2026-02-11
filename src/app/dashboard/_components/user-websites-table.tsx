@@ -28,9 +28,10 @@ import {
 } from "@components/ui/tooltip";
 import { P } from "@components/ui/typography";
 import { WebsiteStatus } from "@prisma/client";
-import { TrashIcon } from "lucide-react";
+import { Ellipsis, TrashIcon } from "lucide-react";
 import { toast } from "sonner";
 
+import { useDeleteWebsite } from "@/hooks/use-delete-website";
 import { cn } from "@/lib/utils";
 import { UserWebsiteWithCount } from "@/types/websites";
 
@@ -46,7 +47,7 @@ import {
 type Order = "asc" | "desc";
 type SortBy = "likes" | "views" | "name";
 
-export function ProfileWebsiteTable({
+export function UserWebsiteTable({
   websites,
 }: {
   websites: UserWebsiteWithCount[];
@@ -143,7 +144,9 @@ export function ProfileWebsiteTable({
               <TableCell className="text-right">
                 <DropdownMenu modal={false}>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost">...</Button>
+                    <Button variant="ghost">
+                      <Ellipsis />
+                    </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-fit" align="end">
                     <DropdownMenuGroup>
@@ -196,24 +199,12 @@ const StatusTooltip = ({
 };
 
 const WebsiteDeleteItem = ({ websiteId }: { websiteId: string }) => {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
-  const handleDelete = async (websiteId: string) => {
-    startTransition(async () => {
-      const result = await deleteWebsite(websiteId);
-      if (result.success) {
-        toast.success(result.success);
-        router.refresh();
-      } else if (result.error) {
-        toast.error(result.error);
-      }
-    });
-  };
+  const { executeDelete, isPending } = useDeleteWebsite();
   return (
     <DropdownMenuItem
       variant="destructive"
       className="cursor-pointer"
-      onClick={() => handleDelete(websiteId)}
+      onClick={() => executeDelete(websiteId)}
     >
       <TrashIcon />
       {isPending ? "Brisanje..." : "Izbriši"}

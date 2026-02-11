@@ -1,14 +1,11 @@
 import Link from "next/link";
 
-import { auth } from "@/auth";
-import { KeyRound, LogIn, SunIcon } from "lucide-react";
+import { auth } from "@/auth"; 
 
 import { getUser } from "@/data/user";
 
-import { Logo } from "@/components/logo";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { LogoutButton } from "@/components/ui/logout-button";
+import { Logo } from "@/components/logo"; 
+import { Button } from "@/components/ui/button"; 
 import { NavMenu } from "@/components/ui/nav-menu";
 import { NavigationSheet } from "@/components/ui/navigation-sheet";
 

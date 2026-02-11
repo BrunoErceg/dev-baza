@@ -2,7 +2,9 @@
 
 import { cookies } from "next/headers";
 
-export async function updateGridConfigCookie(newConfig: "big" | "small") {
+import { GridConfig } from "@/types/websites";
+
+export async function updateGridConfigCookie(newConfig: GridConfig) {
   const cookieStore = await cookies();
   cookieStore.set("gridConfig", newConfig, {
     path: "/",

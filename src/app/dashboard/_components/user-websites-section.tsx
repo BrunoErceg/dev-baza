@@ -12,7 +12,7 @@ import {
 
 import { AddWebsiteDialog } from "../../../components/ui/add-website-dialog";
 import { DashboardCard } from "./dashboard-card";
-import { ProfileWebsiteTable } from "./profile-websites-table";
+import { UserWebsiteTable } from "./user-websites-table";
 
 export function UserWebsitesSection({
   websites,
@@ -40,7 +40,7 @@ export function UserWebsitesSection({
           </EmptyHeader>
         </Empty>
       ) : (
-        <ProfileWebsiteTable websites={websites} />
+        <UserWebsiteTable websites={websites} />
       )}
     </DashboardCard>
   );

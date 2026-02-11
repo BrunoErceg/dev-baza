@@ -1,17 +1,19 @@
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+
 import { rejectWebsite } from "@/actions/admin-actions";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+
 import { RejectReasonFormValues, rejectReasonSchema } from "@/lib/schemas";
 
+import { Button } from "@/components/ui/button";
 import {
-  FieldGroup,
   Field,
-  FieldLabel,
   FieldError,
+  FieldGroup,
+  FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
@@ -27,7 +29,6 @@ export function AdminRejectForm({ websiteId }: { websiteId: string }) {
   });
   async function onSubmit(data: RejectReasonFormValues) {
     startTransition(async () => {
-      console.log(data.reason);
       const result = await rejectWebsite(websiteId, data);
       if (result.success) {
         toast.success(result.success);
