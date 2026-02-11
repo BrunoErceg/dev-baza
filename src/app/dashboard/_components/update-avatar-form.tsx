@@ -1,22 +1,24 @@
 "use client";
-import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { UploadButton } from "@/lib/uploadthing";
-import { updateAvatar } from "@/actions/user-actions";
-import { IoCameraOutline } from "react-icons/io5";
 import { FiUpload } from "react-icons/fi";
+import { IoCameraOutline } from "react-icons/io5";
 
-import { Field } from "@components/ui/field";
+import { updateAvatar } from "@/actions/user-actions";
 import { Avatar, AvatarImage } from "@components/ui/avatar";
+import { Field } from "@components/ui/field";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+
+import { useAction } from "@/hooks/use-action";
 import { AvatarFormValues, avatarSchema } from "@/lib/schemas";
+import { UploadButton } from "@/lib/uploadthing";
 import { cn } from "@/lib/utils";
 
 export function UpdateAvatarForm({ userImage }: { userImage: string }) {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
+  const { isPending, action } = useAction(updateAvatar);
   const [isUploading, setIsUploading] = useState(false);
   const form = useForm<AvatarFormValues>({
     resolver: zodResolver(avatarSchema),
@@ -26,15 +28,7 @@ export function UpdateAvatarForm({ userImage }: { userImage: string }) {
   });
 
   async function onSubmit(data: AvatarFormValues) {
-    startTransition(async () => {
-      const result = await updateAvatar({ image: data.image });
-      if (result.success) {
-        toast.success(result.success);
-        router.refresh();
-      } else if (result.error) {
-        toast.error(result.error);
-      }
-    });
+    action({ image: data.image });
   }
 
   return (
@@ -46,7 +40,7 @@ export function UpdateAvatarForm({ userImage }: { userImage: string }) {
       )}
     >
       <div className="flex flex-col gap-5">
-        <Field className="w-full flex flex-col h-full">
+        <Field className="flex h-full w-full flex-col">
           <>
             <UploadButton
               endpoint="imageUploader"
@@ -61,10 +55,10 @@ export function UpdateAvatarForm({ userImage }: { userImage: string }) {
               }}
               content={{
                 button: (
-                  <div className="w-25 h-25 cursor-pointer relative group">
+                  <div className="group relative h-25 w-25 cursor-pointer">
                     <div
                       className={cn(
-                        "absolute inset-0 rounded-full z-20 flex items-center justify-center duration-200 bg-black/40 h-25 w-25 opacity-0 group-hover:opacity-100",
+                        "absolute inset-0 z-20 flex h-25 w-25 items-center justify-center rounded-full bg-black/40 opacity-0 duration-200 group-hover:opacity-100",
                         (isUploading || isPending) && "opacity-100",
                       )}
                     >
@@ -74,7 +68,7 @@ export function UpdateAvatarForm({ userImage }: { userImage: string }) {
                         <IoCameraOutline size={35} />
                       )}
                     </div>
-                    <Avatar className="w-25 h-25 cursor-pointer">
+                    <Avatar className="h-25 w-25 cursor-pointer">
                       <AvatarImage src={userImage} />
                     </Avatar>
                   </div>
@@ -87,7 +81,7 @@ export function UpdateAvatarForm({ userImage }: { userImage: string }) {
               }}
             />
             {form.formState.errors.image && (
-              <p className="text-red-500 text-sm">
+              <p className="text-sm text-red-500">
                 {form.formState.errors.image.message}
               </p>
             )}

@@ -5,6 +5,8 @@ import { toast } from "sonner";
 
 export function useAction<T extends any[]>(
   actionFn: (...args: T) => Promise<{ success?: string; error?: string }>,
+  onSuccess?: () => void,
+  onError?: () => void,
 ) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -14,8 +16,10 @@ export function useAction<T extends any[]>(
       const result = await actionFn(...args);
       if (result.success) {
         toast.success(result.success);
+        if (onSuccess) onSuccess();
         router.refresh();
       } else if (result.error) {
+        if (onError) onError();
         toast.error(result.error);
       }
     });

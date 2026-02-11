@@ -1,22 +1,22 @@
 "use client";
-import { useTransition } from "react";
 import { signOut } from "next-auth/react";
-import { toast } from "sonner";
+
 import deleteUser from "@/actions/user-actions";
 
+import { useAction } from "@/hooks/use-action";
+
 import { Button } from "@/components/ui/button";
+
 import { DashboardCard } from "./dashboard-card";
 import { DashboardDialog } from "./dashboard-dialog";
 
 export function UserDeleteSection() {
-  const [isPending, startTransition] = useTransition();
+  const { isPending, action } = useAction(deleteUser, () =>
+    signOut({ callbackUrl: "/" }),
+  );
+
   const deleteAccount = async () => {
-    startTransition(async () => {
-      const result = await deleteUser();
-      if (result.success) {
-        signOut({ callbackUrl: "/" });
-      } else if (result.error) toast.error(result.error);
-    });
+    action();
   };
   return (
     <DashboardCard

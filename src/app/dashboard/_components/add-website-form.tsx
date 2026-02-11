@@ -1,14 +1,18 @@
 "use client";
-import { useTransition } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
-import { UploadButton } from "@/lib/uploadthing";
-import { Category, Style } from "@prisma/client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
-import { createWebsite } from "@/actions/website-actions";
 
+import { createWebsite } from "@/actions/website-actions";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Category, Style } from "@prisma/client";
+import { toast } from "sonner";
+
+import { useAction } from "@/hooks/use-action";
+import { WebsiteFormValues, websiteSchema } from "@/lib/schemas";
+import { UploadButton } from "@/lib/uploadthing";
+
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldError,
@@ -23,14 +27,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { websiteSchema, WebsiteFormValues } from "@/lib/schemas";
 
 export function AddWebsiteForm() {
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-
+  const { isPending, action } = useAction(createWebsite);
   const form = useForm<WebsiteFormValues>({
     resolver: zodResolver(websiteSchema),
     defaultValues: {
@@ -44,27 +43,19 @@ export function AddWebsiteForm() {
   const imageUrl = form.watch("image");
 
   async function onSubmit(data: WebsiteFormValues) {
-    startTransition(async () => {
-      const result = await createWebsite(data);
-      if (result.success) {
-        toast.success(result.success);
-        router.refresh();
-      } else if (result.error) {
-        toast.error(result.error);
-      }
-    });
+    action(data);
   }
 
   return (
     <form
       id="form-add-website"
-      className="flex flex-col  gap-5"
+      className="flex flex-col gap-5"
       onSubmit={form.handleSubmit(onSubmit, (errors) =>
         console.log("Validation Errors:", errors),
       )}
     >
       <div className="flex gap-5">
-        <div className="w-1/2 flex flex-col gap-3 justify-between">
+        <div className="flex w-1/2 flex-col justify-between gap-3">
           <FieldGroup>
             <Controller
               name="name"
@@ -168,12 +159,12 @@ export function AddWebsiteForm() {
             />
           </FieldGroup>
         </div>
-        <div className="w-1/2 h-full flex flex-col">
-          <Field className="w-full h-full">
+        <div className="flex h-full w-1/2 flex-col">
+          <Field className="h-full w-full">
             {imageUrl ? (
               <AspectRatio
                 ratio={8 / 6}
-                className="relative bg-muted group overflow-hidden "
+                className="bg-muted group relative overflow-hidden"
               >
                 <Image
                   src={imageUrl}
@@ -219,7 +210,7 @@ export function AddWebsiteForm() {
                   }}
                 />
                 {form.formState.errors.image && (
-                  <p className="text-red-500 text-sm">
+                  <p className="text-sm text-red-500">
                     {form.formState.errors.image.message}
                   </p>
                 )}

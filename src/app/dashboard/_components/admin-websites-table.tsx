@@ -1,12 +1,9 @@
 "use client";
 
-import { Website } from "@prisma/client";
-import Link from "next/link";
-import { toast } from "sonner";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { acceptWebsite, rejectWebsite } from "@/actions/admin-actions";
+import Link from "next/link";
 
+import { acceptWebsite } from "@/actions/admin-actions";
 import {
   Table,
   TableBody,
@@ -16,30 +13,21 @@ import {
   TableRow,
 } from "@components/ui/table";
 import { P } from "@components/ui/typography";
+import { Website } from "@prisma/client";
+
+import { useAction } from "@/hooks/use-action";
+
 import { Button } from "@/components/ui/button";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { DashboardDialog } from "./dashboard-dialog";
+
 import { AdminRejectForm } from "./admin-reject-form";
+import { DashboardDialog } from "./dashboard-dialog";
 
 export function AdminWebsitesTable({ websites }: { websites: Website[] }) {
-  const router = useRouter();
-
-  const handleAction = async (websiteId: string) => {
-    {
-      const result = await acceptWebsite(websiteId);
-      if (result.success) {
-        toast.success(result.success);
-        router.refresh();
-      } else if (result.error) {
-        toast.error(result.error);
-      }
-    }
-  };
-
   return (
     <Table key={websites.length}>
       <TableHeader>
@@ -55,16 +43,16 @@ export function AdminWebsitesTable({ websites }: { websites: Website[] }) {
             <TableCell className="font-medium">
               <HoverCard openDelay={10} closeDelay={100}>
                 <HoverCardTrigger asChild>
-                  <P className="cursor-pointer w-fit">{website.name}</P>
+                  <P className="w-fit cursor-pointer">{website.name}</P>
                 </HoverCardTrigger>
-                <HoverCardContent side="top" className="flex   w-80 h-64">
+                <HoverCardContent side="top" className="flex h-64 w-80">
                   <Image
                     src={website.imageUrl}
                     alt="Website"
                     width={320}
                     height={256}
                     priority
-                    className="rounded-lg w-80 h-56 object-cover "
+                    className="h-56 w-80 rounded-lg object-cover"
                   />
                 </HoverCardContent>
               </HoverCard>
@@ -75,8 +63,8 @@ export function AdminWebsitesTable({ websites }: { websites: Website[] }) {
               </Link>
             </TableCell>
 
-            <TableCell className="text-right flex gap-2 justify-end">
-              <Button onClick={() => handleAction(website.id)}>Odobri</Button>
+            <TableCell className="flex justify-end gap-2 text-right">
+              <ApprovedButton websiteId={website.id} />
               <DashboardDialog
                 title="Upiši razlog za odbijanje"
                 description=""
@@ -95,3 +83,12 @@ export function AdminWebsitesTable({ websites }: { websites: Website[] }) {
     </Table>
   );
 }
+
+const ApprovedButton = ({ websiteId }: { websiteId: string }) => {
+  const { isPending, action } = useAction(acceptWebsite);
+  return (
+    <Button onClick={() => action(websiteId)}>
+      {isPending ? "Odobravanje..." : "Odobri"}
+    </Button>
+  );
+};

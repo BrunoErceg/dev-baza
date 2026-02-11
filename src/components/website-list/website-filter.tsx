@@ -2,13 +2,11 @@
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { CATEGORY_MAP } from "@/constants/categories";
-import { Category } from "@prisma/client";
 
 import { Button } from "../ui/button";
 
 export function WebsiteFilter() {
   const router = useRouter();
-  const categories = Object.values(Category);
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category");
 

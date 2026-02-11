@@ -1,14 +1,14 @@
 "use client";
-import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { toast } from "sonner";
+
+import { updateUser } from "@/actions/user-actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
-import { ProfileFormValues, profileSchema } from "@/lib/schemas";
-import { updateUser } from "@/actions/user-actions";
 
+import { useAction } from "@/hooks/use-action";
+import { ProfileFormValues, profileSchema } from "@/lib/schemas";
+
+import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldError,
@@ -16,12 +16,9 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 
 export function UpdateProfileForm({ user }: { user: User }) {
-  const { update } = useSession();
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
+  const { isPending, action } = useAction(updateUser);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -35,16 +32,7 @@ export function UpdateProfileForm({ user }: { user: User }) {
   });
 
   async function onSubmit(data: ProfileFormValues) {
-    startTransition(async () => {
-      const result = await updateUser(data);
-      if (result.success) {
-        await update({ name: data.name });
-        router.refresh();
-        toast.success(result.success);
-      } else if (result.error) {
-        toast.error(result.error);
-      }
-    });
+    action(data);
   }
 
   return (
@@ -53,7 +41,7 @@ export function UpdateProfileForm({ user }: { user: User }) {
       className="flex flex-col gap-7"
       onSubmit={form.handleSubmit(onSubmit)}
     >
-      <div className="grid gap-5 grid-cols-2">
+      <div className="grid grid-cols-2 gap-5">
         {/* Name */}
         <FieldGroup>
           <Controller

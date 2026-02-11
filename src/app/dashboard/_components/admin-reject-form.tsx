@@ -1,11 +1,9 @@
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { rejectWebsite } from "@/actions/admin-actions";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
 
+import { useAction } from "@/hooks/use-action";
 import { RejectReasonFormValues, rejectReasonSchema } from "@/lib/schemas";
 
 import { Button } from "@/components/ui/button";
@@ -18,8 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 export function AdminRejectForm({ websiteId }: { websiteId: string }) {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+  const { isPending, action } = useAction(rejectWebsite);
 
   const form = useForm<RejectReasonFormValues>({
     resolver: zodResolver(rejectReasonSchema),
@@ -28,15 +25,7 @@ export function AdminRejectForm({ websiteId }: { websiteId: string }) {
     },
   });
   async function onSubmit(data: RejectReasonFormValues) {
-    startTransition(async () => {
-      const result = await rejectWebsite(websiteId, data);
-      if (result.success) {
-        toast.success(result.success);
-        router.refresh();
-      } else if (result.error) {
-        toast.error(result.error);
-      }
-    });
+    action(websiteId, data);
   }
 
   return (
