@@ -3,7 +3,7 @@ import { useTransition } from "react";
 
 import { toast } from "sonner";
 
-export function useAction<T extends any[]>(
+export function useServerAction<T extends any[]>(
   actionFn: (...args: T) => Promise<{ success?: string; error?: string }>,
   onSuccess?: () => void,
   onError?: () => void,

@@ -15,7 +15,7 @@ import {
 import { P } from "@components/ui/typography";
 import { Website } from "@prisma/client";
 
-import { useAction } from "@/hooks/use-action";
+import { useServerAction } from "@/hooks/use-server-action";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -85,7 +85,7 @@ export function AdminWebsitesTable({ websites }: { websites: Website[] }) {
 }
 
 const ApprovedButton = ({ websiteId }: { websiteId: string }) => {
-  const { isPending, action } = useAction(acceptWebsite);
+  const { isPending, action } = useServerAction(acceptWebsite);
   return (
     <Button onClick={() => action(websiteId)}>
       {isPending ? "Odobravanje..." : "Odobri"}

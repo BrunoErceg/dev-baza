@@ -3,7 +3,7 @@ import { signOut } from "next-auth/react";
 
 import deleteUser from "@/actions/user-actions";
 
-import { useAction } from "@/hooks/use-action";
+import { useServerAction } from "@/hooks/use-server-action";
 
 import { Button } from "@/components/ui/button";
 
@@ -11,7 +11,7 @@ import { DashboardCard } from "./dashboard-card";
 import { DashboardDialog } from "./dashboard-dialog";
 
 export function UserDeleteSection() {
-  const { isPending, action } = useAction(deleteUser, () =>
+  const { isPending, action } = useServerAction(deleteUser, () =>
     signOut({ callbackUrl: "/" }),
   );
 

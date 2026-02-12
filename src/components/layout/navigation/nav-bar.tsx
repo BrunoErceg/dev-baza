@@ -1,22 +1,24 @@
 import Link from "next/link";
 
-import { auth } from "@/auth"; 
+import { auth } from "@/auth";
 
-import { getUser } from "@/data/user";
+import { getUser, getUserNotifications } from "@/data/user";
 
-import { Logo } from "@/components/logo"; 
-import { Button } from "@/components/ui/button"; 
+import { Logo } from "@/components/logo";
+import { Button } from "@/components/ui/button";
 import { NavMenu } from "@/components/ui/nav-menu";
 import { NavigationSheet } from "@/components/ui/navigation-sheet";
 
-import { AddWebsiteDialog } from "../ui/add-website-dialog";
-import { UserNav } from "../ui/user-nav";
-import { Container } from "./container";
+import { AddWebsiteDialog } from "../../ui/add-website-dialog";
+import { Container } from "../container";
+import { UserNav } from "./user-nav";
+import { UserNotification } from "./user-notification";
 
 export async function Navbar() {
   const session = await auth();
   const user = (session && (await getUser(session?.user.id))) || null;
-
+  const notifications =
+    (await getUserNotifications(session.user.id || "")).data || [];
   return (
     <nav className="py-5">
       <Container>
@@ -30,10 +32,11 @@ export async function Navbar() {
             <NavMenu className="hidden md:block" />
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-6">
             {session ? (
               <>
                 <AddWebsiteDialog />
+                <UserNotification initialData={notifications} />
                 <UserNav userImage={user.image} />
               </>
             ) : (

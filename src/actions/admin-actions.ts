@@ -1,70 +1,69 @@
 "use server";
+import { revalidatePath } from "next/cache";
+
 import { auth } from "@/auth";
+
+import {
+  actionValidation,
+  ensureAdmin,
+  ensureAuthenticated,
+  ensureWebsiteExists,
+  getWebsiteNameAndUserId,
+  handleActionError,
+} from "@/lib/auth-utils";
 import { prisma } from "@/lib/prisma";
 import { rejectReasonSchema } from "@/lib/schemas";
-import { revalidatePath } from "next/cache";
+
+import { createNotification } from "./notification-actions";
 
 export async function acceptWebsite(websiteId: string) {
   const session = await auth();
 
-  if (!session?.user?.id) {
-    return { error: "Niste prijavljeni!" };
-  }
-
-  if (session?.user?.role !== "ADMIN") {
-    return { error: "Niste admin!" };
-  }
-
   try {
+    ensureAuthenticated(session);
+    ensureAdmin(session);
+    await ensureWebsiteExists(websiteId);
+    const website = await getWebsiteNameAndUserId(websiteId);
+
     await prisma.website.update({
       where: { id: websiteId },
       data: { status: "APPROVED" },
     });
-    revalidatePath("/dashboard");
-    revalidatePath("/");
+
+    await createNotification(website.userId, {
+      type: "POSITIVE",
+      message: "Web stranica " + website.name + " je prihvaćena!",
+    });
+
+    revalidatePath("/", "layout");
     return { success: "Web stranica uspješno prihvaćena!" };
   } catch (error: any) {
-    console.log("ACCEPT_WEBSITE_ERROR:", error);
-
-    if (error.code === "P2025") {
-      return { error: "Stranica nije pronađena!" };
-    }
-    return { error: "Greška pri spremanju u bazu." };
+    return handleActionError(error, "ACCEPT_WEBSITE_ERROR");
   }
 }
 
 export async function rejectWebsite(websiteId: string, rawData: unknown) {
   const session = await auth();
 
-  if (!session?.user?.id) {
-    return { error: "Niste prijavljeni!" };
-  }
-
-  if (session?.user?.role !== "ADMIN") {
-    return { error: "Niste admin!" };
-  }
-
-  const validation = rejectReasonSchema.safeParse(rawData);
-  console.log(validation);
-  if (!validation.success) {
-    return { error: "Niste popunili sva polja!" };
-  }
-
-  const data = validation.data;
-
   try {
+    ensureAuthenticated(session);
+    ensureAdmin(session);
+    await ensureWebsiteExists(websiteId);
+    const website = await getWebsiteNameAndUserId(websiteId);
+    const data = await actionValidation(rawData, rejectReasonSchema);
+
     await prisma.website.update({
       where: { id: websiteId },
       data: { status: "REJECTED", rejectionReason: data.reason },
     });
-    revalidatePath("/dashboard");
+    await createNotification(website.userId, {
+      type: "NEGATIVE",
+      message: "Web stranica " + website.name + " je odbijena!",
+    });
+
+    revalidatePath("/", "layout");
     return { success: "Web stranica uspješno odbijena!" };
   } catch (error: any) {
-    console.log("REJECT_WEBSITE_ERROR:", error);
-
-    if (error.code === "P2025") {
-      return { error: "Stranica nije pronađena!" };
-    }
-    return { error: "Greška pri spremanju u bazu." };
+    return handleActionError(error, "REJECT_WEBSITE_ERROR");
   }
 }

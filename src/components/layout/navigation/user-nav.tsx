@@ -2,7 +2,7 @@
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 
-import { LogOut, LucideIcon, Settings, User } from "lucide-react";
+import { LogOut, Settings, User } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 
 export function UserNav({ userImage }: { userImage: string }) {
   const NAV_ITEMS = [

@@ -1,10 +1,14 @@
-import Google from "next-auth/providers/google";
-import GitHub from "next-auth/providers/github";
-import Resend from "next-auth/providers/resend";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import { prisma } from "@/lib/prisma";
-import { JWT } from "next-auth/jwt";
 import NextAuth, { Session } from "next-auth";
+import { JWT } from "next-auth/jwt";
+import GitHub from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
+import Resend from "next-auth/providers/resend";
+
+import { PrismaAdapter } from "@auth/prisma-adapter";
+
+import { prisma } from "@/lib/prisma";
+
+import { createNotification } from "./actions/notification-actions";
 
 // @ts-expect-error - NextAuth v5 beta types are broken
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -16,14 +20,35 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   events: {
     async createUser({ user }: { user: any }) {
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { image: "https://jrgxq33rwp.ufs.sh/f/BNaNzrQS3KNeOIpQ9sfX6YjFCOQ0PUb84RtzAZJkh3B95pvN" },
-      });
+      try {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: {
+            image:
+              "https://jrgxq33rwp.ufs.sh/f/BNaNzrQS3KNeOIpQ9sfX6YjFCOQ0PUb84RtzAZJkh3B95pvN",
+          },
+        });
+        await createNotification(user.id, {
+          type: "POSITIVE",
+          message: user.name || "Korisniče" + " dobrodošao u Dev-bazu!",
+        });
+      } catch (error) {
+        console.log("CREATE_USER_ERROR:", error);
+      }
     },
   },
   callbacks: {
-    async jwt({ token, user, trigger, session }: { token: JWT; user: any; trigger: string; session: any }) {
+    async jwt({
+      token,
+      user,
+      trigger,
+      session,
+    }: {
+      token: JWT;
+      user: any;
+      trigger: string;
+      session: any;
+    }) {
       if (trigger === "update" && session?.name) {
         // Update user in session
         token.name = session.name;
@@ -31,7 +56,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         token.role = user.role;
         token.id = user.id;
-        token.picture = "https://jrgxq33rwp.ufs.sh/f/BNaNzrQS3KNeOIpQ9sfX6YjFCOQ0PUb84RtzAZJkh3B95pvN";
+        token.picture =
+          "https://jrgxq33rwp.ufs.sh/f/BNaNzrQS3KNeOIpQ9sfX6YjFCOQ0PUb84RtzAZJkh3B95pvN";
         return token;
       }
       return token;

@@ -3,7 +3,7 @@ import { Controller, useForm } from "react-hook-form";
 import { rejectWebsite } from "@/actions/admin-actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useAction } from "@/hooks/use-action";
+import { useServerAction } from "@/hooks/use-server-action";
 import { RejectReasonFormValues, rejectReasonSchema } from "@/lib/schemas";
 
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 export function AdminRejectForm({ websiteId }: { websiteId: string }) {
-  const { isPending, action } = useAction(rejectWebsite);
+  const { isPending, action } = useServerAction(rejectWebsite);
 
   const form = useForm<RejectReasonFormValues>({
     resolver: zodResolver(rejectReasonSchema),

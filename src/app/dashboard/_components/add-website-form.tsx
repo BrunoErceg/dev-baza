@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Category, Style } from "@prisma/client";
 import { toast } from "sonner";
 
-import { useAction } from "@/hooks/use-action";
+import { useServerAction } from "@/hooks/use-server-action";
 import { WebsiteFormValues, websiteSchema } from "@/lib/schemas";
 import { UploadButton } from "@/lib/uploadthing";
 
@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/select";
 
 export function AddWebsiteForm() {
-  const { isPending, action } = useAction(createWebsite);
+  const { isPending, action } = useServerAction(createWebsite);
   const form = useForm<WebsiteFormValues>({
     resolver: zodResolver(websiteSchema),
     defaultValues: {

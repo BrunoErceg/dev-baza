@@ -11,14 +11,14 @@ import { Field } from "@components/ui/field";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
-import { useAction } from "@/hooks/use-action";
+import { useServerAction } from "@/hooks/use-server-action";
 import { AvatarFormValues, avatarSchema } from "@/lib/schemas";
 import { UploadButton } from "@/lib/uploadthing";
 import { cn } from "@/lib/utils";
 
 export function UpdateAvatarForm({ userImage }: { userImage: string }) {
   const router = useRouter();
-  const { isPending, action } = useAction(updateAvatar);
+  const { isPending, action } = useServerAction(updateAvatar);
   const [isUploading, setIsUploading] = useState(false);
   const form = useForm<AvatarFormValues>({
     resolver: zodResolver(avatarSchema),

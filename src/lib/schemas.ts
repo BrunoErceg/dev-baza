@@ -1,4 +1,4 @@
-import { Category, Style } from "@prisma/client";
+import { Category, NotificationType, Style } from "@prisma/client";
 import * as z from "zod";
 
 export const profileSchema = z.object({
@@ -41,6 +41,14 @@ export const websiteSchema = z.object({
 
 export const rejectReasonSchema = z.object({
   reason: z.string().min(1, "Komentar je obavezan."),
+});
+
+export const notificationSchema = z.object({
+  type: z.enum(NotificationType),
+  message: z
+    .string()
+    .min(1, "Poruka je obavezna.")
+    .max(64, "Poruka može imati najviše 64 znaka."),
 });
 
 export const awardSchema = z.object({

@@ -3,7 +3,7 @@ import { useState } from "react";
 import deleteWebsite, { deleteAward } from "@/actions/website-actions";
 import { BadgePlus, TrashIcon, Trophy, UserStar } from "lucide-react";
 
-import { useAction } from "@/hooks/use-action";
+import { useServerAction } from "@/hooks/use-server-action";
 import { cn } from "@/lib/utils";
 
 import { Button } from "../ui/button";
@@ -66,7 +66,7 @@ export function WebsiteAdminDropdown({
 }
 
 const DeleteWebsiteAwardItem = ({ websiteId }: { websiteId: string }) => {
-  const { isPending, action } = useAction(deleteAward);
+  const { isPending, action } = useServerAction(deleteAward);
   return (
     <DropdownMenuItem
       onClick={() => action(websiteId)}
@@ -79,7 +79,7 @@ const DeleteWebsiteAwardItem = ({ websiteId }: { websiteId: string }) => {
 };
 
 const DeleteWebsiteItem = ({ websiteId }: { websiteId: string }) => {
-  const { isPending, action } = useAction(deleteWebsite);
+  const { isPending, action } = useServerAction(deleteWebsite);
   return (
     <DropdownMenuItem
       variant="destructive"

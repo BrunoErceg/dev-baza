@@ -25,6 +25,7 @@ model User {
   sessions      Session[]
   websites      Website[]
   likes         Like[]
+  notifications Notification[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
   role          Role            @default(USER)
@@ -59,14 +60,30 @@ enum Style {
 }
 
 model Like {
-  id        String        @id @default(cuid())
-  userId    String
-  websiteId String
-  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  website   Website       @relation(fields: [websiteId], references: [id], onDelete: Cascade)
-  createdAt DateTime      @default(now())
+  id          String        @id @default(cuid())
+  userId      String
+  websiteId   String 
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  website     Website       @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  createdAt   DateTime      @default(now())
   
   @@unique([userId, websiteId])
+}
+
+enum NotificationType {
+  POSITIVE
+  NEGATIVE
+  NEUTRAL
+  LIKE
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  type      NotificationType @default(NEUTRAL)
+  message   String
+  userId    String  
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime         @default(now())
 }
 
 model Website {

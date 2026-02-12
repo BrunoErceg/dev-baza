@@ -5,7 +5,7 @@ import { updateUser } from "@/actions/user-actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
 
-import { useAction } from "@/hooks/use-action";
+import { useServerAction } from "@/hooks/use-server-action";
 import { ProfileFormValues, profileSchema } from "@/lib/schemas";
 
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 export function UpdateProfileForm({ user }: { user: User }) {
-  const { isPending, action } = useAction(updateUser);
+  const { isPending, action } = useServerAction(updateUser);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),

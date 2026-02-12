@@ -1,47 +1,57 @@
 "use server";
-import { auth } from "@/auth";
-import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+
+import { auth } from "@/auth";
+
+import {
+  ensureAuthenticated,
+  ensureLikeDoesNotExist,
+  ensureLikeExists,
+  getWebsiteNameAndUserId,
+  handleActionError,
+} from "@/lib/auth-utils";
+import { prisma } from "@/lib/prisma";
+
+import { createNotification } from "./notification-actions";
 
 export async function deleteLike(websiteId: string) {
   const session = await auth();
 
-  if (!session?.user?.id) {
-    return { error: "Niste prijavljeni!" };
-  }
-
   try {
+    ensureAuthenticated(session);
+    await ensureLikeExists(websiteId, session.user.id);
     await prisma.like.deleteMany({
       where: { userId: session.user.id, websiteId: websiteId },
     });
-    return { success: "Lajk uspješno obrisano!" };
+    revalidatePath("/", "layout");
+    return { success: "Lajk uspješno obrisan!" };
   } catch (error: any) {
-    if (error.code === "P2025") {
-      return { error: "Lajk nije pronađena!" };
-    }
-    return { error: "Greška pri spremanju u bazu." + error };
+    return handleActionError(error, "DELETE_LIKE_ERROR");
   }
 }
 
 export async function createLike(websiteId: string) {
   const session = await auth();
 
-  if (!session?.user?.id) {
-    return { error: "Niste prijavljeni!" };
-  }
-
   try {
+    ensureAuthenticated(session);
+    await ensureLikeDoesNotExist(websiteId, session.user.id);
+    const website = await getWebsiteNameAndUserId(websiteId);
+
     await prisma.like.create({
       data: { websiteId: websiteId, userId: session.user.id },
     });
-    revalidatePath("/");
+
+    if (session.user.id !== website.userId) {
+      await createNotification(website.userId, {
+        type: "LIKE",
+        message: session.user.name + " je lajka " + website.name,
+      });
+    }
+
+    revalidatePath("/", "layout");
     return { success: "Lajk uspješno dodan!" };
   } catch (error: any) {
-    console.log(error);
-
-    if (error.code === "P2002") {
-      return { error: "Vec ste lajkali ovu web stranicu!" };
-    }
-    return { error: "Greška pri spremanju u bazu." };
+    return handleActionError(error, "CREATE_LIKE_ERROR");
   }
 }

@@ -1,6 +1,5 @@
 "use server";
 import { prisma } from "@/lib/prisma";
-import { WebsiteWithUserAndLikes } from "@/types/websites";
 
 export async function getDashboardData(userId: string) {
   const now = new Date();

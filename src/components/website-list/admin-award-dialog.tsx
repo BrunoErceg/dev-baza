@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { awardWebsite } from "@/actions/website-actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useAction } from "@/hooks/use-action";
+import { useServerAction } from "@/hooks/use-server-action";
 import { AwardFormValues, awardSchema } from "@/lib/schemas";
 
 import { Button } from "@/components/ui/button";
@@ -40,7 +40,7 @@ export function AdminAwardDialog({
     },
   });
 
-  const { isPending, action } = useAction(awardWebsite);
+  const { isPending, action } = useServerAction(awardWebsite);
 
   async function onSubmit(data: AwardFormValues) {
     action(websiteId, data);

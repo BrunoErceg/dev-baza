@@ -87,8 +87,14 @@ export function Large({
   return <p className={cn("text-lg font-semibold", className)}>{children}</p>;
 }
 
-export function Small({ children }: { children: ReactNode }) {
-  return <small className="text-sm leading-none font-medium">{children}</small>;
+export function Small({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return <p className={cn("text-sm font-medium", className)}>{children}</p>;
 }
 
 export function Muted({

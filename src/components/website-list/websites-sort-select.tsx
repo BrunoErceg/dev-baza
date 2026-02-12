@@ -3,6 +3,8 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
+import { OrderByOption } from "@/types/websites";
+
 import {
   Select,
   SelectContent,
@@ -13,11 +15,11 @@ import {
 } from "../ui/select";
 
 export function WebsiteSortSelect() {
-  const ORDER_BY = ["Datum", "Lajkovi", "Pregledi"] as const;
+  const ORDER_BY_OPTIONS: OrderByOption[] = ["Datum", "Lajkovi", "Pregledi"];
   const router = useRouter();
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("orderBy");
-  const [orderBy, setOrderBy] = useState(categoryParam || ORDER_BY[0]);
+  const [orderBy, setOrderBy] = useState(categoryParam || ORDER_BY_OPTIONS[0]);
 
   const changeOrderBy = (value: string) => {
     setOrderBy(value);
@@ -36,7 +38,7 @@ export function WebsiteSortSelect() {
         </SelectTrigger>
         <SelectContent position="popper">
           <SelectGroup>
-            {ORDER_BY.map((orderBy) => (
+            {ORDER_BY_OPTIONS.map((orderBy) => (
               <SelectItem
                 key={orderBy}
                 value={orderBy}

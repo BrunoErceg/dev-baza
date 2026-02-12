@@ -4,7 +4,7 @@ import { Geist } from "next/font/google";
 import { Toaster } from "sonner";
 
 import { Footer } from "@/components/layout/footer";
-import { Navbar } from "@/components/layout/nav-bar";
+import { Navbar } from "@/components/layout/navigation/nav-bar";
 import SessionProvider from "@/components/providers";
 
 import "./globals.css";
