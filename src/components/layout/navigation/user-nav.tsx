@@ -16,11 +16,11 @@ import {
 
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 
-export function UserNav({ userImage }: { userImage: string }) {
+export function UserNav({ user }: { user: { id: string; image: string } }) {
   const NAV_ITEMS = [
     {
       title: "Profil",
-      href: "/dashboard/profile",
+      href: `/profil/${user.id}`,
       Icon: User,
     },
     {
@@ -33,7 +33,7 @@ export function UserNav({ userImage }: { userImage: string }) {
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Avatar size="lg" className="cursor-pointer">
-          <AvatarImage src={userImage} />
+          <AvatarImage src={user.image} />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>

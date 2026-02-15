@@ -130,3 +130,10 @@
   font-weight: 800;
   font-style: normal;
 }
+
+.funnel-display {
+  font-family: "Funnel Display", sans-serif !important;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+}

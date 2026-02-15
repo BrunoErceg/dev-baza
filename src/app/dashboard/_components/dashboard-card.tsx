@@ -1,17 +1,27 @@
-import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Key } from "react";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface DashboardCardProps {
   title: string;
   description: string;
   cta?: React.ReactNode;
   children: React.ReactNode;
-  key?: Key;
 }
 
-export function DashboardCard({ title, description, cta, children, key }: DashboardCardProps) {
+export function DashboardCard({
+  title,
+  description,
+  cta,
+  children,
+}: DashboardCardProps) {
   return (
-    <Card key={key} className="flex gap-5 flex-col">
+    <Card className="flex flex-col gap-5">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>

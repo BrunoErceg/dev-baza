@@ -15,12 +15,11 @@ export const profileSchema = z.object({
     .optional(),
   email: z.email().optional(),
   website: z.url("Unesite ispravnu URL adresu.").optional(),
-  company: z
+  bio: z
     .string()
     .trim()
-    .min(3, "Ime kompanije mora imati barem 3 znaka.")
-    .max(32, "Ime kompanije može imati najviše 32 znaka.")
-    .optional(),
+    .min(3, "Opis mora imati barem 3 znaka.")
+    .max(256, "Opis može imati najviše 256 znaka."),
 });
 
 export const avatarSchema = z.object({
@@ -58,6 +57,27 @@ export const awardSchema = z.object({
     .max(32, "Priznanje može imati najviše 32 znaka."),
 });
 
+export const contactSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(3, "Ime mora imati barem 3 znaka.")
+    .max(32, "Ime može imati najviše 32 znaka."),
+  fromEmail: z.email(),
+  toEmail: z.email(),
+  subject: z
+    .string()
+    .trim()
+    .min(3, "Naslov mora imati barem 3 znaka.")
+    .max(64, "Naslov može imati najviše 64 znaka."),
+  message: z
+    .string()
+    .trim()
+    .min(3, "Poruka mora imati barem 3 znaka.")
+    .max(256, "Poruka može imati najviše 256 znaka."),
+});
+
+export type ContactFormValues = z.infer<typeof contactSchema>;
 export type AwardFormValues = z.infer<typeof awardSchema>;
 export type RejectReasonFormValues = z.infer<typeof rejectReasonSchema>;
 export type WebsiteFormValues = z.infer<typeof websiteSchema>;

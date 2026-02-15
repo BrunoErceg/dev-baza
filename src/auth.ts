@@ -26,6 +26,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           data: {
             image:
               "https://jrgxq33rwp.ufs.sh/f/BNaNzrQS3KNeOIpQ9sfX6YjFCOQ0PUb84RtzAZJkh3B95pvN",
+            emailContact: user.email,
           },
         });
         await createNotification(user.id, {

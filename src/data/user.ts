@@ -1,13 +1,16 @@
 import { auth } from "@/auth";
-import { Notification } from "@prisma/client";
+import { Notification, User } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 import { ActionResponse } from "@/types/actions";
 
 export async function getUser(userId: string) {
-  const session = await auth();
-  if (!session?.user?.id) return { error: "Niste prijavljeni!" };
-  return await prisma.user.findUnique({ where: { id: userId } });
+  try {
+    return await prisma.user.findUnique({ where: { id: userId } });
+  } catch (error) {
+    console.error("GET_USER_BY_ID_ERROR:", error);
+    return null;
+  }
 }
 
 export async function getUserNotifications(

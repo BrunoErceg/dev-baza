@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 
 import { getUser } from "@/data/user";
-import { getDashboardData, getPendingWebsites } from "@/data/websites";
+import { getDashboardData, getPendingWebsites } from "@/data/website";
 
 import { Container } from "@/components/layout/container";
 

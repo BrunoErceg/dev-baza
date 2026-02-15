@@ -17,10 +17,10 @@ model User {
   email         String          @unique
   emailVerified DateTime?
   image         String          @default("https://jrgxq33rwp.ufs.sh/f/BNaNzrQS3KNeOIpQ9sfX6YjFCOQ0PUb84RtzAZJkh3B95pvN")
-  number        String?
+  phone         String?
   emailContact  String?
   website       String?
-  company       String?
+  bio           String          @default("Ovaj korisnik još uvijek nije postavio svoju biografiju. Ovdje će se uskoro nalaziti detalji o njegovom radu, postignućima i projektima koje dijeli sa zajednicom. Pratite profil za buduća ažuriranja")
   accounts      Account[]
   sessions      Session[]
   websites      Website[]
@@ -89,7 +89,7 @@ model Notification {
 model Website {
   id        String        @id @default(cuid())
   url       String        @unique
-  name      String
+  name      String        @unique
   userId    String 
   imageUrl  String
   category  Category      @default(OSTALO)

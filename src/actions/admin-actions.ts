@@ -32,7 +32,7 @@ export async function acceptWebsite(websiteId: string) {
 
     await createNotification(website.userId, {
       type: "POSITIVE",
-      message: "Web stranica " + website.name + " je prihvaćena!",
+      message: website.name + " je odobrena!",
     });
 
     revalidatePath("/", "layout");
@@ -58,7 +58,7 @@ export async function rejectWebsite(websiteId: string, rawData: unknown) {
     });
     await createNotification(website.userId, {
       type: "NEGATIVE",
-      message: "Web stranica " + website.name + " je odbijena!",
+      message: website.name + " je odbijena! Razlog: " + data.reason,
     });
 
     revalidatePath("/", "layout");

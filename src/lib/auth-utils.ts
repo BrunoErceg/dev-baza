@@ -67,9 +67,16 @@ export async function actionValidation<T>(
 
 export function handleActionError(error: any, logLabel: string) {
   console.log(logLabel + ":", error);
-
   if (error instanceof ActionError) {
     return { error: error.message };
   }
+  if (error.code === "P2002") {
+    return { error: "Ovaj zapis već postoji." };
+  }
+
+  if (error.code === "P2025") {
+    return { error: "Zapis nije pronađen." };
+  }
+
   return { error: "Greška pri spremanju u bazu." };
 }

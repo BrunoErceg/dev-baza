@@ -37,7 +37,7 @@ export async function Navbar() {
               <>
                 <AddWebsiteDialog />
                 <UserNotification initialData={notifications} />
-                <UserNav userImage={user.image} />
+                <UserNav user={{ id: user.id, image: user.image }} />
               </>
             ) : (
               <>

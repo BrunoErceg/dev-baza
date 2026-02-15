@@ -24,7 +24,7 @@ export function DashboardStats({ stats }: { stats: WebsitesStats }) {
     },
     {
       title: "Nagrade",
-      value: stats.totalLikes, // Jesi siguran da ovdje ne ide neki drugi field?
+      value: stats.totalAwards,
       Icon: Trophy,
     },
   ];

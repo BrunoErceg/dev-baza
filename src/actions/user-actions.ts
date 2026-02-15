@@ -21,10 +21,10 @@ export const updateUser = async (rawData: unknown) => {
       where: { id: session.user.id },
       data: {
         name: data.name,
-        number: data.phone,
+        phone: data.phone,
         emailContact: data.email,
         website: data.website,
-        company: data.company,
+        bio: data.bio,
       },
     });
     revalidatePath("/");

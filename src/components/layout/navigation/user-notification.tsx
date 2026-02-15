@@ -1,6 +1,13 @@
-import { USER_NOTIFICATION_MAP } from "@/constants/notification";
-import { Notification } from "@prisma/client";
-import { Bell, BellOff } from "lucide-react";
+import { Notification, NotificationType } from "@prisma/client";
+import {
+  Bell,
+  BellOff,
+  CheckCircle2,
+  Heart,
+  Info,
+  LucideIcon,
+  XCircle,
+} from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
@@ -19,13 +26,40 @@ export function UserNotification({
   initialData: Notification[];
 }) {
   const formatRelativeDate = (date: Date) => {
-    const ageInDays = Math.floor(
-      (new Date().getTime() - date.getTime()) / (1000 * 60 * 60 * 24),
+    const ageInHours = Math.floor(
+      (new Date().getTime() - date.getTime()) / (1000 * 60 * 60),
     );
-    if (ageInDays === 0) return "Danas";
-    if (ageInDays === 1) return "Jučer";
-    if (ageInDays === 2) return "Prekjučer";
+
+    if (ageInHours === 0) return "Upravo";
+    if (ageInHours < 5) return `Prije ${ageInHours} sata`;
+    if (ageInHours < 12) return `Prije ${ageInHours} sati`;
+    if (ageInHours < 24) return `Danas`;
+    if (ageInHours < 48) return `Jučer`;
+    const ageInDays = Math.floor(ageInHours / 24);
+
     return `Prije ` + Math.abs(ageInDays) + ` dana`;
+  };
+
+  const USER_NOTIFICATION_MAP: Record<
+    NotificationType,
+    { Icon: LucideIcon; colors: string }
+  > = {
+    POSITIVE: {
+      Icon: CheckCircle2,
+      colors: "border-green-200 bg-green-50 text-green-900",
+    },
+    NEGATIVE: {
+      Icon: XCircle,
+      colors: "border-red-200 bg-red-50 text-red-900",
+    },
+    NEUTRAL: {
+      Icon: Info,
+      colors: "border-blue-200 bg-blue-50 text-blue-900",
+    },
+    LIKE: {
+      Icon: Heart,
+      colors: "border-blue-200 bg-blue-50 text-blue-900",
+    },
   };
 
   return (

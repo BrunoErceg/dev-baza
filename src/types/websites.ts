@@ -16,9 +16,17 @@ export type WebsitesStats = {
   thisMonthLikes: number;
   lastMonthLikes: number;
   totalLikes: number;
+  totalAwards: number;
 };
 export type WebsiteWithUserAndLikes = Prisma.WebsiteGetPayload<{
   include: { user: { select: { name: true; image: true } }; likedBy: true };
+}>;
+
+export type GridWebsiteData = Prisma.WebsiteGetPayload<{
+  include: {
+    user: { select: { name: true; image: true; id: true } };
+    likedBy: true;
+  };
 }>;
 
 export type OrderByOption = "Datum" | "Lajkovi" | "Pregledi";

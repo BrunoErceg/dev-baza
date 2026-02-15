@@ -6,7 +6,7 @@ import { BadgePlus, TrashIcon, Trophy, UserStar } from "lucide-react";
 import { useServerAction } from "@/hooks/use-server-action";
 import { cn } from "@/lib/utils";
 
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +14,8 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
+
 import { AdminAwardDialog } from "./admin-award-dialog";
 
 interface WebsiteAdminDropdownProps {

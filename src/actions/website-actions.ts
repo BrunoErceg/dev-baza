@@ -8,10 +8,13 @@ import {
   ensureAdmin,
   ensureAuthenticated,
   ensureWebsiteExists,
+  getWebsiteNameAndUserId,
   handleActionError,
 } from "@/lib/auth-utils";
 import { prisma } from "@/lib/prisma";
 import { awardSchema, websiteSchema } from "@/lib/schemas";
+
+import { createNotification } from "./notification-actions";
 
 export const createWebsite = async (rawData: unknown) => {
   const session = await auth();
@@ -29,6 +32,10 @@ export const createWebsite = async (rawData: unknown) => {
         category: data.category,
       },
     });
+    await createNotification(session.user.id, {
+      type: "NEUTRAL",
+      message: data.name + " čeka na odobrenje!",
+    });
     revalidatePath("/", "layout");
     return { success: "Web stranica je uspješno dodana!" };
   } catch (error) {
@@ -42,7 +49,7 @@ export default async function deleteWebsite(websiteId: string) {
   try {
     ensureAuthenticated(session);
     await ensureWebsiteExists(websiteId);
-
+    const website = await getWebsiteNameAndUserId(websiteId);
     const whereInput: { id: string; userId?: string } = { id: websiteId };
 
     if (session?.user?.role !== "ADMIN") {
@@ -51,6 +58,11 @@ export default async function deleteWebsite(websiteId: string) {
 
     await prisma.website.delete({
       where: whereInput,
+    });
+
+    await createNotification(session.user.id, {
+      type: "NEGATIVE",
+      message: website.name + " je izbrisana!",
     });
     revalidatePath("/", "layout");
     return { success: "Web stranica uspješno obrisana!" };
@@ -66,6 +78,7 @@ export async function awardWebsite(websiteId: string, rawData: unknown) {
     ensureAuthenticated(session);
     ensureAdmin(session);
     await ensureWebsiteExists(websiteId);
+    const website = await getWebsiteNameAndUserId(websiteId);
     const data = await actionValidation(rawData, awardSchema);
 
     await prisma.website.update({
@@ -73,6 +86,10 @@ export async function awardWebsite(websiteId: string, rawData: unknown) {
       data: {
         award: data.award,
       },
+    });
+    await createNotification(website.userId, {
+      type: "POSITIVE",
+      message: website.name + "  je dobilo priznanje: " + data.award,
     });
     revalidatePath("/", "layout");
     return { success: "Priznanje je uspješno dodano!" };

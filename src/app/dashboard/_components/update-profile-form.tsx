@@ -16,6 +16,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 export function UpdateProfileForm({ user }: { user: User }) {
   const { isPending, action } = useServerAction(updateUser);
@@ -23,11 +24,11 @@ export function UpdateProfileForm({ user }: { user: User }) {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      name: user.name ?? "",
-      phone: user.number ?? "",
+      name: user.name,
+      phone: user.phone ?? "",
       email: user.emailContact ?? "",
       website: user.website ?? "",
-      company: user.company ?? "",
+      bio: user.bio,
     },
   });
 
@@ -115,21 +116,21 @@ export function UpdateProfileForm({ user }: { user: User }) {
           />
         </FieldGroup>
 
-        {/* Company Name */}
+        {/* Website */}
         <FieldGroup>
           <Controller
-            name="company"
+            name="website"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="form-change-company">
-                  Ime Kompanije
+                <FieldLabel htmlFor="form-change-website">
+                  Web-stranica
                 </FieldLabel>
                 <Input
                   {...field}
-                  id="form-change-company"
+                  id="form-change-website"
                   aria-invalid={fieldState.invalid}
-                  placeholder="Unesite novi naziv kompanije"
+                  placeholder="Unesite url svoje web-stranice "
                   autoComplete="off"
                 />
                 {fieldState.invalid && (
@@ -140,21 +141,19 @@ export function UpdateProfileForm({ user }: { user: User }) {
           />
         </FieldGroup>
 
-        {/* Website */}
-        <FieldGroup>
+        {/* Bio */}
+        <FieldGroup className="col-span-2">
           <Controller
-            name="website"
+            name="bio"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="form-change-website">
-                  Web-stranice
-                </FieldLabel>
-                <Input
+                <FieldLabel htmlFor="form-change-bio">Opis</FieldLabel>
+                <Textarea
                   {...field}
-                  id="form-change-website"
+                  id="form-change-bio"
                   aria-invalid={fieldState.invalid}
-                  placeholder="Unesite novi url web-stranice"
+                  placeholder="Unesite opis o vama..."
                   autoComplete="off"
                 />
                 {fieldState.invalid && (

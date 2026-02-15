@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
+import { useUpdateQuery } from "@/hooks/use-update-query";
 import { OrderByOption } from "@/types/websites";
 
 import {
@@ -12,22 +13,17 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from "@/components/ui/select";
 
 export function WebsiteSortSelect() {
   const ORDER_BY_OPTIONS: OrderByOption[] = ["Datum", "Lajkovi", "Pregledi"];
-  const router = useRouter();
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("orderBy");
   const [orderBy, setOrderBy] = useState(categoryParam || ORDER_BY_OPTIONS[0]);
-
+  const { updateQuery } = useUpdateQuery();
   const changeOrderBy = (value: string) => {
     setOrderBy(value);
-    const params = new URLSearchParams(searchParams.toString());
-    if (value) {
-      params.set("orderBy", value);
-    }
-    router.push(`?${params.toString()}`);
+    updateQuery("orderBy", value);
   };
 
   return (

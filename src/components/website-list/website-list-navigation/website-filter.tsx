@@ -3,22 +3,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import { CATEGORY_MAP } from "@/constants/categories";
 
-import { Button } from "../ui/button";
+import { useUpdateQuery } from "@/hooks/use-update-query";
+
+import { Button } from "@/components/ui/button";
 
 export function WebsiteFilter() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category");
-
-  const changeCategory = (value?: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (value) {
-      params.set("category", value);
-    } else {
-      params.delete("category");
-    }
-    router.push(`?${params.toString()}`);
-  };
+  const { updateQuery } = useUpdateQuery();
 
   return (
     <div className="flex gap-1">
@@ -26,7 +18,7 @@ export function WebsiteFilter() {
         <Button
           key={category.slug}
           variant={category.slug === categoryParam ? "default" : "link"}
-          onClick={() => changeCategory(category.slug)}
+          onClick={() => updateQuery("category", category.slug)}
         >
           {category.label}
         </Button>
@@ -34,7 +26,7 @@ export function WebsiteFilter() {
 
       <Button
         variant={!categoryParam ? "default" : "link"}
-        onClick={() => changeCategory()}
+        onClick={() => updateQuery("category")}
       >
         Sve
       </Button>
