@@ -13,13 +13,15 @@ export function ProfileWebsitesTab() {
   return (
     <div className="flex gap-1">
       <Button
-        variant={tabParam === "projekti" || !tabParam ? "outline" : "link"}
+        size="default"
+        variant={tabParam === "projekti" || !tabParam ? "secondary" : "link"}
         onClick={() => updateQuery("tab", "projekti")}
       >
         Moji Projekti
       </Button>
       <Button
-        variant={tabParam === "lajkano" ? "outline" : "link"}
+        size="default"
+        variant={tabParam === "lajkano" ? "secondary" : "link"}
         onClick={() => updateQuery("tab", "lajkano")}
       >
         Lajkani Projekti

@@ -26,7 +26,7 @@ export function GridToggle() {
           key={id}
           className={cn(
             "size-6 cursor-pointer rounded-sm p-0.5",
-            gridConfig === id && "bg-gray-300",
+            gridConfig === id && "bg-gray-200",
           )}
           onClick={() => updateGrid(id)}
         />

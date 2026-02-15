@@ -7,7 +7,7 @@ import {
   ensureAuthenticated,
   handleActionError,
 } from "@/lib/auth-utils";
-import { contactSchema } from "@/lib/schemas";
+import { contactSchema, helpSchema } from "@/lib/schemas";
 
 export async function sendMailToProfile(rawData: unknown) {
   const session = await auth();
@@ -61,6 +61,31 @@ export async function sendMailToProfile(rawData: unknown) {
         </div>
     </div>
       `,
+    };
+    await transporter.sendMail(mailOptions);
+    return { success: "Email poslan uspješno!" };
+  } catch (error) {
+    return handleActionError(error, "SEND_EMAIL_ERROR");
+  }
+}
+
+export async function sendMailToAdmin(rawData: unknown) {
+  try {
+    const data = await actionValidation(rawData, helpSchema);
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: data.fromEmail,
+      to: "brunoerceg95@gmail.com",
+      subject: `Help: ${data.subject}`,
+      html: data.message,
     };
     await transporter.sendMail(mailOptions);
     return { success: "Email poslan uspješno!" };

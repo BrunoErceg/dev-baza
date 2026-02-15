@@ -29,8 +29,8 @@ export function WebsiteSortSelect() {
   return (
     <div>
       <Select value={orderBy} onValueChange={changeOrderBy}>
-        <SelectTrigger className="w-45 cursor-pointer">
-          <SelectValue placeholder="Poredaj po" />
+        <SelectTrigger className="w-35 cursor-pointer rounded-full bg-white">
+          <SelectValue className="" placeholder="Poredaj po" />
         </SelectTrigger>
         <SelectContent position="popper">
           <SelectGroup>

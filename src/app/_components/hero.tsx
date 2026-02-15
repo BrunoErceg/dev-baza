@@ -24,10 +24,10 @@ export default async function Hero({ className }: { className?: string }) {
         >
           <span>🏆 Osvoji priznanje za najbolji projekt</span>
         </Badge>
-        <H1 className="mt-6 max-w-[23ch] text-4xl leading-[1.2]! font-semibold tracking-[-0.035em] md:text-5xl lg:text-[2.75rem] xl:text-[3.25rem]">
+        <H1 className="mt-6 max-w-[23ch]">
           Najbolji hrvatski web projekti na jednom mjestu!
         </H1>
-        <P className="text-foreground/80 mt-6 max-w-[60ch] sm:text-lg">
+        <P className=" ">
           Izloži svoj rad, osvoji priznanja zajednice i poveži se s klijentima.
           DevBaza je dom za projekte koji podižu ljestvicu digitalnog razvoja u
           Hrvatskoj.
@@ -44,7 +44,8 @@ export default async function Hero({ className }: { className?: string }) {
           )}
         </div>
       </div>
-      <HighlightedWebsite className="w-2/5" />
+      {/*
+      <HighlightedWebsite className="w-2/5" /> */}
     </div>
   );
 }

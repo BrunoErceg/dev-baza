@@ -86,7 +86,7 @@ const LikesAndViews = ({
 const WebsiteName = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="absolute bottom-5 left-4 z-20 flex gap-2 text-white opacity-0 duration-100 group-hover:opacity-200">
-      <P>
+      <P className="text-white">
         <span className="text-xs">WEBSITE</span>
         <span className="block text-lg leading-tight">{children}</span>
       </P>

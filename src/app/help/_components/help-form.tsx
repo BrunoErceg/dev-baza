@@ -1,14 +1,16 @@
 "use client";
 import { Controller, useForm } from "react-hook-form";
 
-import { sendMailToProfile } from "@/actions/email-actions";
+import { sendMailToAdmin, sendMailToProfile } from "@/actions/email-actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useServerAction } from "@/hooks/use-server-action";
 import {
   ContactFormValues,
+  HelpFormValues,
   ProfileFormValues,
   contactSchema,
+  helpSchema,
 } from "@/lib/schemas";
 
 import { Button } from "@/components/ui/button";
@@ -21,28 +23,27 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-export function ProfileContactForm({ profileEmail }: { profileEmail: string }) {
-  const { isPending, action } = useServerAction(sendMailToProfile);
+export function HelpForm() {
+  const { isPending, action } = useServerAction(sendMailToAdmin);
 
-  const form = useForm<ContactFormValues>({
-    resolver: zodResolver(contactSchema),
+  const form = useForm<HelpFormValues>({
+    resolver: zodResolver(helpSchema),
     defaultValues: {
       name: "",
       fromEmail: "",
-      toEmail: profileEmail,
       subject: "",
       message: "",
     },
   });
 
-  async function onSubmit(data: ContactFormValues) {
+  async function onSubmit(data: HelpFormValues) {
     action(data);
   }
 
   return (
     <form
-      id="profile-contact-form"
-      className="flex flex-col gap-7"
+      id="help-contact-form"
+      className="flex w-full flex-col gap-7"
       onSubmit={form.handleSubmit(onSubmit)}
     >
       <div className="flex flex-col gap-5">
@@ -130,6 +131,7 @@ export function ProfileContactForm({ profileEmail }: { profileEmail: string }) {
                   {...field}
                   id="form-change-message"
                   aria-invalid={fieldState.invalid}
+                  className="min-h-30"
                   placeholder="Poruka..."
                   autoComplete="off"
                 />
@@ -146,7 +148,7 @@ export function ProfileContactForm({ profileEmail }: { profileEmail: string }) {
           type="submit"
           disabled={isPending}
           className="ml-auto"
-          form="profile-contact-form"
+          form="help-contact-form"
         >
           {isPending ? "Slanje" : "Pošalji poruku"}
         </Button>

@@ -11,12 +11,10 @@ export function H1({
 }) {
   return (
     <h1
-      className={
-        (cn(
-          "scroll-m-20 text-center text-4xl font-semibold tracking-tight text-balance",
-        ),
-        className)
-      }
+      className={cn(
+        "funnel-display scroll-m-20 text-4xl leading-[1.2]! font-semibold! tracking-[-0.035em] text-balance md:text-5xl",
+        className,
+      )}
     >
       {children}
     </h1>
@@ -33,7 +31,7 @@ export function H2({
   return (
     <h2
       className={cn(
-        "scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0",
+        "funnel-display scroll-m-20 text-3xl font-semibold tracking-tight",
         className,
       )}
     >
@@ -52,7 +50,7 @@ export function H3({
   return (
     <h3
       className={cn(
-        "scroll-m-20 text-2xl font-semibold tracking-tight",
+        "funnel-display scroll-m-20 text-2xl font-semibold tracking-tight",
         className,
       )}
     >
@@ -69,7 +67,11 @@ export function P({
   className?: string;
 }) {
   return (
-    <p className={cn("leading-7 not-first:mt-6", className)}>{children}</p>
+    <p
+      className={cn("max-w-[60ch] text-lg leading-7 not-first:mt-6", className)}
+    >
+      {children}
+    </p>
   );
 }
 

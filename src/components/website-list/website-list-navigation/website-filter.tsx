@@ -16,8 +16,9 @@ export function WebsiteFilter() {
     <div className="flex gap-1">
       {Object.values(CATEGORY_MAP).map((category) => (
         <Button
+          size="default"
           key={category.slug}
-          variant={category.slug === categoryParam ? "default" : "link"}
+          variant={category.slug === categoryParam ? "secondary" : "link"}
           onClick={() => updateQuery("category", category.slug)}
         >
           {category.label}
@@ -25,7 +26,8 @@ export function WebsiteFilter() {
       ))}
 
       <Button
-        variant={!categoryParam ? "default" : "link"}
+        size="default"
+        variant={!categoryParam ? "secondary" : "link"}
         onClick={() => updateQuery("category")}
       >
         Sve
