@@ -38,7 +38,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} bg-[#f7f7f7] font-sans antialiased`}
       >
         <div>
-          <Toaster richColors />
+          <Toaster position="bottom-center" />
           <Navbar />
           <SessionProvider>
             <main>{children}</main>

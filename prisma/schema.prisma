@@ -10,6 +10,43 @@ enum Role {
   USER
   ADMIN
 }
+
+enum ColorStyle {
+  LIGHT
+  DARK
+  COLORFUL
+  MINIMALIST
+  PASTEL
+  MONOCHROME
+}
+
+enum PrimaryColor {
+  WHITE
+  BLACK
+  GRAY
+  RED
+  BLUE
+  GREEN
+  YELLOW
+  ORANGE
+  PURPLE
+  PINK
+}
+
+enum Technology {
+  NEXTJS
+  REACT
+  VUE
+  ANGULAR
+  SVELTE
+  LARAVEL
+  NODEJS
+  WORDPRESS
+  WEBFLOW
+  SHOPIFY
+  STRAPI
+  OTHER
+}
  
 model User {
   id            String          @id @default(cuid())
@@ -94,6 +131,9 @@ model Website {
   imageUrl  String
   category  Category      @default(OSTALO)
   style     Style         @default(OSTALO)
+  colorStyle ColorStyle     @default(LIGHT)
+  primaryColor PrimaryColor @default(WHITE)
+  technology Technology   @default(WORDPRESS)
   views     Int           @default(0)
   likedBy   Like[]
   award     String?     

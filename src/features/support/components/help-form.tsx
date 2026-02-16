@@ -1,17 +1,9 @@
 "use client";
 import { Controller, useForm } from "react-hook-form";
 
-import { sendMailToAdmin, sendMailToProfile } from "@/actions/email-actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useServerAction } from "@/hooks/use-server-action";
-import {
-  ContactFormValues,
-  HelpFormValues,
-  ProfileFormValues,
-  contactSchema,
-  helpSchema,
-} from "@/lib/schemas";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -23,8 +15,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
+import { sendSupportTicket } from "../actions/send-support-ticket";
+import { HelpFormValues, helpSchema } from "../schemas/help-schema";
+
 export function HelpForm() {
-  const { isPending, action } = useServerAction(sendMailToAdmin);
+  const { isPending, action } = useServerAction(sendSupportTicket);
 
   const form = useForm<HelpFormValues>({
     resolver: zodResolver(helpSchema),

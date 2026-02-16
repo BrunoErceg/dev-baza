@@ -1,7 +1,5 @@
-import { MessageCircleQuestionMark } from "lucide-react";
-
 import { Card, CardContent } from "@/components/ui/card";
-import { H1, H2, Muted, P, Small } from "@/components/ui/typography";
+import { H2, P } from "@/components/ui/typography";
 
 import { HelpForm } from "./help-form";
 

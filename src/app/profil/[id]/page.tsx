@@ -7,8 +7,8 @@ import { Container } from "@/components/layout/container";
 import { WebsiteList } from "@/components/website-list/website-list";
 import { GridToggle } from "@/components/website-list/website-list-navigation/grid-toggle";
 import { ProfileWebsitesTab } from "@/components/website-list/website-list-navigation/profile-websites-tab";
+import { OrderBySelect } from "@/components/website-list/website-list-navigation/select-filters";
 import { WebsiteListNavigation } from "@/components/website-list/website-list-navigation/website-list-navigation";
-import { WebsiteSortSelect } from "@/components/website-list/website-list-navigation/website-sort-select";
 
 import { ProfileHero } from "./_components/profile-hero";
 
@@ -36,7 +36,7 @@ export default async function Profile({
         error={websiteResponse.error}
       >
         <WebsiteListNavigation>
-          <WebsiteSortSelect />
+          <OrderBySelect />
           <ProfileWebsitesTab />
           <GridToggle />
         </WebsiteListNavigation>

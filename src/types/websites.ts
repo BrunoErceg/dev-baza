@@ -29,4 +29,4 @@ export type GridWebsiteData = Prisma.WebsiteGetPayload<{
   };
 }>;
 
-export type OrderByOption = "Datum" | "Lajkovi" | "Pregledi";
+export type OrderByOption = "datum" | "lajkovi" | "pregledi";

@@ -1,8 +1,4 @@
-import {
-  CircleQuestionMark,
-  MessageCircleQuestionMark,
-  ShieldQuestionMark,
-} from "lucide-react";
+import { CircleQuestionMark } from "lucide-react";
 
 import { H1, P } from "@/components/ui/typography";
 

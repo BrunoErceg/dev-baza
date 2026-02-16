@@ -3,7 +3,7 @@
 import Link from "next/link";
 import * as React from "react";
 
-import { CATEGORY_MAP } from "@/constants/categories";
+import { CATEGORY_MAP } from "@/constants/mappings";
 import { LucideIcon } from "lucide-react";
 
 import {
@@ -61,7 +61,9 @@ export function NavMenu({ className }: { className?: string }) {
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem className="hidden md:flex">
-          <NavigationMenuTrigger>Istraži</NavigationMenuTrigger>
+          <NavigationMenuTrigger>
+            <Link href="/istrazi">Istraži</Link>
+          </NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-100 gap-2 p-2 md:w-125 md:grid-cols-2 lg:w-150">
               {Object.values(CATEGORY_MAP).map((category) => (
@@ -69,7 +71,7 @@ export function NavMenu({ className }: { className?: string }) {
                   key={category.label}
                   title={category.label}
                   Icon={category.icon}
-                  href={category.slug}
+                  href={"istrazi/?kategorija=" + category.slug}
                 >
                   {category.description}
                 </ListItem>

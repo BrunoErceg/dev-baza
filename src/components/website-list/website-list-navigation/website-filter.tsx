@@ -1,7 +1,7 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { CATEGORY_MAP } from "@/constants/categories";
+import { CATEGORY_MAP } from "@/constants/mappings";
 
 import { useUpdateQuery } from "@/hooks/use-update-query";
 
@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 
 export function WebsiteFilter() {
   const searchParams = useSearchParams();
-  const categoryParam = searchParams.get("category");
+  const categoryParam = searchParams.get("kategorija");
   const { updateQuery } = useUpdateQuery();
 
   return (
@@ -19,7 +19,7 @@ export function WebsiteFilter() {
           size="default"
           key={category.slug}
           variant={category.slug === categoryParam ? "secondary" : "link"}
-          onClick={() => updateQuery("category", category.slug)}
+          onClick={() => updateQuery("kategorija", category.slug)}
         >
           {category.label}
         </Button>
@@ -28,7 +28,7 @@ export function WebsiteFilter() {
       <Button
         size="default"
         variant={!categoryParam ? "secondary" : "link"}
-        onClick={() => updateQuery("category")}
+        onClick={() => updateQuery("kategorija")}
       >
         Sve
       </Button>

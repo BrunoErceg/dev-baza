@@ -1,7 +1,16 @@
 "use server";
+import {
+  $Enums,
+  Category,
+  ColorStyle,
+  PrimaryColor,
+  Style,
+  Technology,
+} from "@prisma/client";
+
 import { prisma } from "@/lib/prisma";
 import { DataResponse } from "@/types/actions";
-import { GridWebsiteData } from "@/types/websites";
+import { GridWebsiteData, OrderByOption } from "@/types/websites";
 
 export async function getDashboardData(userId: string) {
   const now = new Date();
@@ -56,17 +65,44 @@ export async function getPendingWebsites() {
   });
 }
 
-export async function getAllApprovedWebsites(): Promise<
-  DataResponse<GridWebsiteData[]>
-> {
+export async function getAllApprovedWebsites({
+  userId,
+  category,
+  style,
+  colorStyle,
+  primaryColor,
+  technology,
+  sort,
+}: {
+  userId?: string;
+  category?: Category;
+  style?: Style;
+  colorStyle?: ColorStyle;
+  primaryColor?: PrimaryColor;
+  technology?: Technology;
+  sort?: string;
+}): Promise<DataResponse<GridWebsiteData[]>> {
   try {
     const websites = await prisma.website.findMany({
-      where: { status: "APPROVED" },
+      where: {
+        userId: userId,
+        status: "APPROVED",
+        category,
+        style,
+        primaryColor,
+        colorStyle,
+        technology,
+      },
       include: {
         user: { select: { name: true, image: true, id: true } },
         likedBy: true,
       },
-      orderBy: { createdAt: "desc" },
+      orderBy:
+        sort === "pregledi"
+          ? { views: "desc" }
+          : sort === "lajkovi"
+            ? { likedBy: { _count: "desc" } }
+            : { createdAt: "desc" },
     });
     return { data: websites, error: null };
   } catch (error) {

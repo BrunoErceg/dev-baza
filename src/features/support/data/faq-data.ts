@@ -1,8 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FaqAccordion } from "@/components/ui/faq";
-import { H2, P } from "@/components/ui/typography";
-
-const faqItems = [
+export const FAQ_ITEMS = [
   {
     question: "Što je Dev-baza i tko može dodati svoju stranicu",
     answer:
@@ -26,13 +22,3 @@ const faqItems = [
     answer: `Ako primijetite tehnički problem, pogrešan link ili bilo kakvu drugu nepravilnost, molimo vas da nam se javite izravno putem emaila navedenog u dnu stranice. Cijenimo svaku povratnu informaciju jer nam pomaže da Dev-bazu učinimo boljim mjestom za sve developere. Također, ako želite suradnju ili imate prijedlog za novu funkcionalnost, slobodno pišite!`,
   },
 ];
-
-export default function FaqCard() {
-  return (
-    <Card>
-      <CardContent>
-        <FaqAccordion faqItems={faqItems} />
-      </CardContent>
-    </Card>
-  );
-}

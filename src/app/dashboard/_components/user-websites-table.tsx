@@ -1,12 +1,10 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { LiaSortSolid } from "react-icons/lia";
 
-import deleteWebsite from "@/actions/website-actions";
-import { WEBSITE_STATUS } from "@/constants/staus";
+import { WEBSITE_STATUS_MAP } from "@/constants/mappings";
 import { Badge } from "@components/ui/badge";
 import {
   HoverCard,
@@ -170,13 +168,13 @@ const StatusTooltip = ({
   status: WebsiteStatus;
   rejectReason?: string | null;
 }) => {
-  const Icon = WEBSITE_STATUS[status].Icon;
+  const Icon = WEBSITE_STATUS_MAP[status].Icon;
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Badge variant="outline" className={WEBSITE_STATUS[status].color}>
+        <Badge variant="outline" className={WEBSITE_STATUS_MAP[status].color}>
           <Icon />
-          {WEBSITE_STATUS[status].label}{" "}
+          {WEBSITE_STATUS_MAP[status].label}{" "}
         </Badge>
       </TooltipTrigger>
       <TooltipContent>
