@@ -24,6 +24,13 @@ export async function ensureWebsiteExists(websiteId: string) {
   if (!website) throw new ActionError("Stranica nije pronađena!");
 }
 
+export async function ensureWebsiteOwner(websiteId: string, userId: string) {
+  const website = await prisma.website.findUnique({
+    where: { id: websiteId, userId: userId },
+  });
+  if (!website) throw new ActionError("Stranica nije pronađena!");
+}
+
 export async function getWebsiteNameAndUserId(id: string) {
   const website = await prisma.website.findUnique({
     where: { id: id },

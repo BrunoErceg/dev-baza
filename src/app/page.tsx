@@ -1,28 +1,19 @@
-import { get } from "http";
+import { Container } from "@features/layout/components/container";
+import { WebsiteList } from "@features/websites/components/website-list/website-list";
+import { GridToggle } from "@features/websites/components/website-list/website-list-navigation/grid-toggle";
+import { OrderBySelect } from "@features/websites/components/website-list/website-list-navigation/select-filters";
+import { WebsiteCategoryList } from "@features/websites/components/website-list/website-list-navigation/website-category-list";
+import { WebsiteListNavigation } from "@features/websites/components/website-list/website-list-navigation/website-list-navigation";
+import { getAllApprovedWebsites } from "@features/websites/data";
+import { parseExploreParams } from "@features/websites/utils";
 
-import { getAllApprovedWebsites } from "@/data/website";
-import { parseExploreParams } from "@/lib/explore-params";
-
-import { Container } from "@/components/layout/container";
-import { WebsiteList } from "@/components/website-list/website-list";
-import { GridToggle } from "@/components/website-list/website-list-navigation/grid-toggle";
-import { OrderBySelect } from "@/components/website-list/website-list-navigation/select-filters";
-import { WebsiteFilter } from "@/components/website-list/website-list-navigation/website-filter";
-import { WebsiteListNavigation } from "@/components/website-list/website-list-navigation/website-list-navigation";
-
-import Hero from "./_components/hero";
+import Hero from "../features/marketing/components/hero";
 
 export default async function Home({ searchParams }: any) {
-  const { category, style, colorStyle, primaryColor, technology, sort } =
-    parseExploreParams(searchParams);
-  const websiteResponse = await getAllApprovedWebsites({
-    category,
-    style,
-    colorStyle,
-    primaryColor,
-    technology,
-    sort,
-  });
+  const resolvedParams = await searchParams;
+  const filters = parseExploreParams(resolvedParams);
+  const websiteResponse = await getAllApprovedWebsites({ ...filters });
+
   return (
     <Container>
       <Hero className="my-20" />
@@ -32,7 +23,7 @@ export default async function Home({ searchParams }: any) {
       >
         <WebsiteListNavigation>
           <OrderBySelect />
-          <WebsiteFilter />
+          <WebsiteCategoryList />
           <GridToggle />
         </WebsiteListNavigation>
       </WebsiteList>

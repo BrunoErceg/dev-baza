@@ -3,8 +3,9 @@
 import Link from "next/link";
 import * as React from "react";
 
-import { CATEGORY_MAP } from "@/constants/mappings";
 import { LucideIcon } from "lucide-react";
+
+import { CATEGORY_MAP } from "@features/websites/constants";
 
 import {
   NavigationMenu,
@@ -14,42 +15,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-
-const components: { title: string; href: string; description: string }[] = [
-  {
-    title: "Alert Dialog",
-    href: "/docs/primitives/alert-dialog",
-    description: "A modal dialog that interrupts the user with.",
-  },
-  {
-    title: "Hover Card",
-    href: "/docs/primitives/hover-card",
-    description: "For sighted users to preview content  ",
-  },
-  {
-    title: "Progress",
-    href: "/docs/primitives/progress",
-    description: "Displays an indicator showing the completion progress.",
-  },
-  {
-    title: "Scroll-area",
-    href: "/docs/primitives/scroll-area",
-    description: "Visually or semantically separates content.",
-  },
-  {
-    title: "Tabs",
-    href: "/docs/primitives/tabs",
-    description:
-      "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
-  },
-  {
-    title: "Tooltip",
-    href: "/docs/primitives/tooltip",
-    description:
-      "A he element receives keyboard focus or the mouse hovers over it.",
-  },
-];
+} from "@ui/navigation-menu";
 
 export function NavMenu({ className }: { className?: string }) {
   return (
@@ -81,7 +47,7 @@ export function NavMenu({ className }: { className?: string }) {
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link href="/help">Pomoć</Link>
+            <Link href="/pomoc">Pomoć</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>

@@ -6,17 +6,17 @@ import Resend from "next-auth/providers/resend";
 
 import { PrismaAdapter } from "@auth/prisma-adapter";
 
-import { prisma } from "@/lib/prisma";
+import { createNotification } from "@features/notifications/actions";
 
-import { createNotification } from "./actions/notification-actions";
+import { prisma } from "@/lib/prisma";
 
 // @ts-expect-error - NextAuth v5 beta types are broken
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   pages: {
-    signIn: "/login", // Preusmjeri na tvoju stranicu
-    newUser: "/register", // Ako želiš poseban page za nove korisnike
+    signIn: "/login",
+    newUser: "/register",
   },
   events: {
     async createUser({ user }: { user: any }) {

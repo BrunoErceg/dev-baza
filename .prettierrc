@@ -8,10 +8,11 @@
   "importOrder": [
     "^(react|next)(.*)$",
     "<THIRD_PARTY_MODULES>",
+    "^@features/(.*)$",
     "^@actions/(.*)$",
     "^@/(types|hooks|context|data|lib)/(.*)$",
-    "^@/ui/(.*)$",
-    "^@/components/(.*)$",
+    "^@ui/(.*)$",
+    "^@components/(.*)$",
     "^[./]"
   ],
   "importOrderSeparation": true,

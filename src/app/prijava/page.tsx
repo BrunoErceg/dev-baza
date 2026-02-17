@@ -1,82 +1,42 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import { Logo } from "@/components/logo";
-import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { signIn, useSession } from "next-auth/react";
-import Image from "next/image";
-import { Large } from "@/components/ui/typography";
-import { Card } from "@/components/ui/card";
 
-const formSchema = z.object({
-  email: z.email(),
-});
-const Login = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    defaultValues: {
-      email: "",
-    },
-    resolver: zodResolver(formSchema),
-  });
+import { Logo } from "@/components/logo";
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    await signIn("resend", {
-      email: data.email,
-      callbackUrl: "/dashboard",
-    });
-  };
+import { GitHubLoginButton } from "@features/auth/components/github-login-button";
+import { GoogleLoginButton } from "@features/auth/components/google-login-button";
+import { LoginForm } from "@features/auth/components/login-form";
 
+import { Card } from "@ui/card";
+import { Separator } from "@ui/separator";
+import { Large } from "@ui/typography";
+
+export default function LoginPage() {
   return (
-    <div className="py-[10%] flex items-center justify-center">
-      <Card className="max-w-md m-auto w-full flex flex-col items-center px-10">
+    <div className="mt-20 flex items-center justify-center">
+      <Card className="flex w-full max-w-md flex-col items-center px-10">
         <Logo />
         <Large>Prijavi se u Dev Bazu</Large>
-        <Button onClick={() => signIn("google", { redirectTo: "/dashboard" })} className=" w-full gap-3">
-          <GoogleLogo />
-          Nastavi putem Googlea
-        </Button>
-        <Button onClick={() => signIn("github", { redirectTo: "/dashboard" })} className="w-full gap-3">
-          <GitHubLogo />
-          Nastavi putem GitHuba
-        </Button>
 
-        <div className="  w-full flex items-center justify-center overflow-hidden">
+        <GoogleLoginButton />
+        <GitHubLoginButton />
+
+        <div className="flex w-full items-center justify-center overflow-hidden">
           <Separator />
-          <span className="text-sm px-2">ili</span>
+          <span className="px-2 text-sm">ili</span>
           <Separator />
         </div>
 
-        <Form {...form}>
-          <form className="w-full space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>E-adresa</FormLabel>
-                  <FormControl>
-                    <Input type="email" placeholder="Email" className="w-full" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" className="mt-4 w-full">
-              Prijavi se
-            </Button>
-          </form>
-        </Form>
+        <LoginForm />
 
         <div className="mt-5 space-y-5">
-          <p className="text-sm text-center">
+          <p className="text-center text-sm">
             Nemate račun?
-            <Link href="/registracija" className="ml-1 underline text-muted-foreground">
+            <Link
+              href="/registracija"
+              className="text-muted-foreground ml-1 underline"
+            >
               Registrirajte se
             </Link>
           </p>
@@ -84,14 +44,4 @@ const Login = () => {
       </Card>
     </div>
   );
-};
-
-const GitHubLogo = () => (
-  <Image src="/github-logo.svg" alt="GitHub" width={18} height={18} className="inline-block shrink-0 align-sub text-inherit size-lg" />
-);
-
-const GoogleLogo = () => (
-  <Image src="/google-logo.svg" alt="GitHub" width={18} height={18} className="inline-block shrink-0 align-sub text-inherit size-lg" />
-);
-
-export default Login;
+}

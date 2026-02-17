@@ -1,5 +1,5 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { H2, P } from "@/components/ui/typography";
+import { Card, CardContent } from "@ui/card";
+import { H2, P } from "@ui/typography";
 
 import { HelpForm } from "./help-form";
 
@@ -12,11 +12,8 @@ export function HelpContactSection() {
           Pošaljite nam upit i odgovorit ćemo vam unutar 24 sata radnim danom.
         </P>
       </div>
-      <Card className="w-full">
-        <CardContent>
-          <HelpForm />
-        </CardContent>
-      </Card>
+
+      <HelpForm />
     </div>
   );
 }

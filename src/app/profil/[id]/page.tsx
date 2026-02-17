@@ -1,16 +1,18 @@
 import { notFound } from "next/navigation";
 
-import { getUser } from "@/data/user";
-import { getUserLikedWebsites, getUserWebsites } from "@/data/website";
-
-import { Container } from "@/components/layout/container";
-import { WebsiteList } from "@/components/website-list/website-list";
-import { GridToggle } from "@/components/website-list/website-list-navigation/grid-toggle";
-import { ProfileWebsitesTab } from "@/components/website-list/website-list-navigation/profile-websites-tab";
-import { OrderBySelect } from "@/components/website-list/website-list-navigation/select-filters";
-import { WebsiteListNavigation } from "@/components/website-list/website-list-navigation/website-list-navigation";
-
-import { ProfileHero } from "./_components/profile-hero";
+import { Container } from "@features/layout/components/container";
+import { ProfileHero } from "@features/user/components/profile-hero/profile-hero";
+import { getUser } from "@features/user/data";
+import { WebsiteList } from "@features/websites/components/website-list/website-list";
+import { GridToggle } from "@features/websites/components/website-list/website-list-navigation/grid-toggle";
+import { ProfileWebsitesTab } from "@features/websites/components/website-list/website-list-navigation/profile-websites-tab";
+import { OrderBySelect } from "@features/websites/components/website-list/website-list-navigation/select-filters";
+import { WebsiteListNavigation } from "@features/websites/components/website-list/website-list-navigation/website-list-navigation";
+import {
+  getAllApprovedWebsites,
+  getUserLikedWebsites,
+} from "@features/websites/data";
+import { parseExploreParams } from "@features/websites/utils";
 
 export default async function Profile({
   params,
@@ -21,12 +23,14 @@ export default async function Profile({
 }) {
   const { id } = await params;
   const { tab } = await searchParams;
-  const user = await getUser(id);
+  const { data: user, error: userError } = await getUser(id);
+  const resolvedParams = await searchParams;
+  const filters = parseExploreParams(resolvedParams);
   const websiteResponse =
     tab === "lajkano"
       ? await getUserLikedWebsites(id)
-      : await getUserWebsites(id);
-  if (!user) notFound();
+      : await getAllApprovedWebsites({ userId: id, ...filters });
+  if (!user || userError) notFound();
 
   return (
     <Container>

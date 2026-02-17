@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 
+import SessionProvider from "@/components/providers";
 import { Toaster } from "sonner";
 
-import { Footer } from "@/components/layout/footer";
-import { Navbar } from "@/components/layout/navigation/nav-bar";
-import SessionProvider from "@/components/providers";
+import { Footer } from "@features/layout/components/footer";
+import { Navbar } from "@features/layout/components/nav-bar";
 
 import "./globals.css";
 
@@ -35,16 +35,14 @@ export default async function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} bg-[#f7f7f7] font-sans antialiased`}
+        className={`${geistSans.variable} flex min-h-screen flex-col bg-[#f7f7f7] font-sans antialiased`}
       >
-        <div>
-          <Toaster position="bottom-center" />
-          <Navbar />
-          <SessionProvider>
-            <main>{children}</main>
-          </SessionProvider>
-          <Footer />
-        </div>
+        <Toaster position="bottom-center" />
+        <Navbar />
+        <SessionProvider>
+          <main className="grow">{children}</main>
+        </SessionProvider>
+        <Footer />
       </body>
     </html>
   );

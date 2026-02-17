@@ -1,18 +1,27 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import { Logo } from "@/components/logo";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
-import { Large } from "@/components/ui/typography";
-import { Card } from "@/components/ui/card";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+
+import { Logo } from "@/components/logo";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+import { Button } from "@ui/button";
+import { Card } from "@ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@ui/form";
+import { Input } from "@ui/input";
+import { Separator } from "@ui/separator";
+import { Large } from "@ui/typography";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -34,27 +43,36 @@ const Register = () => {
   };
 
   return (
-    <div className="py-[10%] flex items-center justify-center">
-      <Card className="max-w-md m-auto w-full flex flex-col items-center px-10">
+    <div className="flex items-center justify-center py-[10%]">
+      <Card className="m-auto flex w-full max-w-md flex-col items-center px-10">
         <Logo />
         <Large>Registriraj se u Dev Bazu</Large>
-        <Button onClick={() => signIn("google", { redirectTo: "/dashboard" })} className=" w-full gap-3">
+        <Button
+          onClick={() => signIn("google", { redirectTo: "/dashboard" })}
+          className="w-full gap-3"
+        >
           <GoogleLogo />
           Nastavi putem Googlea
         </Button>
-        <Button onClick={() => signIn("github", { redirectTo: "/dashboard" })} className="  w-full gap-3">
+        <Button
+          onClick={() => signIn("github", { redirectTo: "/dashboard" })}
+          className="w-full gap-3"
+        >
           <GitHubLogo />
           Nastavi putem GitHuba
         </Button>
 
-        <div className="w-full flex items-center justify-center overflow-hidden">
+        <div className="flex w-full items-center justify-center overflow-hidden">
           <Separator />
-          <span className="text-sm px-2">ili</span>
+          <span className="px-2 text-sm">ili</span>
           <Separator />
         </div>
 
         <Form {...form}>
-          <form className="w-full space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+          <form
+            className="w-full space-y-4"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
             <FormField
               control={form.control}
               name="email"
@@ -62,7 +80,12 @@ const Register = () => {
                 <FormItem>
                   <FormLabel>E-adresa</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="Email" className="w-full" {...field} />
+                    <Input
+                      type="email"
+                      placeholder="Email"
+                      className="w-full"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -75,9 +98,12 @@ const Register = () => {
         </Form>
 
         <div className="mt-5 space-y-5">
-          <p className="text-sm text-center">
+          <p className="text-center text-sm">
             Imaš račun?
-            <Link href="/prijava" className="ml-1 underline text-muted-foreground">
+            <Link
+              href="/prijava"
+              className="text-muted-foreground ml-1 underline"
+            >
               Prijavi se
             </Link>
           </p>
@@ -88,11 +114,23 @@ const Register = () => {
 };
 
 const GitHubLogo = () => (
-  <Image src="/github-logo.svg" alt="GitHub" width={18} height={18} className="inline-block shrink-0 align-sub text-inherit size-lg" />
+  <Image
+    src="/github-logo.svg"
+    alt="GitHub"
+    width={18}
+    height={18}
+    className="size-lg inline-block shrink-0 align-sub text-inherit"
+  />
 );
 
 const GoogleLogo = () => (
-  <Image src="/google-logo.svg" alt="GitHub" width={18} height={18} className="inline-block shrink-0 align-sub text-inherit size-lg" />
+  <Image
+    src="/google-logo.svg"
+    alt="GitHub"
+    width={18}
+    height={18}
+    className="size-lg inline-block shrink-0 align-sub text-inherit"
+  />
 );
 
 export default Register;

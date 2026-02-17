@@ -1,6 +1,6 @@
 import { CircleQuestionMark } from "lucide-react";
 
-import { H1, P } from "@/components/ui/typography";
+import { H1, P } from "@ui/typography";
 
 export function HelpHeader() {
   return (

@@ -1,7 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FaqAccordion } from "@/components/ui/faq";
+import { Card, CardContent } from "@ui/card";
+import { FaqAccordion } from "@ui/faq";
 
-import { FAQ_ITEMS } from "../data/faq-data";
+import { FAQ_ITEMS } from "../data";
 
 export default function FaqCard() {
   return (
