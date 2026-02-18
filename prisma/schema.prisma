@@ -50,7 +50,8 @@ enum Technology {
  
 model User {
   id            String          @id @default(cuid())
-  name          String
+  name          String?
+  userName      String?
   email         String          @unique
   emailVerified DateTime?
   image         String          @default("https://jrgxq33rwp.ufs.sh/f/BNaNzrQS3KNeOIpQ9sfX6YjFCOQ0PUb84RtzAZJkh3B95pvN")

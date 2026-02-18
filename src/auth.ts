@@ -15,8 +15,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   pages: {
-    signIn: "/login",
-    newUser: "/register",
+    verifyRequest: "/provjeri-email",
+    error: "/prijava-error",
   },
   events: {
     async createUser({ user }: { user: any }) {
@@ -36,6 +36,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       } catch (error) {
         console.log("CREATE_USER_ERROR:", error);
       }
+      if (user.name) {
+        const generatedUsername = user.name
+          .toLowerCase()
+          .replace(/\s+/g, "-") // Razmaci postaju crtice
+          .replace(/[^a-z0-9-]/g, ""); // Briše kvačice i specijalne znakove
+
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { userName: generatedUsername },
+        });
+      }
     },
   },
   callbacks: {
@@ -50,11 +61,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       trigger: string;
       session: any;
     }) {
-      if (trigger === "update" && session?.name) {
-        // Update user in session
-        token.name = session.name;
+      if (trigger === "update" && session?.userName) {
+        token.userName = session.userName;
       }
       if (user) {
+        token.userName = (user as any).userName;
         token.role = user.role;
         token.id = user.id;
         token.picture =
@@ -65,8 +76,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async session({ session, token }: { session: Session; token: JWT }) {
       session.user.id = token.id;
+      session.user.userName = token.userName;
+      session.user.image = token.picture;
+      session.user.name = token.name;
       session.user.role = token.role;
-      delete session.user.image;
       return session;
     },
   },

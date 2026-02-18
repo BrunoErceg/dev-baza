@@ -31,7 +31,7 @@ export function H2({
   return (
     <h2
       className={cn(
-        "funnel-display scroll-m-20 text-3xl font-semibold tracking-tight",
+        "funnel-display text-3xl font-semibold tracking-tight",
         className,
       )}
     >

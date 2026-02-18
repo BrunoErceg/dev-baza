@@ -8,3 +8,8 @@ export type DataResponse<T> = {
   data: T;
   error: string | null;
 };
+
+export type FormActionResponse = {
+  success: string | null;
+  error: string | null;
+};

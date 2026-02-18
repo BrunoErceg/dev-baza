@@ -1,26 +1,22 @@
-"use client";
-
 import Link from "next/link";
-
-import { Logo } from "@/components/logo";
 
 import { GitHubLoginButton } from "@features/auth/components/github-login-button";
 import { GoogleLoginButton } from "@features/auth/components/google-login-button";
 import { LoginForm } from "@features/auth/components/login-form";
 
-import { Card } from "@ui/card";
 import { Separator } from "@ui/separator";
-import { Large } from "@ui/typography";
+import { H3, Muted } from "@ui/typography";
 
 export default function LoginPage() {
   return (
-    <div className="mt-20 flex items-center justify-center">
-      <Card className="flex w-full max-w-md flex-col items-center px-10">
-        <Logo />
-        <Large>Prijavi se u Dev Bazu</Large>
+    <div className="flex flex-1 items-center justify-center">
+      <div className="w-full max-w-xs space-y-5 text-center">
+        <div className="mb-10">
+          <H3 className="mb-1">Pridruži se Dev Bazi</H3>
+          <Muted>Odaberite način prijave ili kreirajte račun.</Muted>
+        </div>
 
-        <GoogleLoginButton />
-        <GitHubLoginButton />
+        <LoginForm />
 
         <div className="flex w-full items-center justify-center overflow-hidden">
           <Separator />
@@ -28,20 +24,27 @@ export default function LoginPage() {
           <Separator />
         </div>
 
-        <LoginForm />
-
-        <div className="mt-5 space-y-5">
+        <GoogleLoginButton />
+        <GitHubLoginButton />
+        <div className="mt-5">
           <p className="text-center text-sm">
-            Nemate račun?
+            Nastavkom prijave prihvaćate naše
+            <br />
             <Link
               href="/registracija"
               className="text-muted-foreground ml-1 underline"
             >
-              Registrirajte se
+              Uvjete korištenja
+            </Link>
+            <Link
+              href="/registracija"
+              className="text-muted-foreground ml-1 underline"
+            >
+              Pravila privatnosti
             </Link>
           </p>
         </div>
-      </Card>
+      </div>
     </div>
   );
 }

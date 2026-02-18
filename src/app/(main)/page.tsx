@@ -7,7 +7,7 @@ import { WebsiteListNavigation } from "@features/websites/components/website-lis
 import { getAllApprovedWebsites } from "@features/websites/data";
 import { parseExploreParams } from "@features/websites/utils";
 
-import Hero from "../features/marketing/components/hero";
+import Hero from "../../features/marketing/components/hero";
 
 export default async function Home({ searchParams }: any) {
   const resolvedParams = await searchParams;

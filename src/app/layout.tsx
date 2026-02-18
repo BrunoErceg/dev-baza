@@ -4,9 +4,6 @@ import { Geist } from "next/font/google";
 import SessionProvider from "@/components/providers";
 import { Toaster } from "sonner";
 
-import { Footer } from "@features/layout/components/footer";
-import { Navbar } from "@features/layout/components/nav-bar";
-
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -38,11 +35,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} flex min-h-screen flex-col bg-[#f7f7f7] font-sans antialiased`}
       >
         <Toaster position="bottom-center" />
-        <Navbar />
-        <SessionProvider>
-          <main className="grow">{children}</main>
-        </SessionProvider>
-        <Footer />
+        <SessionProvider>{children}</SessionProvider>
       </body>
     </html>
   );

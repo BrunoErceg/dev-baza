@@ -31,6 +31,16 @@ export async function ensureWebsiteOwner(websiteId: string, userId: string) {
   if (!website) throw new ActionError("Stranica nije pronađena!");
 }
 
+export async function ensureUserExists(userId: string) {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) throw new ActionError("Korisnik nije pronađen!");
+}
+
+export async function ensureUserNameDoesNotExist(userName: string) {
+  const user = await prisma.user.findFirst({ where: { userName: userName } });
+  if (user) throw new ActionError("Korisnik sa ovim imenom vec postoji!");
+}
+
 export async function getWebsiteNameAndUserId(id: string) {
   const website = await prisma.website.findUnique({
     where: { id: id },
