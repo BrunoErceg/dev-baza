@@ -1,23 +1,22 @@
-import { AddWebsiteDialog } from "@features/websites/components/add-website-dialog";
-import { UserWebsiteWithCount } from "@features/websites/types";
+import { auth } from "@/auth";
+
+import { getUserWebsitesTableData } from "@features/websites/data";
 
 import { EmptyState } from "@ui/empty-state";
 import { SectionCard } from "@ui/section-card";
 
+import { AddWebsiteSheet } from "../add-website-sheet/add-website-sheet";
 import { UserWebsiteTable } from "./user-websites-table";
 
-export function UserWebsitesSection({
-  websites,
-}: {
-  websites: UserWebsiteWithCount[];
-}) {
+export async function UserWebsitesOverview() {
+  const session = await auth();
+  const { data: websites } = await getUserWebsitesTableData(session.user.id);
   const isEmpty = websites.length === 0;
   return (
     <SectionCard
-      key={websites.length}
       title="Vaše web stranice"
       description="Upravljajte svojim projektima."
-      cta={<AddWebsiteDialog />}
+      cta={<AddWebsiteSheet />}
     >
       {isEmpty ? (
         <EmptyState

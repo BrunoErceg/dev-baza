@@ -51,11 +51,10 @@ enum Technology {
 model User {
   id            String          @id @default(cuid())
   name          String?
-  userName      String?
+  username      String?         @unique
   email         String          @unique
   emailVerified DateTime?
   image         String          @default("https://jrgxq33rwp.ufs.sh/f/BNaNzrQS3KNeOIpQ9sfX6YjFCOQ0PUb84RtzAZJkh3B95pvN")
-  phone         String?
   emailContact  String?          
   website       String?
   bio           String          @default("Ovaj korisnik još uvijek nije postavio svoju biografiju. Ovdje će se uskoro nalaziti detalji o njegovom radu, postignućima i projektima koje dijeli sa zajednicom. Pratite profil za buduća ažuriranja")
@@ -78,23 +77,22 @@ enum WebsiteStatus {
 }
 
 enum Category {
-  TURIZAM
-  GASTRONOMIJA 
-  NEKRETNINE
-  ZDRAVLJE
-  BIZNIS
-  AUTOMOTO
-  OSTALO
+  TOURISM
+  GASTRONOMY
+  REAL_ESTATE
+  HEALTH
+  BUSINESS
+  AUTOMOTIVE
+  OTHER
 }
-
 enum Style {
-  MINIMALISTICKI
-  MODERAN
+  MINIMALIST
+  MODERN
   RETRO
-  ELEGANTAN
-  KORPORATIVNI
-  KREATIVAN
-  OSTALO
+  ELEGANT
+  CORPORATE
+  CREATIVE
+  OTHER
 }
 
 model Like {
@@ -130,8 +128,8 @@ model Website {
   name      String        @unique
   userId    String 
   imageUrl  String
-  category  Category      @default(OSTALO)
-  style     Style         @default(OSTALO)
+  category  Category      @default(OTHER)
+  style     Style         @default(OTHER)
   colorStyle ColorStyle     @default(LIGHT)
   primaryColor PrimaryColor @default(WHITE)
   technology Technology   @default(WORDPRESS)

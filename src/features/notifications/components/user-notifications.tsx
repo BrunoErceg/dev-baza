@@ -8,7 +8,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@ui/hover-card";
 import { ScrollArea } from "@ui/scroll-area";
 import { Muted, P } from "@ui/typography";
 
-import { USER_NOTIFICATION_MAP } from "../constans";
+import { USER_NOTIFICATION_MAP } from "../constants";
 import { formatRelativeDate } from "../utils";
 import { DeleteNotificationsButton } from "./delete-notifications-button";
 
@@ -38,7 +38,7 @@ const EmptyNotifications = () => {
 const NotificationHeader = () => {
   return (
     <div className="flex items-center justify-between">
-      <P className="font-semibold">Obavijesti</P>
+      <P className="text-base font-semibold">Obavijesti</P>
       <DeleteNotificationsButton />
     </div>
   );

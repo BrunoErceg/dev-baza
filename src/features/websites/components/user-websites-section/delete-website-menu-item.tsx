@@ -5,7 +5,7 @@ import { deleteWebsite } from "@features/websites/actions";
 
 import { DropdownMenuItem } from "@ui/dropdown-menu";
 
-export function WebsiteDeleteItem({ websiteId }: { websiteId: string }) {
+export function DeleteWebsiteMenuItem({ websiteId }: { websiteId: string }) {
   const { isPending, action } = useServerAction(deleteWebsite);
   return (
     <DropdownMenuItem

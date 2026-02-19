@@ -1,11 +1,19 @@
-import { User } from "@prisma/client";
+import { redirect } from "next/navigation";
+
+import { getAuthUser } from "@features/users/data";
 
 import { SectionCard } from "@ui/section-card";
 
 import { UpdateAvatarForm } from "./update-avatar-form";
 import { UpdateProfileForm } from "./update-profile-form";
 
-export function ProfileSettingsCard({ user }: { user: User }) {
+export async function ProfileSettingsSection() {
+  const { data: user } = await getAuthUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
   return (
     <SectionCard
       title="Postavke profila"

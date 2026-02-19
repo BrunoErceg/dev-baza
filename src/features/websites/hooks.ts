@@ -1,15 +1,11 @@
 import { useState } from "react";
 
-import { UserWebsiteWithCount } from "./types";
+import { UserWebsitesTableData } from "./types";
 
 type Order = "asc" | "desc";
 type SortBy = "likes" | "views" | "name";
 
-export function useOderWebsiteTable({
-  websites,
-}: {
-  websites: UserWebsiteWithCount[];
-}) {
+export function useOderWebsiteTable(websites: UserWebsitesTableData[]) {
   const [sortBy, setSortBy] = useState<SortBy>("name");
   const [order, setOrder] = useState<Order>("asc");
 
@@ -27,7 +23,7 @@ export function useOderWebsiteTable({
           : b.name.localeCompare(a.name);
     }
   });
-  const handelSort = (key: SortBy) => {
+  const handleSort = (key: SortBy) => {
     if (sortBy === key) {
       setOrder(order === "asc" ? "desc" : "asc");
     } else {
@@ -36,5 +32,5 @@ export function useOderWebsiteTable({
     }
   };
 
-  return { sortedWebsites, handelSort };
+  return { sortedWebsites, handleSort };
 }

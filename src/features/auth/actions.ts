@@ -14,7 +14,7 @@ import { FormActionResponse } from "@/types/actions";
 
 import { onboardingSchema } from "./schema";
 
-export async function updateUserName(
+export async function updateUsername(
   rawData: unknown,
 ): Promise<FormActionResponse> {
   const session = await auth();
@@ -23,12 +23,12 @@ export async function updateUserName(
     ensureAuthenticated(session);
     ensureUserExists(session.user.id);
     const data = await actionValidation(rawData, onboardingSchema);
-    console.log(data.userName);
-    await ensureUserNameDoesNotExist(data.userName);
+    console.log(data.username);
+    await ensureUserNameDoesNotExist(data.username);
 
     await prisma.user.update({
       where: { id: session.user.id },
-      data: { userName: data.userName },
+      data: { username: data.username },
     });
 
     return { success: "Korisničko ime uspješno ažurirano!", error: null };

@@ -1,12 +1,11 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import { LiaSortSolid } from "react-icons/lia";
 
 import { Ellipsis } from "lucide-react";
 
-import { useOderWebsiteTable } from "@features/websites/hooks";
-import { UserWebsiteWithCount } from "@features/websites/types";
+import { useOderWebsiteTable as useOrderWebsiteTable } from "@features/websites/hooks";
+import { UserWebsitesTableData } from "@features/websites/types";
 
 import { Button } from "@ui/button";
 import {
@@ -25,21 +24,15 @@ import {
 } from "@ui/table";
 import { P } from "@ui/typography";
 
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@components/ui/hover-card";
-
+import { DeleteWebsiteMenuItem } from "./delete-website-menu-item";
 import { StatusTooltip } from "./status-tooltip";
-import { WebsiteDeleteItem } from "./website-delete-item";
 
 export function UserWebsiteTable({
   websites,
 }: {
-  websites: UserWebsiteWithCount[];
+  websites: UserWebsitesTableData[];
 }) {
-  const { sortedWebsites, handelSort } = useOderWebsiteTable({ websites });
+  const { sortedWebsites, handleSort } = useOrderWebsiteTable(websites);
 
   return (
     <div>
@@ -48,7 +41,7 @@ export function UserWebsiteTable({
           <TableRow>
             <TableHead
               className="cursor-pointer"
-              onClick={() => handelSort("name")}
+              onClick={() => handleSort("name")}
             >
               Ime <LiaSortSolid className="inline-block" />
             </TableHead>
@@ -56,13 +49,13 @@ export function UserWebsiteTable({
             <TableHead>Status</TableHead>
             <TableHead
               className="cursor-pointer"
-              onClick={() => handelSort("views")}
+              onClick={() => handleSort("views")}
             >
               Pregledi <LiaSortSolid className="inline-block" />
             </TableHead>
             <TableHead
               className="cursor-pointer text-right"
-              onClick={() => handelSort("likes")}
+              onClick={() => handleSort("likes")}
             >
               Lajkovi <LiaSortSolid className="inline-block" />
             </TableHead>
@@ -73,24 +66,14 @@ export function UserWebsiteTable({
           {sortedWebsites.map((website) => (
             <TableRow key={website.id}>
               <TableCell className="font-medium">
-                <HoverCard openDelay={10} closeDelay={100}>
-                  <HoverCardTrigger asChild>
-                    <P className="w-fit cursor-pointer">{website.name}</P>
-                  </HoverCardTrigger>
-                  <HoverCardContent side="top" className="flex h-64 w-80">
-                    <Image
-                      src={website.imageUrl}
-                      alt="Website"
-                      width={320}
-                      height={256}
-                      priority
-                      className="h-56 w-80 rounded-lg object-cover"
-                    />
-                  </HoverCardContent>
-                </HoverCard>
+                <P className="w-fit cursor-pointer text-base">{website.name}</P>
               </TableCell>
               <TableCell>
-                <Link href={website.url} target="_blank">
+                <Link
+                  href={website.url}
+                  className="max-w-[60ch]"
+                  target="_blank"
+                >
                   {website.url}
                 </Link>
               </TableCell>
@@ -113,7 +96,7 @@ export function UserWebsiteTable({
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-fit" align="end">
                     <DropdownMenuGroup>
-                      <WebsiteDeleteItem websiteId={website.id} />
+                      <DeleteWebsiteMenuItem websiteId={website.id} />
                     </DropdownMenuGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>

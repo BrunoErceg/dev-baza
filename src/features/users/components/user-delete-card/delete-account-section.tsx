@@ -1,19 +1,20 @@
 "use client";
-import { signOut } from "next-auth/react";
+import { useTransition } from "react";
 
-import { deleteUser } from "@features/user/actions";
-
-import { useServerAction } from "@/hooks/use-server-action";
+import { deleteAuthUser } from "@features/users/actions";
 
 import { ActionDialog } from "@ui/action-dialog";
 import { Button } from "@ui/button";
 import { SectionCard } from "@ui/section-card";
 import { Spinner } from "@ui/spinner";
 
-export function UserDeleteCard() {
-  const { isPending, action: deleteAction } = useServerAction(deleteUser, () =>
-    signOut({ callbackUrl: "/" }),
-  );
+export function DeleteAccountSection() {
+  const [isPending, startTransition] = useTransition();
+  const deleteAction = async () => {
+    startTransition(async () => {
+      await deleteAuthUser();
+    });
+  };
 
   return (
     <SectionCard

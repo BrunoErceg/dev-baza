@@ -6,6 +6,7 @@ export class ActionError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "ActionError";
+    Object.setPrototypeOf(this, ActionError.prototype);
   }
 }
 
@@ -36,8 +37,8 @@ export async function ensureUserExists(userId: string) {
   if (!user) throw new ActionError("Korisnik nije pronađen!");
 }
 
-export async function ensureUserNameDoesNotExist(userName: string) {
-  const user = await prisma.user.findFirst({ where: { userName: userName } });
+export async function ensureUserNameDoesNotExist(username: string) {
+  const user = await prisma.user.findFirst({ where: { username: username } });
   if (user) throw new ActionError("Korisnik sa ovim imenom vec postoji!");
 }
 
@@ -50,6 +51,12 @@ export async function getWebsiteNameAndUserId(id: string) {
     throw new ActionError("Stranica nije pronađena!");
   }
   return website;
+}
+
+export async function getUserName(userId: string) {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) throw new ActionError("Korisnik nije pronađen!");
+  return user.username;
 }
 
 export async function ensureLikeExists(websiteId: string, userId: string) {

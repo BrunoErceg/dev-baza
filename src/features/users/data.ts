@@ -5,13 +5,17 @@ import { prisma } from "@/lib/prisma";
 import { DataResponse } from "@/types/actions";
 
 export async function getUser(
-  userId: string,
+  identifier: string, // Može biti ID ili username
 ): Promise<DataResponse<User | null>> {
   try {
-    const user = await prisma.user.findUnique({ where: { id: userId } });
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [{ id: identifier }, { username: identifier }],
+      },
+    });
     return { data: user, error: null };
   } catch (error) {
-    console.error("GET_USER_BY_ID_ERROR:", error);
+    console.error("GET_USER_ERROR:", error);
     return { data: null, error: "Greška pri hvatanju podataka." };
   }
 }

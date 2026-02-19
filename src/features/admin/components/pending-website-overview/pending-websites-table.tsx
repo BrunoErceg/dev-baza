@@ -42,7 +42,7 @@ export function PendingWebsitesTable({ websites }: { websites: Website[] }) {
         {websites.map((website) => (
           <TableRow key={website.id}>
             <TableCell className="font-medium">
-              <P className="w-fit cursor-pointer">{website.name}</P>
+              <P className="w-fit cursor-pointer text-base">{website.name}</P>
             </TableCell>
             <TableCell>
               <Link href={website.url} target="_blank" className="underline">

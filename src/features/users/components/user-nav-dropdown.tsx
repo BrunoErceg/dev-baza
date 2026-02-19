@@ -19,12 +19,12 @@ import { ProfileAvatar } from "./profile-avatar";
 export function UserNavDropdown({
   user,
 }: {
-  user: { id: string; image: string };
+  user: { username: string; image: string };
 }) {
   const NAV_ITEMS = [
     {
       title: "Profil",
-      href: `/profil/${user.id}`,
+      href: `/profil/${user.username}`,
       Icon: User,
     },
     {
@@ -36,7 +36,7 @@ export function UserNavDropdown({
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger>
-        <ProfileAvatar image={user.image} className="size-10" />
+        <ProfileAvatar image={user.image} className="size-9" />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40 p-3" align="end">
         <DropdownMenuGroup>

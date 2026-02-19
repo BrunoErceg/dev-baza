@@ -1,11 +1,13 @@
-"use client";
+import { auth } from "@/auth";
 import { EyeIcon, ThumbsUp, Trophy } from "lucide-react";
-
-import { WebsitesStats } from "@features/websites/types";
 
 import { StatsCard } from "@ui/stats-card";
 
-export function StatsSection({ stats }: { stats: WebsitesStats }) {
+import { getDashboardStats } from "../data";
+
+export async function DashboardStats() {
+  const session = await auth();
+  const { stats } = await getDashboardStats(session.user.id);
   const statsConfig = [
     {
       title: "Sveukupni pregledi",

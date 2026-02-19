@@ -7,8 +7,8 @@ import { IoCameraOutline } from "react-icons/io5";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
-import { updateAvatar } from "@features/user/actions";
-import { AvatarFormValues, avatarSchema } from "@features/user/schema";
+import { updateAvatar } from "@features/users/actions";
+import { AvatarFormValues, avatarSchema } from "@features/users/schema";
 
 import { useServerAction } from "@/hooks/use-server-action";
 import { UploadButton } from "@/lib/uploadthing";

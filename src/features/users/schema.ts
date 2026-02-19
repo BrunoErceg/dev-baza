@@ -32,12 +32,13 @@ export const profileSchema = z.object({
     .trim()
     .min(3, "Ime mora imati barem 3 znaka.")
     .max(32, "Ime može imati najviše 32 znaka."),
-  phone: z
+  username: z
     .string()
     .trim()
-    .min(3, "Broj mora imati barem 3 znaka.")
-    .max(32, "Broj može imati najviše 32 znaka.")
-    .optional(),
+    .min(3, "Username mora imati barem 3 znaka.")
+    .max(20, "Username može imati najviše 20 znaka.")
+    .regex(/^[a-zA-Z0-9_]+$/, "Dopuštena su samo slova, brojke i podvlaka (_).")
+    .toLowerCase(),
   email: z.email().optional(),
   website: z.url("Unesite ispravnu URL adresu.").optional(),
   bio: z

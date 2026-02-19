@@ -1,21 +1,20 @@
 import { ReactNode } from "react";
 
 import { auth } from "@/auth";
-import { Notification } from "@prisma/client";
 
 import { LoginButton } from "@features/auth/components/login-button";
 import { RegisterButton } from "@features/auth/components/register-button";
 import { UserNotifications } from "@features/notifications/components/user-notifications";
 import { getUserNotifications } from "@features/notifications/data";
-import { getAuthUser, getUser } from "@features/user/data";
-import { AddWebsiteDialog } from "@features/websites/components/add-website-dialog";
+import { UserNavDropdown } from "@features/users/components/user-nav-dropdown";
+import { getAuthUser } from "@features/users/data";
+import { AddWebsiteSheet } from "@features/websites/components/add-website-sheet/add-website-sheet";
 
 import { NavMenu } from "@ui/nav-menu";
 import { NavigationSheet } from "@ui/navigation-sheet";
 
 import { Logo } from "@components/logo";
 
-import { UserNavDropdown } from "../../user/components/user-nav-dropdown";
 import { Container } from "./container";
 
 const NavBarLayout = ({ children }: { children: ReactNode }) => (
@@ -41,6 +40,7 @@ export async function Navbar() {
   const isAuth = !!session;
   const { data: user } = await getAuthUser();
   const { data: notifications } = await getUserNotifications();
+
   return (
     <NavBarLayout>
       <div className="flex items-center gap-12">
@@ -48,14 +48,14 @@ export async function Navbar() {
         <NavMenu className="hidden translate-y-1 md:block" />
       </div>
 
-      {isAuth ? (
+      {isAuth && user ? (
         <div className="flex items-center gap-6">
-          <AddWebsiteDialog />
+          <AddWebsiteSheet />
           <UserNotifications initialData={notifications} />
           {user && (
             <UserNavDropdown
               user={{
-                id: user.id,
+                username: user.username ?? "",
                 image: user.image,
               }}
             />

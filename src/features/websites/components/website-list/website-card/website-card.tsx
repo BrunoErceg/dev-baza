@@ -42,16 +42,16 @@ const AwardBadge = ({ title }: { title: string }) => {
 function WebsiteUser({
   user,
 }: {
-  user: { name: string; image: string; id: string };
+  user: { username: string | null; image: string };
 }) {
   return (
-    <Link href={`/profil/${user.id}`}>
+    <Link href={`/profil/${user.username}`}>
       <Large className="flex items-center gap-2">
         <Avatar size="sm">
           <AvatarImage src={user.image} alt="@shadcn" className="grayscale" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
-        {user.name}
+        {user.username}
       </Large>
     </Link>
   );
@@ -134,7 +134,7 @@ export function WebsiteCard({
       </CardContent>
 
       <footer className="mt-2 flex justify-between">
-        <WebsiteUser user={user} />
+        <WebsiteUser user={{ username: user.username, image: user.image }} />
         <LikesAndViews stats={{ likes: likedBy.length, views }} />
       </footer>
     </div>

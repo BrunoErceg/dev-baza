@@ -7,7 +7,7 @@ export const loginSchema = z.object({
 export type LoginFormValues = z.infer<typeof loginSchema>;
 
 export const onboardingSchema = z.object({
-  userName: z
+  username: z
     .string()
     .trim()
     .min(3, "Username mora imati barem 3 znaka.")

@@ -44,7 +44,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         await prisma.user.update({
           where: { id: user.id },
-          data: { userName: generatedUsername },
+          data: { username: generatedUsername },
         });
       }
     },
@@ -61,11 +61,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       trigger: string;
       session: any;
     }) {
-      if (trigger === "update" && session?.userName) {
-        token.userName = session.userName;
+      if (trigger === "update" && session?.username) {
+        token.username = session.username;
       }
       if (user) {
-        token.userName = (user as any).userName;
+        token.username = (user as any).username;
         token.role = user.role;
         token.id = user.id;
         token.picture =
@@ -76,7 +76,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async session({ session, token }: { session: Session; token: JWT }) {
       session.user.id = token.id;
-      session.user.userName = token.userName;
+      session.user.username = token.username;
       session.user.image = token.picture;
       session.user.name = token.name;
       session.user.role = token.role;

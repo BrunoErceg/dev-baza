@@ -1,3 +1,5 @@
+import { cn } from "@lib/utils";
+
 import {
   Card,
   CardAction,
@@ -11,6 +13,7 @@ interface SectionCardProps {
   title: string;
   description: string;
   cta?: React.ReactNode;
+  className?: string;
   children: React.ReactNode;
 }
 
@@ -18,10 +21,11 @@ export function SectionCard({
   title,
   description,
   cta,
+  className,
   children,
 }: SectionCardProps) {
   return (
-    <Card className="flex flex-col gap-5">
+    <Card className={cn("flex flex-col gap-5", className)}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>

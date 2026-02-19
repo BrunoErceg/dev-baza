@@ -18,14 +18,17 @@ export type WebsitesStats = {
   totalLikes: number;
   totalAwards: number;
 };
-export type WebsiteWithUserAndLikes = Prisma.WebsiteGetPayload<{
-  include: { user: { select: { name: true; image: true } }; likedBy: true };
-}>;
 
 export type GridWebsiteData = Prisma.WebsiteGetPayload<{
   include: {
-    user: { select: { name: true; image: true; id: true } };
+    user: { select: { username: true; image: true; id: true } };
     likedBy: true;
+  };
+}>;
+
+export type UserWebsitesTableData = Prisma.WebsiteGetPayload<{
+  include: {
+    _count: { select: { likedBy: true } };
   };
 }>;
 

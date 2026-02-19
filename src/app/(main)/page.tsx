@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import { Container } from "@features/layout/components/container";
 import { WebsiteList } from "@features/websites/components/website-list/website-list";
 import { GridToggle } from "@features/websites/components/website-list/website-list-navigation/grid-toggle";
@@ -17,14 +19,17 @@ export default async function Home({ searchParams }: any) {
   return (
     <Container>
       <Hero className="my-20" />
+
       <WebsiteList
         websites={websiteResponse.data}
         error={websiteResponse.error}
       >
         <WebsiteListNavigation>
-          <OrderBySelect />
-          <WebsiteCategoryList />
-          <GridToggle />
+          <OrderBySelect className="flex-1" />
+
+          <WebsiteCategoryList className="flex-1" />
+
+          <GridToggle className="flex-1" />
         </WebsiteListNavigation>
       </WebsiteList>
     </Container>

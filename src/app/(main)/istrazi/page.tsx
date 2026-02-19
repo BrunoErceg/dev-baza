@@ -4,7 +4,6 @@ import { GridToggle } from "@features/websites/components/website-list/website-l
 import {
   CategorySelect,
   ColorStyleSelect,
-  PrimaryColorSelect,
   StyleSelect,
   TechnologySelect,
 } from "@features/websites/components/website-list/website-list-navigation/select-filters";
@@ -28,7 +27,6 @@ export default async function Home({ searchParams }: any) {
             <CategorySelect />
             <StyleSelect />
             <ColorStyleSelect />
-            <PrimaryColorSelect />
             <TechnologySelect />
           </div>
 

@@ -18,7 +18,6 @@ import {
   handleActionError,
 } from "@/lib/auth-utils";
 import { prisma } from "@/lib/prisma";
-import { ActionResponse } from "@/types/actions";
 
 import { GridConfig } from "./types";
 
@@ -28,6 +27,7 @@ export async function createWebsite(rawData: unknown) {
   try {
     ensureAuthenticated(session);
     const data = await actionValidation(rawData, websiteSchema);
+
     await prisma.website.create({
       data: {
         userId: session.user.id,
@@ -36,6 +36,8 @@ export async function createWebsite(rawData: unknown) {
         imageUrl: data.image,
         style: data.style,
         category: data.category,
+        colorStyle: data.colorStyle,
+        technology: data.technology,
       },
     });
     await createNotification(session.user.id, {

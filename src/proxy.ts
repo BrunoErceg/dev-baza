@@ -5,7 +5,7 @@ import { auth } from "@/auth";
 export const proxy = auth((req: any) => {
   const session = req.auth;
   const isLoggedIn = !!session;
-  const username = session?.user?.userName;
+  const username = session?.user?.username;
 
   const { nextUrl } = req;
 

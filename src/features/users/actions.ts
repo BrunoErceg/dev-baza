@@ -8,9 +8,12 @@ import nodemailer from "nodemailer";
 import {
   actionValidation,
   ensureAuthenticated,
+  ensureUserNameDoesNotExist,
+  getUserName,
   handleActionError,
 } from "@/lib/auth-utils";
 import { prisma } from "@/lib/prisma";
+import { FormActionResponse } from "@/types/actions";
 
 import { avatarSchema, profileContactSchema, profileSchema } from "./schema";
 import { getEmailTemplate } from "./utils";
@@ -21,11 +24,17 @@ export const updateProfile = async (rawData: unknown) => {
   try {
     ensureAuthenticated(session);
     const data = await actionValidation(rawData, profileSchema);
+    const currentUserName = await getUserName(session.user.id);
+
+    if (data.username !== currentUserName) {
+      await ensureUserNameDoesNotExist(data.username);
+    }
+
     await prisma.user.update({
       where: { id: session.user.id },
       data: {
         name: data.name,
-        phone: data.phone,
+        username: data.username,
         emailContact: data.email,
         website: data.website,
         bio: data.bio,
@@ -34,7 +43,9 @@ export const updateProfile = async (rawData: unknown) => {
     revalidatePath("/");
     return { success: "Profil uspješno ažuriran!" };
   } catch (error) {
-    return handleActionError(error, "UPDATE_USER_ERROR");
+    return {
+      error: handleActionError(error, "UPDATE_USER_ERROR").error,
+    };
   }
 };
 
@@ -55,16 +66,15 @@ export async function updateAvatar(rawData: unknown) {
   }
 }
 
-export async function deleteUser() {
+export async function deleteAuthUser() {
   const session = await auth();
   try {
     ensureAuthenticated(session);
     await prisma.user.delete({ where: { id: session.user.id } });
-    await signOut({ redirectTo: "/" });
-    return { success: "Korisnik uspješno obrisan!" };
   } catch (error) {
     return handleActionError(error, "DELETE_USER_ERROR");
   }
+  await signOut({ redirectTo: "/" });
 }
 
 export async function sendMailToProfile(rawData: unknown) {

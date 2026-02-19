@@ -9,7 +9,7 @@ import { Button } from "@ui/button";
 import { FormInput } from "@ui/form-input";
 import { Spinner } from "@ui/spinner";
 
-import { updateUserName } from "../actions";
+import { updateUsername } from "../actions";
 import { OnboardingFormValues, onboardingSchema } from "../schema";
 
 export function OnboardingForm() {
@@ -24,20 +24,20 @@ export function OnboardingForm() {
   } = useForm<OnboardingFormValues>({
     resolver: zodResolver(onboardingSchema),
     defaultValues: {
-      userName: "",
+      username: "",
     },
   });
 
   const onSubmit = async (data: OnboardingFormValues) => {
     startTransition(async () => {
-      const result = await updateUserName(data);
+      const result = await updateUsername(data);
       if (result?.error) {
-        setError("userName", {
+        setError("username", {
           type: "server",
           message: result.error,
         });
       } else if (result?.success) {
-        await update({ userName: data.userName });
+        await update({ username: data.username });
 
         router.push("/dashboard");
       }
@@ -48,10 +48,10 @@ export function OnboardingForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <FormInput
         label="Korisničko ime"
-        error={errors.userName?.message}
+        error={errors.username?.message}
         placeholder="Unesite korisničko ime..."
         id="username"
-        {...register("userName")}
+        {...register("username")}
       />
       <Button className="w-full">{isPending ? <Spinner /> : "Nastavi"}</Button>
     </form>

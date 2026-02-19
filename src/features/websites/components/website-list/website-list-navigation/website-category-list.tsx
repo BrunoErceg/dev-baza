@@ -1,19 +1,21 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
 
+import { cn } from "@lib/utils";
+
 import { CATEGORY_MAP } from "@features/websites/constants";
 
 import { useUpdateQuery } from "@/hooks/use-update-query";
 
 import { Button } from "@ui/button";
 
-export function WebsiteCategoryList() {
+export function WebsiteCategoryList({ className }: { className?: string }) {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("kategorija");
   const { updateQuery } = useUpdateQuery();
 
   return (
-    <div className="flex gap-1">
+    <div className={cn("flex gap-1", className)}>
       {Object.values(CATEGORY_MAP).map((category) => (
         <Button
           size="default"

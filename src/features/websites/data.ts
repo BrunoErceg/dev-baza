@@ -9,14 +9,13 @@ import {
 
 import { DataResponse } from "@/types/actions";
 
-import { GridWebsiteData } from "./types";
+import { GridWebsiteData, UserWebsitesTableData } from "./types";
 
 export async function getAllApprovedWebsites({
   userId,
   category,
   style,
   colorStyle,
-  primaryColor,
   technology,
   sort,
 }: {
@@ -24,7 +23,6 @@ export async function getAllApprovedWebsites({
   category?: Category;
   style?: Style;
   colorStyle?: ColorStyle;
-  primaryColor?: PrimaryColor;
   technology?: Technology;
   sort?: string;
 }): Promise<DataResponse<GridWebsiteData[]>> {
@@ -35,12 +33,11 @@ export async function getAllApprovedWebsites({
         status: "APPROVED",
         category,
         style,
-        primaryColor,
         colorStyle,
         technology,
       },
       include: {
-        user: { select: { name: true, image: true, id: true } },
+        user: { select: { username: true, image: true, id: true } },
         likedBy: true,
       },
       orderBy:
@@ -64,8 +61,26 @@ export async function getUserLikedWebsites(
     const websites = await prisma.website.findMany({
       where: { likedBy: { some: { userId: userId } } },
       include: {
-        user: { select: { name: true, image: true, id: true } },
+        user: { select: { username: true, image: true, id: true } },
         likedBy: true,
+      },
+      orderBy: { createdAt: "desc" },
+    });
+    return { data: websites, error: null };
+  } catch (error) {
+    console.error("GET_USER_LIKED_WEBSITES_ERROR:", error);
+    return { data: [], error: "Greška pri hvatanju podataka." };
+  }
+}
+
+export async function getUserWebsitesTableData(
+  userId: string,
+): Promise<DataResponse<UserWebsitesTableData[]>> {
+  try {
+    const websites = await prisma.website.findMany({
+      where: { userId: userId },
+      include: {
+        _count: { select: { likedBy: true } },
       },
       orderBy: { createdAt: "desc" },
     });

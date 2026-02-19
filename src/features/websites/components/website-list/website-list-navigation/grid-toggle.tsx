@@ -6,7 +6,7 @@ import { useWebsites } from "@features/websites/websites-context";
 
 import { cn } from "@/lib/utils";
 
-export function GridToggle() {
+export function GridToggle({ className }: { className?: string }) {
   const { gridConfig, updateGrid } = useWebsites();
 
   const configs = [
@@ -21,7 +21,7 @@ export function GridToggle() {
   ] as const;
 
   return (
-    <div className="flex gap-2">
+    <div className={cn("flex justify-end gap-2", className)}>
       {configs.map(({ id, Icon }) => (
         <Icon
           key={id}

@@ -35,9 +35,9 @@ export default async function Hero({ className }: { className?: string }) {
       </P>
       <div className="mt-10 flex gap-5">
         {highlights.map((highlight) => (
-          <Card className="px-0 py-3" key={highlight}>
+          <Card className="px-0 py-2" key={highlight}>
             <CardContent>
-              <span className="font-semibold">{highlight}</span>
+              <span className="text-sm font-semibold">{highlight}</span>
             </CardContent>
           </Card>
         ))}

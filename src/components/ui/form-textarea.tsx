@@ -1,16 +1,17 @@
-import { InputHTMLAttributes, forwardRef } from "react";
+import { InputHTMLAttributes } from "react";
 
 import { cn } from "@lib/utils";
 
 import { Field, FieldError, FieldLabel } from "@ui/field";
-import { Input } from "@ui/input";
 
-interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
+import { Textarea } from "./textarea";
+
+interface FormInputProps extends InputHTMLAttributes<HTMLTextAreaElement> {
   label: string;
   error?: string;
 }
 
-export function FormInput({
+export function FormTextarea({
   label,
   error,
   id,
@@ -21,7 +22,7 @@ export function FormInput({
   return (
     <Field className={cn("text-left", className)}>
       <FieldLabel htmlFor={id}>{label}</FieldLabel>
-      <Input
+      <Textarea
         id={id}
         aria-invalid={!!error}
         placeholder={placeholder}
