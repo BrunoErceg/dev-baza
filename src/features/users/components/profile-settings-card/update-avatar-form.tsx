@@ -19,6 +19,8 @@ import { Large, Muted } from "@ui/typography";
 import { Avatar, AvatarImage } from "@components/ui/avatar";
 import { Field } from "@components/ui/field";
 
+import { ProfileAvatar } from "../profile-avatar";
+
 export function UpdateAvatarForm({ userImage }: { userImage: string }) {
   const { isPending, action } = useServerAction(updateAvatar);
   const [isUploading, setIsUploading] = useState(false);
@@ -71,9 +73,7 @@ export function UpdateAvatarForm({ userImage }: { userImage: string }) {
                           <IoCameraOutline size={35} />
                         )}
                       </div>
-                      <Avatar className="h-25 w-25 cursor-pointer">
-                        <AvatarImage src={userImage} />
-                      </Avatar>
+                      <ProfileAvatar image={userImage} className="h-25 w-25" />
                     </div>
                   ),
                   allowedContent: <></>,

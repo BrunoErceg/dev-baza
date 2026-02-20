@@ -12,14 +12,14 @@ import { DataResponse } from "@/types/actions";
 import { GridWebsiteData, UserWebsitesTableData } from "./types";
 
 export async function getAllApprovedWebsites({
-  userId,
+  username,
   category,
   style,
   colorStyle,
   technology,
   sort,
 }: {
-  userId?: string;
+  username?: string;
   category?: Category;
   style?: Style;
   colorStyle?: ColorStyle;
@@ -27,6 +27,8 @@ export async function getAllApprovedWebsites({
   sort?: string;
 }): Promise<DataResponse<GridWebsiteData[]>> {
   try {
+    const userId =
+      username && (await prisma.user.findUnique({ where: { username } }))?.id;
     const websites = await prisma.website.findMany({
       where: {
         userId: userId,
@@ -55,16 +57,24 @@ export async function getAllApprovedWebsites({
 }
 
 export async function getUserLikedWebsites(
-  userId: string,
+  username: string,
+  sort?: string,
 ): Promise<DataResponse<GridWebsiteData[]>> {
   try {
+    const userId =
+      username && (await prisma.user.findUnique({ where: { username } }))?.id;
     const websites = await prisma.website.findMany({
       where: { likedBy: { some: { userId: userId } } },
       include: {
         user: { select: { username: true, image: true, id: true } },
         likedBy: true,
       },
-      orderBy: { createdAt: "desc" },
+      orderBy:
+        sort === "pregledi"
+          ? { views: "desc" }
+          : sort === "lajkovi"
+            ? { likedBy: { _count: "desc" } }
+            : { createdAt: "desc" },
     });
     return { data: websites, error: null };
   } catch (error) {

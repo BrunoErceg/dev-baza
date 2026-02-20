@@ -15,7 +15,17 @@ import { FormTextarea } from "@ui/form-textarea";
 import { Spinner } from "@ui/spinner";
 import { Small } from "@ui/typography";
 
-export function UpdateProfileForm({ user }: { user: User }) {
+interface ProfileFormProps {
+  user: {
+    name: string | null;
+    username: string | null;
+    emailContact: string | null;
+    website: string | null;
+    bio: string | null;
+  };
+}
+
+export function UpdateProfileForm({ user }: ProfileFormProps) {
   const [isPending, startTransition] = useTransition();
 
   const {
@@ -30,14 +40,14 @@ export function UpdateProfileForm({ user }: { user: User }) {
       username: user.username ?? "",
       email: user.emailContact ?? "",
       website: user.website ?? "",
-      bio: user.bio,
+      bio: user.bio ?? "",
     },
   });
 
   async function onSubmit(data: ProfileFormValues) {
     startTransition(async () => {
       const result = await updateProfile(data);
-      console.log(result);
+
       if (result?.error) {
         setError("root", {
           type: "server",
@@ -49,11 +59,7 @@ export function UpdateProfileForm({ user }: { user: User }) {
 
   return (
     <>
-      <form
-        id="form-change-name"
-        className="flex flex-col gap-7"
-        onSubmit={handleSubmit(onSubmit)}
-      >
+      <form className="flex flex-col gap-7" onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-2 gap-5">
           <FormInput
             label="Ime i prezime"
@@ -102,12 +108,7 @@ export function UpdateProfileForm({ user }: { user: User }) {
           </Small>
         )}
         <Field orientation="horizontal">
-          <Button
-            type="submit"
-            disabled={isPending}
-            form="form-change-name"
-            className="ml-auto w-25"
-          >
+          <Button type="submit" disabled={isPending} className="ml-auto w-25">
             {isPending ? <Spinner /> : "Spremi"}
           </Button>
         </Field>

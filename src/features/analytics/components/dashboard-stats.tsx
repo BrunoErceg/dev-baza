@@ -1,11 +1,22 @@
+import { Suspense } from "react";
+
 import { auth } from "@/auth";
 import { EyeIcon, ThumbsUp, Trophy } from "lucide-react";
 
 import { StatsCard } from "@ui/stats-card";
 
 import { getDashboardStats } from "../data";
+import { DashboardStatsSkeleton } from "./dashboard-stats-skeleton";
 
-export async function DashboardStats() {
+export function DashboardStats() {
+  return (
+    <Suspense fallback={<DashboardStatsSkeleton />}>
+      <DashboardStatsContent />
+    </Suspense>
+  );
+}
+
+async function DashboardStatsContent() {
   const session = await auth();
   const { stats } = await getDashboardStats(session.user.id);
   const statsConfig = [

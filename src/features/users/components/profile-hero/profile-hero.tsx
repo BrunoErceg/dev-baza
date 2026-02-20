@@ -1,23 +1,37 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
-import { User } from "@prisma/client";
+import { getUser } from "@features/users/data";
 
 import { cn } from "@/lib/utils";
 
 import { ActionDialog } from "@ui/action-dialog";
 import { Button } from "@ui/button";
+import { Skeleton } from "@ui/skeleton";
 import { H1, P } from "@ui/typography";
 
 import { ProfileAvatar } from "../profile-avatar";
 import { ProfileContactForm } from "./profile-contact-form";
+import { ProfileHeroSkeleton } from "./profile-hero-skeleton";
 
-export async function ProfileHero({
-  user,
-  className,
-}: {
-  user: User;
+interface ProfileHeroProps {
+  username: string;
   className?: string;
-}) {
+}
+
+export function ProfileHero({ username, className }: ProfileHeroProps) {
+  return (
+    <Suspense fallback={<ProfileHeroSkeleton className={className} />}>
+      <ProfileHeroContent username={username} className={className} />
+    </Suspense>
+  );
+}
+
+async function ProfileHeroContent({ username, className }: ProfileHeroProps) {
+  const { data: user, error: userError } = await getUser(username);
+  if (!user || userError) notFound();
+
   return (
     <div className={cn("flex w-full items-center", className)}>
       <div>

@@ -1,5 +1,8 @@
 import { Container } from "@features/layout/components/container";
-import { WebsiteList } from "@features/websites/components/website-list/website-list";
+import {
+  WebsiteGridData,
+  WebsiteGridWrapper,
+} from "@features/websites/components/website-list/website-grid-data";
 import { GridToggle } from "@features/websites/components/website-list/website-list-navigation/grid-toggle";
 import {
   CategorySelect,
@@ -8,20 +11,17 @@ import {
   TechnologySelect,
 } from "@features/websites/components/website-list/website-list-navigation/select-filters";
 import { WebsiteListNavigation } from "@features/websites/components/website-list/website-list-navigation/website-list-navigation";
+import { WebsiteListWrapper } from "@features/websites/components/website-list/website-list-wrapper";
 import { getAllApprovedWebsites } from "@features/websites/data";
 import { parseExploreParams } from "@features/websites/utils";
 
 export default async function Home({ searchParams }: any) {
   const resolvedParams = await searchParams;
   const filters = parseExploreParams(resolvedParams);
-  const websiteResponse = await getAllApprovedWebsites({ ...filters });
 
   return (
     <Container>
-      <WebsiteList
-        websites={websiteResponse.data}
-        error={websiteResponse.error}
-      >
+      <WebsiteListWrapper>
         <WebsiteListNavigation>
           <div className="flex gap-3">
             <CategorySelect />
@@ -29,10 +29,14 @@ export default async function Home({ searchParams }: any) {
             <ColorStyleSelect />
             <TechnologySelect />
           </div>
-
-          <GridToggle />
+          <GridToggle className="flex-1" />
         </WebsiteListNavigation>
-      </WebsiteList>
+        <WebsiteGridWrapper>
+          <WebsiteGridData
+            getWebsites={() => getAllApprovedWebsites({ ...filters })}
+          />
+        </WebsiteGridWrapper>
+      </WebsiteListWrapper>
     </Container>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
-import { signOut } from "next-auth/react";
+import { ExtendedUser } from "next-auth";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 
 import { LogOut, Settings, User } from "lucide-react";
@@ -19,12 +20,12 @@ import { ProfileAvatar } from "./profile-avatar";
 export function UserNavDropdown({
   user,
 }: {
-  user: { username: string; image: string };
+  user: { username: string | null; image: string };
 }) {
   const NAV_ITEMS = [
     {
       title: "Profil",
-      href: `/profil/${user.username}`,
+      href: `/profil/${user?.username}`,
       Icon: User,
     },
     {

@@ -20,6 +20,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   events: {
     async createUser({ user }: { user: any }) {
+      const generatedUsername = user.name
+        ? user.name
+            .toLowerCase()
+            .replace(/\s+/g, "-") // Razmaci postaju crtice
+            .replace(/[^a-z0-9-]/g, "")
+        : ""; // Briše kvačice i specijalne znakove
       try {
         await prisma.user.update({
           where: { id: user.id },
@@ -27,6 +33,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             image:
               "https://jrgxq33rwp.ufs.sh/f/BNaNzrQS3KNeOIpQ9sfX6YjFCOQ0PUb84RtzAZJkh3B95pvN",
             emailContact: user.email,
+            username: generatedUsername,
           },
         });
         await createNotification(user.id, {
@@ -35,17 +42,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         });
       } catch (error) {
         console.log("CREATE_USER_ERROR:", error);
-      }
-      if (user.name) {
-        const generatedUsername = user.name
-          .toLowerCase()
-          .replace(/\s+/g, "-") // Razmaci postaju crtice
-          .replace(/[^a-z0-9-]/g, ""); // Briše kvačice i specijalne znakove
-
-        await prisma.user.update({
-          where: { id: user.id },
-          data: { username: generatedUsername },
-        });
       }
     },
   },

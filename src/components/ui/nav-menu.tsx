@@ -3,6 +3,7 @@
 import Link from "next/link";
 import * as React from "react";
 
+import { cn } from "@lib/utils";
 import { LucideIcon } from "lucide-react";
 
 import { CATEGORY_MAP } from "@features/websites/constants";
@@ -19,7 +20,7 @@ import {
 
 export function NavMenu({ className }: { className?: string }) {
   return (
-    <NavigationMenu className={className}>
+    <NavigationMenu className={cn("z-40", className)}>
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>

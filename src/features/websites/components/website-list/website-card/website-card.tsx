@@ -3,8 +3,6 @@ import Link from "next/link";
 import { IoEyeSharp } from "react-icons/io5";
 import { VscHeartFilled } from "react-icons/vsc";
 
-import { auth } from "@/auth";
-
 import { WebsiteAdminDropdown } from "@features/admin/components/website-admin-dropdown/website-admin-dropdown";
 import { GridWebsiteData } from "@features/websites/types";
 
@@ -59,7 +57,7 @@ function WebsiteUser({
 
 const CardContent = ({ children }: { children: React.ReactNode }) => {
   return (
-    <AspectRatio ratio={8 / 6} className="bg-muted group relative">
+    <AspectRatio ratio={8 / 6} className="group relative">
       {children}
     </AspectRatio>
   );
@@ -104,18 +102,17 @@ const WebsiteImage = ({ url }: { url: string }) => {
       fill
       priority
       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-      className="rounded-sm object-cover"
+      className="h-full w-full rounded-sm object-cover"
     />
   );
 };
 
-export function WebsiteCard({
-  website,
-  isAdmin,
-}: {
+interface WebsiteCardProps {
   website: GridWebsiteData;
   isAdmin: boolean;
-}) {
+}
+
+export function WebsiteCard({ website, isAdmin }: WebsiteCardProps) {
   const { id, name, url, award, imageUrl, user, views, likedBy } = website;
 
   return (
@@ -125,6 +122,7 @@ export function WebsiteCard({
           {isAdmin && (
             <WebsiteAdminDropdown websiteAward={award} websiteId={id} />
           )}
+
           {award && <AwardBadge title={award} />}
           <WebsiteName>{name}</WebsiteName>
           <WebsiteLikeButton websiteId={id} likes={likedBy} />

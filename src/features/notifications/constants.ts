@@ -7,7 +7,7 @@ export const USER_NOTIFICATION_MAP: Record<
 > = {
   POSITIVE: {
     Icon: CheckCircle2,
-    twClass: "border-green-200 bg-green-50 text-green-900",
+    twClass: "bg-gray-100",
   },
   NEGATIVE: {
     Icon: XCircle,
@@ -15,10 +15,10 @@ export const USER_NOTIFICATION_MAP: Record<
   },
   NEUTRAL: {
     Icon: Info,
-    twClass: "border-blue-200 bg-blue-50 text-blue-900",
+    twClass: "bg-gray-100",
   },
   LIKE: {
     Icon: Heart,
-    twClass: "border-blue-200 bg-blue-50 text-blue-900",
+    twClass: "bg-gray-100",
   },
 };

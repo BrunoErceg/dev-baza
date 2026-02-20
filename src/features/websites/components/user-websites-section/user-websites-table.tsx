@@ -54,12 +54,12 @@ export function UserWebsiteTable({
               Pregledi <LiaSortSolid className="inline-block" />
             </TableHead>
             <TableHead
-              className="cursor-pointer text-right"
+              className="cursor-pointer"
               onClick={() => handleSort("likes")}
             >
               Lajkovi <LiaSortSolid className="inline-block" />
             </TableHead>
-            <TableHead></TableHead>
+            <TableHead className="text-right">Opcije</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -84,9 +84,7 @@ export function UserWebsiteTable({
                 />
               </TableCell>
               <TableCell>{website.views}</TableCell>
-              <TableCell className="text-right">
-                {website._count.likedBy}
-              </TableCell>
+              <TableCell>{website._count.likedBy}</TableCell>
               <TableCell className="text-right">
                 <DropdownMenu modal={false}>
                   <DropdownMenuTrigger asChild>

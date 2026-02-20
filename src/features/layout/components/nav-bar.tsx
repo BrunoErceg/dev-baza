@@ -1,3 +1,4 @@
+import { ExtendedUser } from "next-auth";
 import { ReactNode } from "react";
 
 import { auth } from "@/auth";
@@ -37,8 +38,7 @@ const MobileNavigation = () => {
 
 export async function Navbar() {
   const session = await auth();
-  const isAuth = !!session;
-  const { data: user } = await getAuthUser();
+  const user = session?.user;
   const { data: notifications } = await getUserNotifications();
 
   return (
@@ -48,7 +48,7 @@ export async function Navbar() {
         <NavMenu className="hidden translate-y-1 md:block" />
       </div>
 
-      {isAuth && user ? (
+      {user ? (
         <div className="flex items-center gap-6">
           <AddWebsiteSheet />
           <UserNotifications initialData={notifications} />

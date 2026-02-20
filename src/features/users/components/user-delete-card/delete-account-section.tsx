@@ -1,14 +1,23 @@
 "use client";
-import { useTransition } from "react";
+import { Suspense, useTransition } from "react";
 
 import { deleteAuthUser } from "@features/users/actions";
 
 import { ActionDialog } from "@ui/action-dialog";
 import { Button } from "@ui/button";
 import { SectionCard } from "@ui/section-card";
+import { Skeleton } from "@ui/skeleton";
 import { Spinner } from "@ui/spinner";
 
 export function DeleteAccountSection() {
+  return (
+    <Suspense fallback={<Skeleton className="h-40 w-full rounded-md" />}>
+      <DeleteAccountContent />
+    </Suspense>
+  );
+}
+
+export function DeleteAccountContent() {
   const [isPending, startTransition] = useTransition();
   const deleteAction = async () => {
     startTransition(async () => {
