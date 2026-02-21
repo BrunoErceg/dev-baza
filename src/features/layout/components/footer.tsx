@@ -32,7 +32,7 @@ const PageLinks = () => {
     { text: "Pomoć", url: "/pomoc" },
   ];
   return (
-    <div className="flex gap-8 text-sm font-medium">
+    <div className="mb-3 flex gap-8 text-base font-medium md:mb-0 md:text-sm">
       {navLinks.map((link, linkIdx) => (
         <Link
           key={linkIdx}
@@ -48,14 +48,14 @@ const PageLinks = () => {
 
 const FooterLegal = () => {
   const legalLinks = [
-    { text: "Uvjeti korištenja", url: "#" },
-    { text: "Pravila privatnosti", url: "#" },
+    { text: "Uvjeti korištenja", url: "/uvjeti-koristenja" },
+    { text: "Pravila privatnosti", url: "/pravila-privatnosti" },
   ];
   return (
-    <div className="mt-10 flex flex-col justify-between md:flex-row md:items-center">
+    <div className="mt-10 flex flex-col items-center justify-between md:flex-row md:items-center">
       <Muted>{`© ${new Date().getFullYear()} dev-baza.hr. Sva prava pridržana.`}</Muted>
 
-      <ul className="flex gap-4">
+      <ul className="mt-3 flex gap-3 md:mt-0">
         {legalLinks.map((link, linkIdx) => (
           <Muted key={linkIdx}>
             <Link href={link.url}>{link.text}</Link>
@@ -67,7 +67,7 @@ const FooterLegal = () => {
 };
 
 const AuthOptions = () => (
-  <div className="flex items-center gap-5 text-sm font-medium">
+  <div className="flex items-center gap-5 text-base font-medium md:text-sm">
     <Link href="/dashboard" className="duration-200 hover:opacity-70">
       Dashboard
     </Link>
@@ -90,7 +90,7 @@ const AuthOptions = () => (
 const LoginLink = () => (
   <Link
     href="/prijava"
-    className="text-sm font-medium duration-200 hover:opacity-70"
+    className="text-base font-medium duration-200 hover:opacity-70 md:text-sm"
   >
     Prijavi se
   </Link>
@@ -101,8 +101,8 @@ export async function Footer({ className }: { className?: string }) {
   const isAuth = !!session;
   return (
     <FooterLayout className={className}>
-      <div className="flex justify-between">
-        <Logo className="text-2xl" />
+      <div className="flex flex-col items-center md:flex-row md:justify-between">
+        <Logo className="pb-4 text-3xl md:pb-0 md:text-2xl" />
         <PageLinks />
         <div>{!isAuth ? <LoginLink /> : <AuthOptions />}</div>
       </div>

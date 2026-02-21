@@ -18,13 +18,13 @@ export default async function DashboardPage() {
       <DashboardHeader />
 
       <div className="grid grid-cols-12 gap-5">
-        <div className="col-span-7 space-y-5">
+        <div className="col-span-12 space-y-5 lg:col-span-7">
           <DashboardStats />
           <UserWebsitesOverview />
 
           {isAdmin && <PendingWebsitesOverview />}
         </div>
-        <div className="col-span-5 space-y-5">
+        <div className="col-span-12 space-y-5 lg:col-span-5">
           <ProfileSettingsSection />
           <DeleteAccountSection />
         </div>

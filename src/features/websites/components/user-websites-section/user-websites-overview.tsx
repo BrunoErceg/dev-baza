@@ -24,19 +24,21 @@ async function WebsitesOverviewContent() {
   const { data: websites } = await getUserWebsitesTableData(session.user.id);
   const isEmpty = websites.length === 0;
   return (
-    <SectionCard
-      title="Vaše web stranice"
-      description="Upravljajte svojim projektima."
-      cta={<AddWebsiteSheet />}
-    >
-      {isEmpty ? (
-        <EmptyState
-          title="Još nema web stranica"
-          description="Još niste dodali nijednu web stranicu. Započnite tako što ćete dodati svoju prvu stranicu."
-        />
-      ) : (
-        <UserWebsiteTable websites={websites} />
-      )}
-    </SectionCard>
+    <>
+      <SectionCard
+        title="Vaše web stranice"
+        description="Upravljajte svojim projektima."
+        cta={<AddWebsiteSheet />}
+      >
+        {isEmpty ? (
+          <EmptyState
+            title="Još nema web stranica"
+            description="Još niste dodali nijednu web stranicu. Započnite tako što ćete dodati svoju prvu stranicu."
+          />
+        ) : (
+          <UserWebsiteTable websites={websites} />
+        )}
+      </SectionCard>
+    </>
   );
 }

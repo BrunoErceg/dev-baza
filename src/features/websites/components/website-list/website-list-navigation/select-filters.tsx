@@ -11,6 +11,7 @@ import {
   ORDER_BY_MAP,
   STYLE_MAP,
   TECH_MAP,
+  USER_TAP_MAP,
 } from "@features/websites/constants";
 
 import { useUpdateQuery } from "@/hooks/use-update-query";
@@ -134,10 +135,21 @@ const OrderBySelect = ({ className }: { className?: string }) => (
   />
 );
 
+const UserWebsitesTabSelect = ({ className }: { className?: string }) => (
+  <QuerySelect
+    className={className}
+    map={USER_TAP_MAP}
+    paramName="tab"
+    placeholder="Opcije"
+    deleteItem={false}
+  />
+);
+
 export {
   StyleSelect,
   ColorStyleSelect,
   TechnologySelect,
   CategorySelect,
   OrderBySelect,
+  UserWebsitesTabSelect,
 };

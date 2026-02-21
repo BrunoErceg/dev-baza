@@ -37,7 +37,7 @@ export function UserNavDropdown({
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger>
-        <ProfileAvatar image={user.image} className="size-9" />
+        <ProfileAvatar image={user.image} className="size-8 md:size-9" />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40 p-3" align="end">
         <DropdownMenuGroup>

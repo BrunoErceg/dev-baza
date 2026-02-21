@@ -15,21 +15,24 @@ import { WebsiteListWrapper } from "@features/websites/components/website-list/w
 import { getAllApprovedWebsites } from "@features/websites/data";
 import { parseExploreParams } from "@features/websites/utils";
 
+import { H1, P } from "@ui/typography";
+
 export default async function Home({ searchParams }: any) {
   const resolvedParams = await searchParams;
   const filters = parseExploreParams(resolvedParams);
 
   return (
     <Container>
+      <div className="mb-8 flex flex-col items-center text-center">
+        <H1>Kreni u istraživanje</H1>
+        <P>Pretraži, filtriraj i otkrij ono što te zanima.</P>
+      </div>
       <WebsiteListWrapper>
         <WebsiteListNavigation>
-          <div className="flex gap-3">
-            <CategorySelect />
-            <StyleSelect />
-            <ColorStyleSelect />
-            <TechnologySelect />
-          </div>
-          <GridToggle className="flex-1" />
+          <CategorySelect />
+          <StyleSelect />
+          <ColorStyleSelect />
+          <TechnologySelect />
         </WebsiteListNavigation>
         <WebsiteGridWrapper>
           <WebsiteGridData

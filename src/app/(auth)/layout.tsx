@@ -12,8 +12,8 @@ export default function AuthLayout({
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
-        <div className="flex items-center justify-center gap-2 md:justify-between">
-          <Logo className="text-3xl" />
+        <div className="flex items-center justify-between gap-2">
+          <Logo className="text-2xl md:text-3xl" />
           <Link
             href="/"
             className="flex items-center gap-1 font-medium duration-200 hover:gap-2 hover:opacity-70"
@@ -25,7 +25,7 @@ export default function AuthLayout({
 
         {children}
       </div>
-      <div className="relative gap-4 overflow-hidden bg-gray-200 py-20 lg:block dark:bg-gray-200">
+      <div className="relative hidden gap-4 overflow-hidden bg-gray-200 py-20 md:block lg:block dark:bg-gray-200">
         <img
           src="/dashboard-screen-2.png"
           alt="Image"

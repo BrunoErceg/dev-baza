@@ -66,7 +66,9 @@ export function UserWebsiteTable({
           {sortedWebsites.map((website) => (
             <TableRow key={website.id}>
               <TableCell className="font-medium">
-                <P className="w-fit cursor-pointer text-base">{website.name}</P>
+                <P className="w-fit cursor-pointer md:text-base">
+                  {website.name}
+                </P>
               </TableCell>
               <TableCell>
                 <Link

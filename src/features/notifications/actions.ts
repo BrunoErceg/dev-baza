@@ -40,3 +40,19 @@ export async function deleteAllNotifications() {
     return handleActionError(error, "DELETE_ALL_NOTIFICATIONS_ERROR");
   }
 }
+
+export async function setAllNotificationsAsRead() {
+  const session = await auth();
+
+  try {
+    ensureAuthenticated(session);
+    await prisma.notification.updateMany({
+      where: { userId: session.user.id },
+      data: { isRead: true },
+    });
+    revalidatePath("/", "layout");
+    return { success: "Sve obavijesti uspješno označene kao pročitane!" };
+  } catch (error) {
+    return handleActionError(error, "SET_ALL_NOTIFICATIONS_AS_READ_ERROR");
+  }
+}

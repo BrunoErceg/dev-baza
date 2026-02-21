@@ -1,4 +1,3 @@
-import { Card, CardContent } from "@ui/card";
 import { H2, P } from "@ui/typography";
 
 import { HelpForm } from "./help-form";

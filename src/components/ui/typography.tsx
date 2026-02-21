@@ -68,7 +68,10 @@ export function P({
 }) {
   return (
     <p
-      className={cn("max-w-[60ch] text-lg leading-7 not-first:mt-6", className)}
+      className={cn(
+        "max-w-[60ch] text-base leading-7 not-first:mt-4 md:text-lg",
+        className,
+      )}
     >
       {children}
     </p>

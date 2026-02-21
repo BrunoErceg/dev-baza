@@ -21,7 +21,7 @@ export function GridToggle({ className }: { className?: string }) {
   ] as const;
 
   return (
-    <div className={cn("flex justify-end gap-2", className)}>
+    <div className={cn("hidden justify-end gap-2 md:flex", className)}>
       {configs.map(({ id, Icon }) => (
         <Icon
           key={id}

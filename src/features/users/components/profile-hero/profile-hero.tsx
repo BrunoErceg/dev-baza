@@ -37,7 +37,7 @@ async function ProfileHeroContent({ username, className }: ProfileHeroProps) {
       <div>
         <ProfileAvatar image={user.image} className="size-20" />
         <H1 className="mt-4 -translate-x-1">@{user.username}</H1>
-        {user.bio && <P className="max-w-[60ch]">{user.bio}</P>}
+        {user.bio && <P className="mt-3 max-w-[60ch]">{user.bio}</P>}
 
         <div className="mt-12 flex gap-4">
           {user.emailContact && (

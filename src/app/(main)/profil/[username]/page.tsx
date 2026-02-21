@@ -42,9 +42,7 @@ export default async function Profile({
 
       <WebsiteListWrapper>
         <WebsiteListNavigation>
-          <OrderBySelect className="flex-1" />
-          <ProfileWebsitesTab className="flex-1 justify-center" />
-          <GridToggle className="flex-1" />
+          <ProfileWebsitesTab />
         </WebsiteListNavigation>
 
         <WebsiteGridWrapper>

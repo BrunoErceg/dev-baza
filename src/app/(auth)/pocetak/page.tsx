@@ -23,13 +23,13 @@ export default function OnboardingPage() {
               Nastavkom prijave prihvaćate naše
               <br />
               <Link
-                href="/registracija"
+                href="/uvjeti-koristenja"
                 className="text-muted-foreground ml-1 underline"
               >
                 Uvjete korištenja
               </Link>
               <Link
-                href="/registracija"
+                href="/pravila-privatnosti"
                 className="text-muted-foreground ml-1 underline"
               >
                 Pravila privatnosti

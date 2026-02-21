@@ -23,9 +23,7 @@ export default async function Home({ searchParams }: any) {
 
       <WebsiteListWrapper>
         <WebsiteListNavigation>
-          <OrderBySelect className="flex-1" />
-          <WebsiteCategoryList className="flex-1" />
-          <GridToggle className="flex-1" />
+          <WebsiteCategoryList />
         </WebsiteListNavigation>
 
         <WebsiteGridWrapper>

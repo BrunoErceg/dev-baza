@@ -21,7 +21,7 @@ export default function AuthErrorPage() {
   return (
     <div className="flex flex-1 flex-col items-center justify-center text-center">
       <H2>Ups! Greška pri prijavi</H2>
-      <P className="text-destructive bg-destructive/10 mb-5 rounded-md p-4 text-sm">
+      <P className="text-destructive bg-destructive/10 mt-4 mb-5 rounded-md p-4 text-sm">
         {message}
       </P>
       <Link href="/prijava" className="text-sm underline">

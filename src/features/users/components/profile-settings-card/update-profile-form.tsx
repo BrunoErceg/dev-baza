@@ -3,7 +3,6 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "@prisma/client";
 
 import { updateProfile } from "@features/users/actions";
 import { ProfileFormValues, profileSchema } from "@features/users/schema";
@@ -60,7 +59,7 @@ export function UpdateProfileForm({ user }: ProfileFormProps) {
   return (
     <>
       <form className="flex flex-col gap-7" onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-2 gap-5">
+        <div className="flex flex-col gap-10 md:grid md:grid-cols-2 md:gap-5">
           <FormInput
             label="Ime i prezime"
             error={errors.name?.message}

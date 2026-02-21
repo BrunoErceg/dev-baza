@@ -42,7 +42,7 @@ async function DashboardStatsContent() {
     },
   ];
   return (
-    <div className="flex justify-between gap-5">
+    <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
       {statsConfig.map((stat, index) => (
         <StatsCard
           key={index}

@@ -73,7 +73,7 @@ export function AddWebsiteForm({
       className="mt-5 flex flex-col gap-5"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="grid grid-cols-2 gap-5">
+      <div className="flex flex-col gap-5 md:grid md:grid-cols-2">
         <FormInput
           label="Naziv"
           {...register("name")}

@@ -9,31 +9,36 @@ import { useUpdateQuery } from "@/hooks/use-update-query";
 
 import { Button } from "@ui/button";
 
+import { CategorySelect } from "./select-filters";
+
 export function WebsiteCategoryList({ className }: { className?: string }) {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("kategorija");
   const { updateQuery } = useUpdateQuery();
 
   return (
-    <div className={cn("flex gap-1", className)}>
-      {Object.values(CATEGORY_MAP).map((category) => (
+    <>
+      <div className={cn("hidden gap-1 md:flex", className)}>
+        {Object.values(CATEGORY_MAP).map((category) => (
+          <Button
+            size="default"
+            key={category.slug}
+            variant={category.slug === categoryParam ? "secondary" : "link"}
+            onClick={() => updateQuery("kategorija", category.slug)}
+          >
+            {category.label}
+          </Button>
+        ))}
+
         <Button
           size="default"
-          key={category.slug}
-          variant={category.slug === categoryParam ? "secondary" : "link"}
-          onClick={() => updateQuery("kategorija", category.slug)}
+          variant={!categoryParam ? "secondary" : "link"}
+          onClick={() => updateQuery("kategorija")}
         >
-          {category.label}
+          Sve
         </Button>
-      ))}
-
-      <Button
-        size="default"
-        variant={!categoryParam ? "secondary" : "link"}
-        onClick={() => updateQuery("kategorija")}
-      >
-        Sve
-      </Button>
-    </div>
+      </div>
+      <CategorySelect className="md:hidden" />
+    </>
   );
 }

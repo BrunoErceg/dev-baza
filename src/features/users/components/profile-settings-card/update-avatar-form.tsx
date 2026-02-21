@@ -97,7 +97,7 @@ export function UpdateAvatarForm({ userImage }: { userImage: string }) {
         <Large>Profilna Slika</Large>
         <Muted>
           Kliknite na avatar za prijenos nove fotografije.
-          <br /> JPG ili PNG. Maksimalno 4 MB.
+          <br className="hidden md:block" /> JPG ili PNG. Maksimalno 4 MB.
         </Muted>
       </div>
     </div>

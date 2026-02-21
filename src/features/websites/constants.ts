@@ -36,6 +36,11 @@ import {
 
 import { OrderByOption } from "@features/websites/types";
 
+export const USER_TAP_MAP: Record<string, { label: string; slug: string }> = {
+  projekti: { label: "Moji Projekti", slug: "projekti" },
+  lajkano: { label: "Lajkani Projekti", slug: "lajkano" },
+};
+
 export const CATEGORY_MAP: Record<
   Category,
   { icon: LucideIcon; description: string; label: string; slug: string }
