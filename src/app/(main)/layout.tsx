@@ -11,7 +11,7 @@ export default async function MainLayout({
   return (
     <>
       <Navbar />
-      <main className="grow">{children}</main>
+      <main className="flex flex-1">{children}</main>
       <Footer />
     </>
   );

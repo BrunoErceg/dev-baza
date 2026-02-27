@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  reactStrictMode: false, // Ovo će zaustaviti duple pozive u dev modu
   /* config options here */
   images: {
     remotePatterns: [

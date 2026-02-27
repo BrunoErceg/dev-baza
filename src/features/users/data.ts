@@ -1,3 +1,4 @@
+"use server";
 import { auth } from "@/auth";
 import { User } from "@prisma/client";
 
@@ -31,5 +32,43 @@ export async function getAuthUser(): Promise<DataResponse<User | null>> {
   } catch (error) {
     console.error("GET_USER_BY_ID_ERROR:", error);
     return { data: null, error: "Greška pri hvatanju podataka." };
+  }
+}
+
+export async function getNewChatCandidates(
+  username: string,
+): Promise<DataResponse<User[]>> {
+  const session = await auth();
+  const currentUserId = session.user.id;
+  try {
+    const users = await prisma.user.findMany({
+      where: {
+        username: {
+          contains: username,
+          mode: "insensitive",
+        },
+        NOT: {
+          id: currentUserId,
+        },
+        // 2. Izbaci korisnike s kojima već imam razgovor
+        conversations: {
+          none: {
+            conversation: {
+              participants: {
+                some: {
+                  userId: currentUserId,
+                },
+              },
+            },
+          },
+        },
+      },
+      take: 5,
+    });
+
+    return { data: users, error: null };
+  } catch (error) {
+    console.error("GET_USER_ERROR:", error);
+    return { data: [], error: "Greška pri hvatanju podataka." };
   }
 }

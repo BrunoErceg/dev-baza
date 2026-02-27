@@ -36,10 +36,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             username: generatedUsername,
           },
         });
-        await createNotification(user.id, {
-          type: "POSITIVE",
-          message: user.name || "Korisniče" + " dobrodošao u Dev-bazu!",
-        });
       } catch (error) {
         console.log("CREATE_USER_ERROR:", error);
       }
@@ -57,13 +53,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       trigger: string;
       session: any;
     }) {
-      if (trigger === "update" && session?.username) {
-        token.username = session.username;
+      if (trigger === "update") {
+        if (session?.username) token.username = session.username;
+        if (session?.onboarding !== undefined)
+          token.onboarding = session.onboarding;
       }
       if (user) {
         token.username = (user as any).username;
         token.role = user.role;
         token.id = user.id;
+        token.onboarding = user.onboarding;
         token.picture =
           "https://jrgxq33rwp.ufs.sh/f/BNaNzrQS3KNeOIpQ9sfX6YjFCOQ0PUb84RtzAZJkh3B95pvN";
         return token;
@@ -76,6 +75,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.image = token.picture;
       session.user.name = token.name;
       session.user.role = token.role;
+      session.user.onboarding = token.onboarding as boolean;
       return session;
     },
   },
@@ -85,6 +85,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Resend({
       apiKey: process.env.AUTH_RESEND_KEY,
       from: "onboarding@resend.dev",
+
+      async sendVerificationRequest({ identifier, url }) {
+        if (process.env.NODE_ENV === "development") {
+          console.log("\n--- MAGIC LINK TEST ---");
+          console.log(`Email: ${identifier}`);
+          console.log(`URL: ${url}`);
+          console.log("-----------------------\n");
+          return; // Ovo sprječava slanje pravog maila preko Resenda dok si na localhostu
+        }
+      },
     }),
   ],
 });

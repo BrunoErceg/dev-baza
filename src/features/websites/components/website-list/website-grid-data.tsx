@@ -5,7 +5,7 @@ import { GridWebsiteData } from "@features/websites/types";
 import { DataResponse } from "@/types/actions";
 
 import { EmptyState } from "@ui/empty-state";
-import { ErrorCard } from "@ui/error-card";
+import { ErrorState } from "@ui/error-state";
 
 import { WebsiteGrid } from "./website-grid";
 import { WebsiteListSkeleton } from "./website-list-skeleton";
@@ -28,7 +28,7 @@ export async function WebsiteGridData({
   return (
     <>
       {error ? (
-        <ErrorCard description={error} className="mx-auto my-20" />
+        <ErrorState description={error} className="mx-auto my-20" />
       ) : websites.length === 0 ? (
         <EmptyState
           className="my-20"

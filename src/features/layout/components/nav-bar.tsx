@@ -5,6 +5,12 @@ import { auth } from "@/auth";
 
 import { NavMenu } from "@features/layout/components/nav-menu";
 import { NavigationSheet } from "@features/layout/components/navigation-sheet";
+import { MessagesNotification } from "@features/messages/components/messages-notification";
+import {
+  getConversations,
+  getUnreadMessagesCount,
+} from "@features/messages/data";
+import { MessagesProvider } from "@features/messages/messages-context";
 import { UserNotifications } from "@features/notifications/components/user-notifications";
 import { getUserNotifications } from "@features/notifications/data";
 import { UserNavDropdown } from "@features/users/components/user-nav-dropdown";
@@ -16,20 +22,20 @@ import { Logo } from "@components/logo";
 
 import { Container } from "./container";
 
-const NavBarLayout = ({ children }: { children: ReactNode }) => (
-  <nav className="py-5">
-    <Container>
-      <div className="flex h-full items-center justify-between py-4">
-        {children}
-      </div>
-    </Container>
-  </nav>
-);
-
 export async function Navbar() {
   const session = await auth();
   const user = session?.user;
-  const { data } = await getUserNotifications();
+
+  const { data: notificationsData, error: notificationsError } =
+    await getUserNotifications();
+
+  let unreadNumber = 0;
+  if (user) {
+    const { data: unreadMessageCount } = await getUnreadMessagesCount(
+      session.user.id,
+    );
+    unreadNumber = unreadMessageCount;
+  }
 
   return (
     <NavBarLayout>
@@ -42,12 +48,23 @@ export async function Navbar() {
         {user ? (
           <>
             <AddWebsiteSheet className="hidden md:block" />
+
+            {user && (
+              <MessagesProvider userId={user.id}>
+                <MessagesNotification
+                  initialUnreadCount={unreadNumber}
+                  userId={user.id}
+                />
+              </MessagesProvider>
+            )}
+
             <UserNotifications
-              initialData={{
-                notifications: data.notifications,
-                unreadCount: data.unreadCount,
-              }}
+              userId={user.id}
+              initialNotifications={notificationsData.notifications}
+              initialUnreadCount={notificationsData.unreadCount}
+              error={notificationsError}
             />
+
             <UserNavDropdown
               user={{
                 username: user.username ?? "",
@@ -69,3 +86,13 @@ export async function Navbar() {
     </NavBarLayout>
   );
 }
+
+const NavBarLayout = ({ children }: { children: ReactNode }) => (
+  <nav className="py-5">
+    <Container>
+      <div className="flex h-full items-center justify-between py-4">
+        {children}
+      </div>
+    </Container>
+  </nav>
+);

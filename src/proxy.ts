@@ -6,7 +6,7 @@ export const proxy = auth((req: any) => {
   const session = req.auth;
   const isLoggedIn = !!session;
   const username = session?.user?.username;
-
+  const isOnboardingFinished = session?.user?.onboarding;
   const { nextUrl } = req;
 
   if (!isLoggedIn && nextUrl.pathname.startsWith("/dashboard")) {
@@ -17,8 +17,12 @@ export const proxy = auth((req: any) => {
     return NextResponse.redirect(new URL("/dashboard", nextUrl));
   }
 
-  if (isLoggedIn && !username && nextUrl.pathname !== "/pocetak") {
+  if (isLoggedIn && !isOnboardingFinished && nextUrl.pathname !== "/pocetak") {
     return NextResponse.redirect(new URL("/pocetak", nextUrl));
+  }
+
+  if (isLoggedIn && isOnboardingFinished && nextUrl.pathname === "/pocetak") {
+    return NextResponse.redirect(new URL("/dashboard", nextUrl));
   }
 
   return NextResponse.next();

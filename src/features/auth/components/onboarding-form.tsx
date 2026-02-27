@@ -9,7 +9,7 @@ import { Button } from "@ui/button";
 import { FormInput } from "@ui/form-input";
 import { Spinner } from "@ui/spinner";
 
-import { updateUsername } from "../actions";
+import { onboardingUpdate } from "../actions";
 import { OnboardingFormValues, onboardingSchema } from "../schema";
 
 export function OnboardingForm() {
@@ -30,14 +30,14 @@ export function OnboardingForm() {
 
   const onSubmit = async (data: OnboardingFormValues) => {
     startTransition(async () => {
-      const result = await updateUsername(data);
+      const result = await onboardingUpdate(data);
       if (result?.error) {
         setError("username", {
           type: "server",
           message: result.error,
         });
       } else if (result?.success) {
-        await update({ username: data.username });
+        await update({ onboarding: true, username: data.username });
 
         router.push("/dashboard");
       }

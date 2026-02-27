@@ -1,10 +1,17 @@
+"use server";
 import { auth } from "@/auth";
 import { ensureAuthenticated } from "@lib/auth-utils";
 import { prisma } from "@lib/prisma";
+import { Notification } from "@prisma/client";
 
-export async function getUserNotifications() {
+import { DataResponse } from "@/types/actions";
+
+import { UserNotificationsData } from "./types";
+
+export async function getUserNotifications(): Promise<
+  DataResponse<UserNotificationsData>
+> {
   const session = await auth();
-
   try {
     ensureAuthenticated(session);
     const [notifications, unreadCount] = await Promise.all([
@@ -17,7 +24,6 @@ export async function getUserNotifications() {
         where: { userId: session.user.id, isRead: false },
       }),
     ]);
-
     return { data: { notifications, unreadCount }, error: null };
   } catch (error) {
     console.log("NOTIFICATION_FETCH_ERROR:", error);

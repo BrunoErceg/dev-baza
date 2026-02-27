@@ -6,7 +6,7 @@ import { Field, FieldError, FieldLabel } from "@ui/field";
 import { Input } from "@ui/input";
 
 interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
-  label: string;
+  label?: string;
   error?: string;
 }
 
@@ -20,7 +20,7 @@ export function FormInput({
 }: FormInputProps) {
   return (
     <Field className={cn("text-left", className)}>
-      <FieldLabel htmlFor={id}>{label}</FieldLabel>
+      {label && <FieldLabel htmlFor={id}>{label}</FieldLabel>}
       <Input
         id={id}
         aria-invalid={!!error}

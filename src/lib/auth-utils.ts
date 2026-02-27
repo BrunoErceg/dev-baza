@@ -20,6 +20,16 @@ export function ensureAuthenticated(session: any) {
   if (!session?.user?.id) throw new ActionError("Niste prijavljeni!");
 }
 
+export async function ensureConversationParticipant(
+  conversationId: string,
+  userId: string,
+) {
+  const participants = await prisma.participant.findMany({
+    where: { conversationId: conversationId, userId: userId },
+  });
+  if (!participants) throw new ActionError("Nemate ovlasti za ovu akciju!");
+}
+
 export async function ensureWebsiteExists(websiteId: string) {
   const website = await prisma.website.findUnique({ where: { id: websiteId } });
   if (!website) throw new ActionError("Stranica nije pronađena!");

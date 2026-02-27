@@ -10,11 +10,13 @@ import {
 } from "@lib/auth-utils";
 import { prisma } from "@lib/prisma";
 
+import { createNotification } from "@features/notifications/actions";
+
 import { FormActionResponse } from "@/types/actions";
 
 import { onboardingSchema } from "./schema";
 
-export async function updateUsername(
+export async function onboardingUpdate(
   rawData: unknown,
 ): Promise<FormActionResponse> {
   const session = await auth();
@@ -29,6 +31,11 @@ export async function updateUsername(
     await prisma.user.update({
       where: { id: session.user.id },
       data: { username: data.username },
+    });
+
+    await createNotification(session.user.id, {
+      type: "POSITIVE",
+      message: ` ${data.username} dobrodošao u Dev-bazu!`,
     });
 
     return { success: "Korisničko ime uspješno ažurirano!", error: null };
