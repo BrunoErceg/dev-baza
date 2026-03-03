@@ -7,7 +7,7 @@ import { Message } from "@prisma/client";
 import { ConversationListItem } from "../types";
 import { useActiveChat } from "./use-active-chat";
 
-export function useConversations(
+export function useConversationsList(
   initialConversations: ConversationListItem[],
   initialIsLoading?: boolean,
 ) {

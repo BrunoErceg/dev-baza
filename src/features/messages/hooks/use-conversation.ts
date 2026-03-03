@@ -7,9 +7,7 @@ interface UseConversationItemProps {
   conversation: ConversationListItem;
 }
 
-export function useConversationItem({
-  conversation,
-}: UseConversationItemProps) {
+export function useConversation({ conversation }: UseConversationItemProps) {
   const { data: session } = useSession();
   const { activeChatId } = useActiveChat();
 

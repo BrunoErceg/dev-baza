@@ -38,7 +38,7 @@ export async function createConversation(
       include: {
         participants: {
           include: {
-            user: { select: { username: true, id: true, image: true } },
+            user: true,
           },
         },
         messages: {

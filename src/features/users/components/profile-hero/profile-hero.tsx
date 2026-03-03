@@ -2,17 +2,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
+import { ContactProfileButton } from "@features/messages/components/contact-profile-button";
 import { getUser } from "@features/users/data";
 
 import { cn } from "@/lib/utils";
 
-import { ActionDialog } from "@ui/action-dialog";
 import { Button } from "@ui/button";
-import { Skeleton } from "@ui/skeleton";
 import { H1, P } from "@ui/typography";
 
 import { ProfileAvatar } from "../profile-avatar";
-import { ProfileContactForm } from "./profile-contact-form";
 import { ProfileHeroSkeleton } from "./profile-hero-skeleton";
 
 interface ProfileHeroProps {
@@ -40,15 +38,7 @@ async function ProfileHeroContent({ username, className }: ProfileHeroProps) {
         {user.bio && <P className="mt-3 max-w-[60ch]">{user.bio}</P>}
 
         <div className="mt-12 flex gap-4">
-          {user.emailContact && (
-            <ActionDialog
-              title="Pošalji poruku"
-              description={`Ispunite sva polja u nastavku da kontaktirate ${user.name}`}
-              cta={<Button size="lg">Pošalji poruku</Button>}
-            >
-              <ProfileContactForm profileEmail={user.emailContact} />
-            </ActionDialog>
-          )}
+          <ContactProfileButton userId={user.id} />
 
           {user.website && (
             <Button variant="outline" size="lg" asChild>

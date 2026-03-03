@@ -2,7 +2,7 @@
 
 import { MessageCircleOff } from "lucide-react";
 
-import { useConversations } from "@features/messages/hooks/use-conversations";
+import { useConversationsList } from "@features/messages/hooks/use-conversations-list";
 import { ConversationListItem } from "@features/messages/types";
 
 import { EmptyState } from "@ui/empty-state";
@@ -23,7 +23,7 @@ export function ConversationList({
   error,
   initaialIsLoading = false,
 }: ConversationListProps) {
-  const { conversations, isLoading } = useConversations(
+  const { conversations, isLoading } = useConversationsList(
     initialConversations,
     initaialIsLoading,
   );
@@ -41,6 +41,7 @@ export function ConversationList({
         cta={<NewConversation />}
       />
     );
+
   return (
     <div className="overflow-auto">
       {conversations.map((conversation) => (

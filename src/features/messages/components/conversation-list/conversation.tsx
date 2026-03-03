@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { cn, formatRelativeDate } from "@lib/utils";
 
-import { useConversationItem } from "@features/messages/hooks/use-conversation-item";
+import { useConversation } from "@features/messages/hooks/use-conversation";
 import { ConversationListItem } from "@features/messages/types";
 import { ProfileAvatar } from "@features/users/components/profile-avatar";
 
@@ -14,7 +14,7 @@ export function Conversation({
   conversation: ConversationListItem;
 }) {
   const { otherUser, lastMessage, isSentByMe, isActive, isUnread } =
-    useConversationItem({ conversation });
+    useConversation({ conversation });
 
   return (
     <Link
