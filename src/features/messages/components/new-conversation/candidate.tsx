@@ -1,10 +1,10 @@
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 
 import { User } from "@prisma/client";
 import { CirclePlus } from "lucide-react";
 
 import { createConversation } from "@features/messages/actions";
-import { useMessages } from "@features/messages/messages-context";
 import { ProfileAvatar } from "@features/users/components/profile-avatar";
 
 import { Spinner } from "@ui/spinner";
@@ -12,11 +12,11 @@ import { Large } from "@ui/typography";
 
 export function Candidate({ user }: { user: User }) {
   const [isPending, startTransition] = useTransition();
-  const { setActiveChat } = useMessages();
+  const router = useRouter();
   const onSelect = (id: string) => {
     startTransition(async () => {
       const { data: newConversation } = await createConversation(id);
-      if (newConversation) setActiveChat(newConversation.id);
+      if (newConversation) router.push(`/poruke/${newConversation.id}`);
     });
   };
   return (

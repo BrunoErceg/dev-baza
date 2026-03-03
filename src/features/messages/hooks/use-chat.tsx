@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useEffect, useRef, useState } from "react";
 
 import { pusherClient } from "@lib/pusher";
 import { Message } from "@prisma/client";
 
 import { setMessagesAsRead } from "../actions";
 import { getConversation, getConversationMessages } from "../data";
-import { useMessages } from "../messages-context";
+import { useActiveChat } from "./use-active-chat";
 
 interface User {
   id: string;
@@ -14,65 +15,90 @@ interface User {
 }
 
 export function useChat() {
-  const { userId, activeChatId } = useMessages();
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+  const { activeChatId } = useActiveChat();
+
   const [isLoading, setIsLoading] = useState(true);
   const [otherUser, setOtherUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
-    setIsLoading(true);
-    const fetchData = async () => {
-      if (!activeChatId) return;
-      const [conv, msg] = await Promise.all([
-        getConversation(activeChatId),
-        getConversationMessages(activeChatId),
-      ]);
-
-      const otherUser = conv.data?.participants.find(
-        (p) => p.userId !== userId,
-      )?.user;
-      if (otherUser) {
-        setOtherUser(otherUser);
-      }
-
-      if (msg.error) {
-        setError(msg.error);
-      } else {
-        setMessages(msg.data);
-      }
-
-      setIsLoading(false);
-    };
-
-    const updateReadStatus = async () => {
-      if (!activeChatId) return;
-      await setMessagesAsRead(activeChatId, userId);
-    };
-    updateReadStatus();
-    fetchData();
-  }, [activeChatId]);
-
-  useEffect(() => {
-    const channel = pusherClient.subscribe(`conversation-${activeChatId}`);
-
-    channel.bind("new-message", (newMsg: Message) => {
-      setMessages((prev) => [...prev, newMsg]);
-    });
-    return () => {
-      channel.unbind("new-message");
-      pusherClient.unsubscribe(`user-${activeChatId}`);
-    };
-  }, [activeChatId]);
-
-  useEffect(() => {
-    const markMessagesAsRead = async () => {
-      if (!activeChatId) return;
-      await setMessagesAsRead(activeChatId, userId);
-    };
-
-    markMessagesAsRead();
+    scrollToBottom();
   }, [messages]);
 
-  return { messages, error, isLoading, otherUser };
+  useEffect(() => {
+    if (!activeChatId || !userId) return;
+
+    let isMounted = true;
+
+    const initChat = async () => {
+      setIsLoading(true);
+      setError(null);
+      setMessages([]);
+
+      try {
+        const [_, conv, msg] = await Promise.all([
+          setMessagesAsRead(activeChatId, userId),
+          getConversation(activeChatId),
+          getConversationMessages(activeChatId),
+        ]);
+
+        if (!isMounted) return;
+
+        if (msg.error) {
+          setError(msg.error);
+        } else {
+          setMessages(msg.data || []);
+          const other = conv.data?.participants.find(
+            (p) => p.userId !== userId,
+          )?.user;
+          if (other) setOtherUser(other);
+        }
+      } catch (err) {
+        if (isMounted) setError("Došlo je do pogreške.");
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    };
+
+    initChat();
+    return () => {
+      isMounted = false;
+    };
+  }, [activeChatId, userId]);
+
+  useEffect(() => {
+    if (!activeChatId || !userId) return;
+
+    const channel = pusherClient.subscribe(`conversation-${activeChatId}`);
+    channel.bind("new-message", (newMsg: Message) => {
+      setMessages((prev) => [...prev, newMsg]);
+      const markAsRead = async () =>
+        await setMessagesAsRead(activeChatId, userId);
+
+      markAsRead();
+    });
+
+    return () => {
+      channel.unbind_all();
+      pusherClient.unsubscribe(`conversation-${activeChatId}`);
+    };
+  }, [activeChatId, userId]);
+
+  return {
+    messages,
+    error,
+    isLoading,
+    otherUser,
+    userId,
+    activeChatId,
+    scrollRef,
+  };
 }

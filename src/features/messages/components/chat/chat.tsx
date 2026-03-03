@@ -3,21 +3,18 @@ import { cn } from "@lib/utils";
 import { MessageCircleOff } from "lucide-react";
 
 import { useChat } from "@features/messages/hooks/use-chat";
-import { useMessages } from "@features/messages/messages-context";
 
 import { EmptyState } from "@ui/empty-state";
 import { ErrorState } from "@ui/error-state";
-import { H1 } from "@ui/typography";
+import { Spinner } from "@ui/spinner";
 
 import { NewConversation } from "../new-conversation/new-conversation";
 import { ChatBody } from "./chat-body";
-import { ChatBodySkeleton } from "./chat-body-skeleton";
 import { ChatFooter } from "./chat-footer";
 import { ChatHeader } from "./chat-header";
 
 export function Chat({ className }: { className?: string }) {
-  const { activeChatId } = useMessages();
-  const { messages, error, isLoading, otherUser } = useChat();
+  const { messages, isLoading, error, activeChatId } = useChat();
 
   if (!activeChatId)
     return (
@@ -33,7 +30,7 @@ export function Chat({ className }: { className?: string }) {
     return (
       <ErrorState
         Icon={MessageCircleOff}
-        title={"Nije moguca pristup porukama."}
+        title={"Greška pri hvatanju poruka."}
         description={"Pokusajte ponovo."}
       />
     );
@@ -43,7 +40,9 @@ export function Chat({ className }: { className?: string }) {
       <ChatHeader />
 
       {isLoading ? (
-        <ChatBodySkeleton className="flex-1" />
+        <div className="flex flex-1 items-center justify-center">
+          <Spinner className="size-10 text-gray-300" />
+        </div>
       ) : !messages.length ? (
         <>
           <EmptyState

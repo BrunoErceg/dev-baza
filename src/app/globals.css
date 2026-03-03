@@ -137,3 +137,24 @@
   font-weight: 600;
   font-style: normal;
 }
+
+/* Širina scrollbara */
+::-webkit-scrollbar {
+  width: 5px; /* Jako tanak */
+}
+
+/* Pozadina (track) - neka bude prozirna */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Dio koji se pomiče (thumb) */
+::-webkit-scrollbar-thumb {
+  background: #d1d5db; /* Siva boja (gray-300) */
+  border-radius: 10px;
+}
+
+/* Boja kad se prijeđe mišem */
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af; /* Tamnija siva (gray-400) */
+}

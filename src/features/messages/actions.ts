@@ -1,5 +1,4 @@
 "use server";
-import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import {
@@ -19,6 +18,53 @@ import {
   notifyNewMessage,
 } from "./services/pusher-notifications";
 import { ConversationListItem } from "./types";
+import { formatConversation, formatConversations } from "./utils";
+
+export async function createConversation(
+  otherUserId: string,
+): Promise<DataResponse<ConversationListItem | null>> {
+  const session = await auth();
+
+  try {
+    ensureAuthenticated(session);
+    const userId = session.user.id;
+
+    const newRawConv = await prisma.conversation.create({
+      data: {
+        participants: {
+          create: [{ userId: userId }, { userId: otherUserId }],
+        },
+      },
+      include: {
+        participants: {
+          include: {
+            user: { select: { username: true, id: true, image: true } },
+          },
+        },
+        messages: {
+          orderBy: { createdAt: "desc" },
+          take: 1,
+        },
+      },
+    });
+
+    const formattedConv = formatConversation(newRawConv, userId);
+
+    await Promise.all([
+      pusherServer.trigger(`user-${userId}`, "new-conversation", formattedConv),
+      pusherServer.trigger(
+        `user-${otherUserId}`,
+        "new-conversation",
+        formattedConv,
+      ),
+    ]);
+
+    return { data: formattedConv, error: null };
+  } catch (error) {
+    console.log("CREATE_CONVERSATION_ERROR:", error);
+    return { data: null, error: "Greška pri kreiranju razgovora." };
+  }
+}
 
 export async function deleteConversation(
   conversationId: string,
@@ -26,11 +72,10 @@ export async function deleteConversation(
   otherUserId: string,
 ) {
   const session = await auth();
-  let shouldRedirect = false;
   try {
     ensureAuthenticated(session);
     await ensureConversationParticipant(conversationId, session.user.id);
-    await prisma.conversation.delete({
+    const result = await prisma.conversation.delete({
       where: { id: conversationId },
     });
 
@@ -44,14 +89,11 @@ export async function deleteConversation(
         ),
       ),
     );
-    shouldRedirect = true;
+
+    return { data: result, error: null };
   } catch (error) {
     console.log("DELETE_CONVERSATION_ERROR:", error);
     return { data: null, error: "Greška pri brisanju razgovora." };
-  }
-
-  if (shouldRedirect) {
-    redirect("/poruke");
   }
 }
 
@@ -69,23 +111,34 @@ export async function sendMessage(
       ensureConversationParticipant(conversationId, session.user.id),
     ]);
 
-    const newMessage = await prisma.message.create({
-      data: {
-        conversationId: conversationId,
-        senderId: session.user.id,
-        content: validatedData.message,
-      },
-      include: {
-        conversation: {
+    const newMessage = await prisma.$transaction(async (tx) => {
+      const [msg, _] = await Promise.all([
+        tx.message.create({
+          data: {
+            conversationId: conversationId,
+            senderId: session.user.id,
+            content: validatedData.message,
+          },
           include: {
-            participants: {
+            conversation: {
               include: {
-                user: { select: { id: true, username: true, image: true } },
+                participants: {
+                  include: {
+                    user: { select: { id: true, username: true, image: true } },
+                  },
+                },
               },
             },
           },
-        },
-      },
+        }),
+
+        tx.conversation.update({
+          where: { id: conversationId },
+          data: { lastMessageAt: new Date() },
+        }),
+      ]);
+
+      return msg;
     });
 
     const participants = newMessage.conversation.participants;
@@ -116,60 +169,12 @@ export async function setMessagesAsRead(
 
       data: { isRead: true },
     });
-
+    console.log("SET_MESSAGES_AS_READ_RESULT:", result.count);
     await notifyConversationIsRead(userId, conversationId, result.count);
 
     return { data: result.count, error: null };
   } catch (error) {
     console.log("SET_MESSAGES_AS_READ_ERROR:", error);
     return { data: null, error: "Greška pri postavljanju obavijesti." };
-  }
-}
-
-export async function createConversation(
-  otherUserId: string,
-): Promise<DataResponse<ConversationListItem | null>> {
-  const session = await auth();
-
-  try {
-    ensureAuthenticated(session);
-    const currentUserId = session.user.id;
-
-    const newConversation: ConversationListItem =
-      await prisma.conversation.create({
-        data: {
-          participants: {
-            create: [{ userId: currentUserId }, { userId: otherUserId }],
-          },
-        },
-
-        include: {
-          participants: {
-            include: {
-              user: { select: { username: true, id: true, image: true } },
-            },
-          },
-          messages: {
-            orderBy: { createdAt: "desc" },
-            take: 1,
-          },
-        },
-      });
-
-    await pusherServer.trigger(
-      `user-${currentUserId}`,
-      "new-conversation",
-      newConversation,
-    );
-    await pusherServer.trigger(
-      `user-${otherUserId}`,
-      "new-conversation",
-      newConversation,
-    );
-
-    return { data: newConversation, error: null };
-  } catch (error) {
-    console.log("CREATE_CONVERSATION_ERROR:", error);
-    return { data: null, error: "Greška pri kreiranju razgovora." };
   }
 }

@@ -1,56 +1,53 @@
-"use client";
+import Link from "next/link";
 
-import { formatRelativeDate } from "@lib/utils";
+import { cn, formatRelativeDate } from "@lib/utils";
 
-import { useConversationItem as useConversation } from "@features/messages/hooks/use-conversation";
-import { useMessages } from "@features/messages/messages-context";
+import { useConversationItem } from "@features/messages/hooks/use-conversation-item";
+import { ConversationListItem } from "@features/messages/types";
 import { ProfileAvatar } from "@features/users/components/profile-avatar";
 
 import { Large, Muted } from "@ui/typography";
-
-import { ConversationListItem } from "../../types";
 
 export function Conversation({
   conversation,
 }: {
   conversation: ConversationListItem;
 }) {
-  const {
-    id,
-    otherUser,
-    message,
-    isNewUnreadMessage,
-    messageText,
-    linkClassName,
-    messageClassName,
-  } = useConversation({ conversation });
-  const { setActiveChat } = useMessages();
-  const onSelect = async () => {
-    setActiveChat(id);
-  };
+  const { otherUser, lastMessage, isSentByMe, isActive, isUnread } =
+    useConversationItem({ conversation });
 
   return (
-    <div onClick={() => onSelect()} className={linkClassName}>
+    <Link
+      href={`/poruke/${conversation.id}`}
+      className={cn(
+        "flex cursor-pointer items-center gap-5 px-3 py-4 duration-200 hover:bg-gray-100",
+        isActive && "bg-gray-100",
+      )}
+    >
       <ProfileAvatar className="size-14" image={otherUser.image} />
-      <div className="flex-1">
-        <Large className="-translate-x-0.5">@{otherUser.username}</Large>
-        <Muted className={messageClassName}>{messageText}</Muted>
+
+      <div className="flex-1 overflow-hidden">
+        <Large className="truncate">@{otherUser.username}</Large>
+        <Muted
+          className={cn("truncate", isUnread && "font-bold text-gray-950")}
+        >
+          {isSentByMe && "Vi: "}
+          {lastMessage?.content || "Nema poruka"}
+        </Muted>
       </div>
 
-      {message && (
-        <div className="flex items-center gap-2">
-          <TimeAgo createdAt={message.createdAt} />
-          {isNewUnreadMessage && <BlueDot />}
-        </div>
-      )}
-    </div>
+      <div className="flex items-center gap-2">
+        {lastMessage && (
+          <>
+            <Muted className="text-xs whitespace-nowrap">
+              {formatRelativeDate(lastMessage.createdAt)}
+            </Muted>
+            {isUnread && (
+              <div className="size-2.5 translate-y-0.5 rounded-full bg-blue-600" />
+            )}
+          </>
+        )}
+      </div>
+    </Link>
   );
 }
-
-const TimeAgo = ({ createdAt }: { createdAt: Date }) => {
-  return <p>{formatRelativeDate(createdAt)}</p>;
-};
-
-const BlueDot = () => {
-  return <div className="size-2 rounded-full bg-blue-600" />;
-};

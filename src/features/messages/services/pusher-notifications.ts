@@ -5,7 +5,7 @@ export async function notifyNewMessage(
   newMessage: Message,
   participants: any[],
 ) {
-  const receiver = participants.find((p) => p.userId !== newMessage.senderId);
+  const receiver = participants.find((p) => p.userId !== newMessage.senderId)!;
   const participantIds = participants.map((p) => `user-${p.userId}`);
 
   return Promise.all([
@@ -19,13 +19,19 @@ export async function notifyNewMessage(
       newMessage,
     ),
 
+    pusherServer.trigger(`user-${receiver.userId}`, "new-message", newMessage),
+
     // 3. Brojač za primatelja
-    receiver &&
-      pusherServer.trigger(`user-${receiver.userId}`, "update-message-count", {
-        conversationId: newMessage.conversationId,
+
+    pusherServer.trigger(
+      `user-messages-notification-${receiver.userId}`,
+      "update-message-count",
+      {
         type: "INCREMENT",
+        conversationId: newMessage.conversationId,
         count: 1,
-      }),
+      },
+    ),
   ]);
 }
 
@@ -35,11 +41,15 @@ export async function notifyConversationIsRead(
   count: number,
 ) {
   await Promise.all([
-    pusherServer.trigger(`user-${userId}`, "update-message-count", {
-      conversationId,
-      type: "DECREMENT",
-      result: count,
-    }),
+    pusherServer.trigger(
+      `user-messages-notification-${userId}`,
+      "update-message-count",
+      {
+        type: "DECREMENT",
+        conversationId,
+        count: count,
+      },
+    ),
     pusherServer.trigger(
       `user-${userId}`,
       "set-conversation-as-read",

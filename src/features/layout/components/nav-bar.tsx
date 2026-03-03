@@ -10,7 +10,6 @@ import {
   getConversations,
   getUnreadMessagesCount,
 } from "@features/messages/data";
-import { MessagesProvider } from "@features/messages/messages-context";
 import { UserNotifications } from "@features/notifications/components/user-notifications";
 import { getUserNotifications } from "@features/notifications/data";
 import { UserNavDropdown } from "@features/users/components/user-nav-dropdown";
@@ -50,12 +49,10 @@ export async function Navbar() {
             <AddWebsiteSheet className="hidden md:block" />
 
             {user && (
-              <MessagesProvider userId={user.id}>
-                <MessagesNotification
-                  initialUnreadCount={unreadNumber}
-                  userId={user.id}
-                />
-              </MessagesProvider>
+              <MessagesNotification
+                initialUnreadCount={unreadNumber}
+                userId={user.id}
+              />
             )}
 
             <UserNotifications

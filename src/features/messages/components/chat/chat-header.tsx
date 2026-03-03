@@ -1,11 +1,11 @@
 "use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { Trash2 } from "lucide-react";
 
 import { deleteConversation } from "@features/messages/actions";
 import { useChat } from "@features/messages/hooks/use-chat";
-import { useMessages } from "@features/messages/messages-context";
 import { ProfileAvatar } from "@features/users/components/profile-avatar";
 
 import {
@@ -24,14 +24,16 @@ import { Large } from "@ui/typography";
 import { ChatHeaderSkeleton } from "./chat-header-skeleton";
 
 export function ChatHeader() {
-  const { userId, activeChatId } = useMessages();
-  const { otherUser, isLoading } = useChat();
+  const { otherUser, isLoading, activeChatId, userId } = useChat();
+  const router = useRouter();
 
   if (isLoading) return <ChatHeaderSkeleton />;
 
   if (!otherUser || !activeChatId) return null;
   const handelDelete = async () => {
-    deleteConversation(activeChatId, userId, otherUser.id);
+    if (!activeChatId || !userId) return;
+    const result = await deleteConversation(activeChatId, userId, otherUser.id);
+    if (!result.error) router.push("/poruke");
   };
 
   return (

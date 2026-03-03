@@ -79,9 +79,12 @@ model Conversation {
   id          String        @id @default(cuid())
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt 
- 
+  lastMessageAt DateTime      @default(now())
+
+
   participants Participant[]
   messages     Message[]
+  @@index([lastMessageAt(sort: Desc)])
 }
 
 model Participant {

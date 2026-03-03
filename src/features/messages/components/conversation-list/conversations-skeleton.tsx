@@ -1,6 +1,6 @@
 import { Skeleton } from "@ui/skeleton";
 
-export function ConversationListSkeleton() {
+export function ConversationsSkeleton() {
   return (
     <div className="flex flex-col gap-5 px-3 py-4">
       {Array.from({ length: 5 }).map((_, i) => {

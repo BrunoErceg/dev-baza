@@ -1,9 +1,10 @@
+import { ReactNode } from "react";
+
 import { Large } from "@ui/typography";
 
-import { ConversationList } from "../conversation-list/conversation-list";
 import { NewConversation } from "../new-conversation/new-conversation";
 
-export function Sidebar() {
+export function Sidebar({ children }: { children: ReactNode }) {
   return (
     <div className="flex w-lg flex-col border-r">
       <div className="flex justify-between border-b px-3 py-6">
@@ -11,7 +12,7 @@ export function Sidebar() {
         <NewConversation />
       </div>
 
-      <ConversationList />
+      {children}
     </div>
   );
 }

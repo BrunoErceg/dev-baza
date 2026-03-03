@@ -6,8 +6,8 @@ import { Muted } from "@ui/typography";
 
 export function UserMessage({ message }: { message: Message }) {
   return (
-    <div key={message.id} className="flex flex-col items-end gap-2 self-end">
-      <div className="flex max-w-2/3 items-center">
+    <div key={message.id} className="flex flex-col items-end">
+      <div className="flex max-w-2/3 items-center gap-2 self-end">
         <div className="flex items-center">
           <Muted className="text-xs">
             {formatRelativeDate(message.createdAt)}
@@ -19,10 +19,6 @@ export function UserMessage({ message }: { message: Message }) {
           {message.content}
         </div>
       </div>
-      <CheckCheck
-        size={15}
-        className={cn("-translate-x-1", message.isRead && "text-blue-600")}
-      />
     </div>
   );
 }

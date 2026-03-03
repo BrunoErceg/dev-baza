@@ -6,18 +6,20 @@ import { Participant } from "@prisma/client";
 
 import { DataResponse } from "@/types/actions";
 
+import { formatConversations } from "./utils";
+
 export async function getConversations() {
   const session = await auth();
-
+  const userId = session.user.id;
   try {
     ensureAuthenticated(session);
 
-    const conversations = await prisma.conversation.findMany({
-      where: { participants: { some: { userId: session.user.id } } },
+    const rawConvs = await prisma.conversation.findMany({
+      where: { participants: { some: { userId: userId } } },
       include: {
         participants: {
           include: {
-            user: { select: { username: true, id: true, image: true } },
+            user: true,
           },
         },
 
@@ -26,24 +28,12 @@ export async function getConversations() {
           take: 1,
         },
       },
-      orderBy: { updatedAt: "desc" },
+      orderBy: { lastMessageAt: "desc" },
     });
 
-    return { data: conversations || [], error: null };
-  } catch (error) {
-    return { data: [], error: "Greška pri hvatanju podataka" };
-  }
-}
+    const formattedConvs = formatConversations(rawConvs, userId);
 
-export async function getConversationParticipants(
-  conversationId: string,
-): Promise<DataResponse<Participant[]>> {
-  try {
-    const participants = await prisma.participant.findMany({
-      where: { conversationId: conversationId },
-    });
-
-    return { data: participants || [], error: null };
+    return { data: formattedConvs || [], error: null };
   } catch (error) {
     return { data: [], error: "Greška pri hvatanju podataka" };
   }
@@ -74,6 +64,20 @@ export async function getConversation(id: string) {
     return { data: conversation, error: null };
   } catch (error) {
     return { data: null, error: "Greška pri hvatanju podataka" };
+  }
+}
+
+export async function getConversationParticipants(
+  conversationId: string,
+): Promise<DataResponse<Participant[]>> {
+  try {
+    const participants = await prisma.participant.findMany({
+      where: { conversationId: conversationId },
+    });
+
+    return { data: participants || [], error: null };
+  } catch (error) {
+    return { data: [], error: "Greška pri hvatanju podataka" };
   }
 }
 
@@ -111,18 +115,5 @@ export async function getUnreadMessagesCount(
   } catch (error) {
     console.log("GET_UNREAD_MESSAGES_COUNT_ERROR:", error);
     return { data: 0, error: "Greška pri hvatanju podataka." };
-  }
-}
-
-export async function getUnreadConversationMessages(id: string) {
-  try {
-    const messages = await prisma.message.findMany({
-      where: { conversationId: id },
-
-      orderBy: { createdAt: "asc" },
-    });
-    return { data: messages, error: null };
-  } catch (error) {
-    return { data: [], error: "Greska pri hvatanju podataka" };
   }
 }

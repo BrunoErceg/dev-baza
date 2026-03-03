@@ -1,9 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
 
-import { pusherClient } from "@lib/pusher";
 import { MessageCircleMore } from "lucide-react";
 
 import {
@@ -16,7 +13,7 @@ import {
   SheetTrigger,
 } from "@ui/sheet";
 
-import { MessagesProvider } from "../messages-context";
+import { useMessagesNotification } from "../hooks/use-messages-notification";
 import { ConversationList } from "./conversation-list/conversation-list";
 
 interface MessagesNavigationProps {
@@ -24,48 +21,25 @@ interface MessagesNavigationProps {
   userId: string;
 }
 
-interface UpdateMessageCount {
-  count: number;
-  type: "INCREMENT" | "DECREMENT";
-  conversationId: string;
-}
-
 export function MessagesNotification({
   initialUnreadCount,
   userId,
 }: MessagesNavigationProps) {
-  const searchParams = useSearchParams();
-  const activeChatId = searchParams.get("id");
-  const [unreadCount, setUnreadCount] = useState(initialUnreadCount);
-
-  useEffect(() => {
-    const channel = pusherClient.subscribe(`user-${userId}`);
-
-    channel.bind("update-message-count", (data: UpdateMessageCount) => {
-      const isActiveChat = data.conversationId === activeChatId;
-      setUnreadCount((prev) => {
-        if (data.type === "DECREMENT") {
-          return prev - data.count;
-        } else if (isActiveChat) {
-          return prev;
-        } else {
-          return prev + data.count;
-        }
-      });
-    });
-
-    channel.bind("reduce-message-count", (count: number) => {
-      setUnreadCount((prev) => {
-        return prev - count;
-      });
-    });
-    return () => {
-      pusherClient.unsubscribe(`user-${userId}`);
-    };
-  }, [userId, activeChatId]);
-
+  const {
+    unreadCount,
+    isOpen,
+    setIsOpen,
+    isLoading,
+    error,
+    initialConversations,
+  } = useMessagesNotification({
+    initialUnreadCount,
+    userId,
+  });
+  console.log("INITIAL_UNREAD_COUNT", initialUnreadCount);
+  console.log("UNREAD_COUNT", unreadCount);
   return (
-    <Sheet>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger>
         <div className="relative">
           <MessageCircleMore className="size-6 cursor-pointer md:size-8" />
@@ -84,7 +58,11 @@ export function MessagesNotification({
           </SheetDescription>
         </SheetHeader>
 
-        <ConversationList />
+        <ConversationList
+          initialConversations={initialConversations}
+          error={error}
+          initaialIsLoading={isLoading}
+        />
 
         <SheetFooter>
           <Link href="/poruke">Pogledaj sve razgovore</Link>

@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Send } from "lucide-react";
 
 import { sendMessage } from "@features/messages/actions";
-import { useMessages } from "@features/messages/messages-context";
+import { useChat } from "@features/messages/hooks/use-chat";
 import { MessageFormValues, messageSchema } from "@features/messages/schema";
 
 import { Button } from "@ui/button";
@@ -14,7 +14,7 @@ import { FormInput } from "@ui/form-input";
 import { Spinner } from "@ui/spinner";
 
 export function ChatFooter() {
-  const { activeChatId } = useMessages();
+  const { activeChatId } = useChat();
   if (!activeChatId) return null;
   const [isPending, startTransition] = useTransition();
   const {
@@ -44,6 +44,7 @@ export function ChatFooter() {
           placeholder="Napišite poruku..."
           id="username"
           {...register("message")}
+          autoComplete="off"
         />
         <Button type="submit" className="w-20">
           {isPending ? <Spinner /> : <Send />}
