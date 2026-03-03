@@ -18,6 +18,15 @@ import {
 } from "@features/websites/data";
 import { parseExploreParams } from "@features/websites/utils";
 
+export async function generateMetadata({ params }: { params: any }) {
+  const { username } = await params;
+
+  return {
+    // Ovo "Poruke" ili "Razgovor" ulazi na mjesto %s u RootLayoutu
+    title: username,
+  };
+}
+
 export default async function Profile({
   params,
   searchParams,

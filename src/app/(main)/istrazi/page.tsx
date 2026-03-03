@@ -3,7 +3,6 @@ import {
   WebsiteGridData,
   WebsiteGridWrapper,
 } from "@features/websites/components/website-list/website-grid-data";
-import { GridToggle } from "@features/websites/components/website-list/website-list-navigation/grid-toggle";
 import {
   CategorySelect,
   ColorStyleSelect,
@@ -16,6 +15,10 @@ import { getAllApprovedWebsites } from "@features/websites/data";
 import { parseExploreParams } from "@features/websites/utils";
 
 import { H1, P } from "@ui/typography";
+
+export const metadata = {
+  title: "Istraživanje",
+};
 
 export default async function Home({ searchParams }: any) {
   const resolvedParams = await searchParams;

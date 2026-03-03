@@ -2,6 +2,10 @@ import { Container } from "@features/layout/components/container";
 
 import { H1, Large, P } from "@ui/typography";
 
+export const metadata = {
+  title: "Uvjeti korištenja",
+};
+
 export default function TermsOfService() {
   return (
     <Container className="my-10">

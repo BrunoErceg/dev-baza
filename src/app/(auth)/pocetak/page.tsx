@@ -5,6 +5,10 @@ import { OnboardingForm } from "@features/auth/components/onboarding-form";
 
 import { H3, Muted } from "@ui/typography";
 
+export const metadata = {
+  title: "Početak",
+};
+
 export default function OnboardingPage() {
   return (
     <>

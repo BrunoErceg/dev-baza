@@ -7,6 +7,9 @@ import { LoginForm } from "@features/auth/components/login-form";
 import { Separator } from "@ui/separator";
 import { H3, Muted } from "@ui/typography";
 
+export const metadata = {
+  title: "Prijava",
+};
 export default function LoginPage() {
   return (
     <div className="flex flex-1 items-center justify-center">

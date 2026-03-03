@@ -3,6 +3,10 @@ import FaqCard from "@features/support/components/faq-card";
 import { HelpContactSection } from "@features/support/components/help-contact-section";
 import { HelpHeader } from "@features/support/components/help-header";
 
+export const metadata = {
+  title: "Pomoć i podrška",
+};
+
 export default function HelpPage() {
   return (
     <section className="my-15">

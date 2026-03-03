@@ -4,6 +4,10 @@ import { useSearchParams } from "next/navigation";
 
 import { H1, H2, P } from "@ui/typography";
 
+export const metadata = {
+  title: "Greška pri prijavi",
+};
+
 export default function AuthErrorPage() {
   const searchParams = useSearchParams();
   const error = searchParams.get("error");

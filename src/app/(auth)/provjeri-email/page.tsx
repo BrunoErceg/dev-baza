@@ -2,6 +2,10 @@ import Link from "next/link";
 
 import { H2, P } from "@ui/typography";
 
+export const metadata = {
+  title: "Provjeri E-mail",
+};
+
 export default function VerifyEmailPage() {
   return (
     <div className="flex flex-1 flex-col items-center justify-center text-center">

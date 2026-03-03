@@ -10,6 +10,10 @@ import { ProfileSettingsSection } from "@features/users/components/profile-setti
 import { DeleteAccountSection } from "@features/users/components/user-delete-card/delete-account-section";
 import { UserWebsitesOverview } from "@features/websites/components/user-websites-section/user-websites-overview";
 
+export const metadata = {
+  title: "Dashboard",
+};
+
 export default async function DashboardPage() {
   const session = await auth();
   const isAdmin = session.user.role === "ADMIN";

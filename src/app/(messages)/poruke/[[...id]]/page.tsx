@@ -8,6 +8,15 @@ import { getConversations } from "@features/messages/data";
 
 import { Card } from "@ui/card";
 
+export async function generateMetadata({ params }: { params: any }) {
+  const { id } = await params;
+
+  return {
+    // Ovo "Poruke" ili "Razgovor" ulazi na mjesto %s u RootLayoutu
+    title: id ? "Razgovor" : "Poruke",
+  };
+}
+
 export default async function MessagesPage({
   params,
 }: {
