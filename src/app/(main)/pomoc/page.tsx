@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function HelpPage() {
   return (
-    <section className="my-15">
+    <section className="my-15 w-full">
       <Container className="mt-10 flex flex-col gap-10 md:gap-15 lg:max-w-4xl">
         <HelpHeader />
         <FaqCard />

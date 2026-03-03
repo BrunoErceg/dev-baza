@@ -25,12 +25,11 @@ export async function onboardingUpdate(
     ensureAuthenticated(session);
     ensureUserExists(session.user.id);
     const data = await actionValidation(rawData, onboardingSchema);
-    console.log(data.username);
     await ensureUserNameDoesNotExist(data.username);
 
     await prisma.user.update({
       where: { id: session.user.id },
-      data: { username: data.username },
+      data: { username: data.username, name: data.fullName, onboarding: true },
     });
 
     await createNotification(session.user.id, {

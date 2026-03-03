@@ -36,7 +36,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} flex min-h-screen flex-col bg-[#f7f7f7] font-sans antialiased`}
       >
-        <Toaster position="bottom-center" />
+        <Toaster position="bottom-center" richColors />
         <SessionProvider>{children}</SessionProvider>
       </body>
     </html>

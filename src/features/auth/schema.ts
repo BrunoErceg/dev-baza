@@ -7,6 +7,11 @@ export const loginSchema = z.object({
 export type LoginFormValues = z.infer<typeof loginSchema>;
 
 export const onboardingSchema = z.object({
+  fullName: z
+    .string()
+    .trim()
+    .min(3, "Ime mora imati barem 3 znaka.")
+    .max(32, "Ime može imati najviše 32 znaka."),
   username: z
     .string()
     .trim()

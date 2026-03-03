@@ -39,7 +39,6 @@ export const profileSchema = z.object({
     .max(20, "Username može imati najviše 20 znaka.")
     .regex(/^[a-zA-Z0-9_]+$/, "Dopuštena su samo slova, brojke i podvlaka (_).")
     .toLowerCase(),
-  email: z.email().optional(),
   website: z.url("Unesite ispravnu URL adresu.").optional(),
   bio: z
     .string()

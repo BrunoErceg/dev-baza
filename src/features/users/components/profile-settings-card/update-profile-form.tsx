@@ -1,8 +1,10 @@
 "use client";
+import { useSession } from "next-auth/react";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 import { updateProfile } from "@features/users/actions";
 import { ProfileFormValues, profileSchema } from "@features/users/schema";
@@ -18,7 +20,6 @@ interface ProfileFormProps {
   user: {
     name: string | null;
     username: string | null;
-    emailContact: string | null;
     website: string | null;
     bio: string | null;
   };
@@ -26,7 +27,7 @@ interface ProfileFormProps {
 
 export function UpdateProfileForm({ user }: ProfileFormProps) {
   const [isPending, startTransition] = useTransition();
-
+  const { update } = useSession();
   const {
     register,
     handleSubmit,
@@ -37,7 +38,6 @@ export function UpdateProfileForm({ user }: ProfileFormProps) {
     defaultValues: {
       name: user.name || "",
       username: user.username ?? "",
-      email: user.emailContact ?? "",
       website: user.website ?? "",
       bio: user.bio ?? "",
     },
@@ -45,13 +45,19 @@ export function UpdateProfileForm({ user }: ProfileFormProps) {
 
   async function onSubmit(data: ProfileFormValues) {
     startTransition(async () => {
-      const result = await updateProfile(data);
+      const { data: updatedUser, error } = await updateProfile(data);
 
-      if (result?.error) {
+      if (error) {
         setError("root", {
           type: "server",
-          message: result.error,
+          message: error,
         });
+      } else if (updatedUser) {
+        await update({
+          username: updatedUser.username,
+          name: updatedUser.name,
+        });
+        toast.success("Uspješno ste ažurirali profil!");
       }
     });
   }
@@ -77,18 +83,11 @@ export function UpdateProfileForm({ user }: ProfileFormProps) {
           />
 
           <FormInput
-            label="Kontakt e-mail"
-            error={errors.email?.message}
-            placeholder="Unesite e-mail kontakt ..."
-            id="email"
-            {...register("email")}
-          />
-
-          <FormInput
             label="Web stranica"
             error={errors.website?.message}
             placeholder="Unesite website..."
             id="website"
+            className="col-span-2"
             {...register("website")}
           />
 

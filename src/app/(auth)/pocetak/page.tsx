@@ -1,4 +1,3 @@
-"use client";
 import Link from "next/link";
 
 import { OnboardingForm } from "@features/auth/components/onboarding-form";

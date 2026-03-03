@@ -50,13 +50,12 @@ enum Technology {
  
 model User {
   id              String          @id @default(cuid())
-  name            String
-  username        String          @unique
+  name            String          @default("Gost")
+  username        String          @unique  @default(cuid())
   email           String          @unique
   emailVerified   DateTime?
   onboarding      Boolean         @default(false)
-  image           String          @default("https://jrgxq33rwp.ufs.sh/f/BNaNzrQS3KNeOIpQ9sfX6YjFCOQ0PUb84RtzAZJkh3B95pvN")
-  emailContact    String          
+  image           String          @default("https://jrgxq33rwp.ufs.sh/f/BNaNzrQS3KNeOIpQ9sfX6YjFCOQ0PUb84RtzAZJkh3B95pvN")     
   website         String?
   bio             String          @default("Kreativac koji tek gradi svoju priču. Pratite profil za ažuriranja.")
   accounts        Account[]

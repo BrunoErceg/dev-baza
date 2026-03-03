@@ -1,3 +1,4 @@
+"use client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
@@ -24,6 +25,7 @@ export function OnboardingForm() {
   } = useForm<OnboardingFormValues>({
     resolver: zodResolver(onboardingSchema),
     defaultValues: {
+      fullName: "",
       username: "",
     },
   });
@@ -47,12 +49,20 @@ export function OnboardingForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <FormInput
+        label="Ime i prezime"
+        error={errors.fullName?.message}
+        placeholder="Unesite puno ime..."
+        id="fullName"
+        {...register("fullName")}
+      />
+      <FormInput
         label="Korisničko ime"
         error={errors.username?.message}
         placeholder="Unesite korisničko ime..."
         id="username"
         {...register("username")}
       />
+
       <Button className="w-full">{isPending ? <Spinner /> : "Nastavi"}</Button>
     </form>
   );

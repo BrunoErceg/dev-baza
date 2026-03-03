@@ -18,7 +18,7 @@ export function ProfileAvatar({ image, className }: ProfileAvatarProps) {
         alt="Avatar"
         fill
         priority
-        sizes="(max-width: 768px) 40px, 40px"
+        sizes="(max-width: 768px) 120px, 120px"
         className="object-cover"
       />
       <AvatarFallback className="bg-muted"></AvatarFallback>

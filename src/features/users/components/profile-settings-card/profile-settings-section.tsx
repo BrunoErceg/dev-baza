@@ -31,7 +31,6 @@ async function ProfileSettingsContent() {
         user={{
           name: user.name,
           username: user.username,
-          emailContact: user.emailContact,
           website: user.website,
           bio: user.bio,
         }}

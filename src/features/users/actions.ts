@@ -11,9 +11,9 @@ import {
   ensureUserNameDoesNotExist,
   getUserName,
   handleActionError,
+  handleError,
 } from "@/lib/auth-utils";
 import { prisma } from "@/lib/prisma";
-import { FormActionResponse } from "@/types/actions";
 
 import { avatarSchema, profileContactSchema, profileSchema } from "./schema";
 import { getEmailTemplate } from "./utils";
@@ -30,22 +30,19 @@ export const updateProfile = async (rawData: unknown) => {
       await ensureUserNameDoesNotExist(data.username);
     }
 
-    await prisma.user.update({
+    const user = await prisma.user.update({
       where: { id: session.user.id },
       data: {
         name: data.name,
         username: data.username,
-        emailContact: data.email,
         website: data.website,
         bio: data.bio,
       },
     });
     revalidatePath("/");
-    return { success: "Profil uspješno ažuriran!" };
+    return { data: user, error: null };
   } catch (error) {
-    return {
-      error: handleActionError(error, "UPDATE_USER_ERROR").error,
-    };
+    return handleError(error, "UPDATE_PROFILE_ERROR");
   }
 };
 

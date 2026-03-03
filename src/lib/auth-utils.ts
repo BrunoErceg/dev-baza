@@ -49,7 +49,7 @@ export async function ensureUserExists(userId: string) {
 
 export async function ensureUserNameDoesNotExist(username: string) {
   const user = await prisma.user.findFirst({ where: { username: username } });
-  if (user) throw new ActionError("Korisnik sa ovim imenom vec postoji!");
+  if (user) throw new ActionError("Korisnik sa ovim imenom već postoji!");
 }
 
 export async function getWebsiteNameAndUserId(id: string) {
@@ -113,4 +113,20 @@ export function handleActionError(error: any, logLabel: string) {
   }
 
   return { error: "Greška pri spremanju u bazu." };
+}
+
+export function handleError(error: any, logLabel: string) {
+  console.log(logLabel + ":", error);
+  if (error instanceof ActionError) {
+    return { data: null, error: error.message };
+  }
+  if (error.code === "P2002") {
+    return { data: null, error: "Ovaj zapis već postoji." };
+  }
+
+  if (error.code === "P2025") {
+    return { data: null, error: "Zapis nije pronađen." };
+  }
+
+  return { data: null, error: "Greška pri spremanju u bazu." };
 }

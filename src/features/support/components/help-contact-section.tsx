@@ -4,7 +4,7 @@ import { HelpForm } from "./help-form";
 
 export function HelpContactSection() {
   return (
-    <div className="flex flex-col items-center gap-10">
+    <div className="mt-15 flex flex-col items-center gap-10">
       <div className="flex flex-col items-center justify-center text-center">
         <H2>Niste pronašli odgovor?</H2>
         <P>
