@@ -4,9 +4,6 @@ import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Category, ColorStyle, Style, Technology } from "@prisma/client";
-import { AlertCircleIcon } from "lucide-react";
-import { start } from "repl";
 import { toast } from "sonner";
 
 import { createWebsite } from "@features/websites/actions";
@@ -100,7 +97,7 @@ export function AddWebsiteForm({
           control={control}
           label="Kategorija"
           placeholder="Odaberite kategoriju"
-          options={Category}
+          options={Object.keys(CATEGORY_MAP)}
           map={CATEGORY_MAP}
         />
         <FormSelectField
@@ -108,7 +105,7 @@ export function AddWebsiteForm({
           control={control}
           label="Stil dizajna"
           placeholder="Odaberite stil"
-          options={Style}
+          options={Object.keys(STYLE_MAP)}
           map={STYLE_MAP}
         />
         <FormSelectField
@@ -116,7 +113,7 @@ export function AddWebsiteForm({
           control={control}
           label="Tehnologija"
           placeholder="Odaberite tehnologiju"
-          options={Technology}
+          options={Object.keys(TECH_MAP)}
           map={TECH_MAP}
         />
         <FormSelectField
@@ -124,7 +121,7 @@ export function AddWebsiteForm({
           control={control}
           label="Stil boja"
           placeholder="Odaberite stil boja"
-          options={ColorStyle}
+          options={Object.keys(COLOR_STYLE_MAP)}
           map={COLOR_STYLE_MAP}
         />
         <div className="col-span-2 flex flex-col">

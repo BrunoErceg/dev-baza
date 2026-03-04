@@ -41,7 +41,7 @@ export function FormSelectField({
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
               <SelectContent position="popper">
-                {Object.values(options).map((opt: any) => (
+                {options.map((opt: string) => (
                   <SelectItem key={opt} value={opt}>
                     {map[opt]?.label || opt}
                   </SelectItem>
