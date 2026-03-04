@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 
 import { auth } from "@/auth";
-import { Website } from "@prisma/client";
+import type { Website } from "@prisma/client";
 
 import { createNotification } from "@features/notifications/actions";
 
