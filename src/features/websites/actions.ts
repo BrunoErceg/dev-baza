@@ -3,7 +3,14 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 import { auth } from "@/auth";
-import { Like, Website } from "@prisma/client";
+import {
+  Category,
+  ColorStyle,
+  Like,
+  Style,
+  Technology,
+  Website,
+} from "@prisma/client";
 
 import { createNotification } from "@features/notifications/actions";
 import { websiteSchema } from "@features/websites/schemas";
@@ -38,10 +45,10 @@ export async function createWebsite(
         name: data.name,
         url: data.url,
         imageUrl: data.image,
-        style: data.style,
-        category: data.category,
-        colorStyle: data.colorStyle,
-        technology: data.technology,
+        style: data.style as Style,
+        category: data.category as Category,
+        colorStyle: data.colorStyle as ColorStyle,
+        technology: data.technology as Technology,
       },
     });
     await createNotification(session.user.id, {
