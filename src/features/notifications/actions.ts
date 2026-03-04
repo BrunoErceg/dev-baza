@@ -4,7 +4,11 @@ import { auth } from "@/auth";
 import { pusherServer } from "@lib/pusher";
 import { Notification } from "@prisma/client";
 
-import { actionValidation, ensureAuthenticated } from "@/lib/auth-utils";
+import {
+  actionValidation,
+  ensureAuthenticated,
+  handleError,
+} from "@/lib/auth-utils";
 import { prisma } from "@/lib/prisma";
 import { DataResponse } from "@/types/actions";
 
@@ -21,15 +25,14 @@ export async function createNotification(
     });
 
     await pusherServer.trigger(
-      `user-${recipientId}`,
+      `user-notifications-${recipientId}`,
       "new-notification",
       newNotification,
     );
 
     return { data: newNotification, error: null };
   } catch (error: any) {
-    console.log("CREATE_NOTIFICATION_ERROR:", error);
-    return { data: null, error: "Greška pri spremanju obavijesti." };
+    return handleError(error, "CREATE_NOTIFICATION_ERROR");
   }
 }
 
@@ -45,8 +48,7 @@ export async function deleteAllNotifications(): Promise<
     });
     return { data: result.count, error: null };
   } catch (error: any) {
-    console.log("DELETE_ALL_NOTIFICATIONS_ERROR:", error);
-    return { data: null, error: "Greška pri brisanju obavijesti." };
+    return handleError(error, "DELETE_ALL_NOTIFICATIONS_ERROR");
   }
 }
 
@@ -63,7 +65,6 @@ export async function setAllNotificationsAsRead(): Promise<
     });
     return { data: result.count, error: null };
   } catch (error) {
-    console.log("SET_ALL_NOTIFICATIONS_AS_READ_ERROR:", error);
-    return { data: null, error: "Greška pri postavljanju obavijesti." };
+    return handleError(error, "SET_ALL_NOTIFICATIONS_AS_READ_ERROR");
   }
 }

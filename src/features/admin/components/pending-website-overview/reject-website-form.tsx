@@ -1,21 +1,19 @@
-import { Controller, useForm } from "react-hook-form";
+import { useTransition } from "react";
+import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 import { rejectWebsite } from "@features/admin/actions";
 
-import { useServerAction } from "@/hooks/use-server-action";
-
 import { Button } from "@ui/button";
-import { Field, FieldError, FieldGroup, FieldLabel } from "@ui/field";
 import { FormInput } from "@ui/form-input";
-import { Input } from "@ui/input";
 import { Spinner } from "@ui/spinner";
 
 import { RejectReasonFormValues, rejectReasonSchema } from "../../schemas";
 
 export function AdminRejectForm({ websiteId }: { websiteId: string }) {
-  const { isPending, action } = useServerAction(rejectWebsite);
+  const [isPending, startTransition] = useTransition();
 
   const {
     register,
@@ -27,8 +25,17 @@ export function AdminRejectForm({ websiteId }: { websiteId: string }) {
       reason: "",
     },
   });
+
   async function onSubmit(data: RejectReasonFormValues) {
-    action(websiteId, data);
+    startTransition(async () => {
+      const { error } = await rejectWebsite(websiteId, data);
+
+      if (error) {
+        toast.error(error);
+      } else {
+        toast.success("Uspješno ste odbili web stranicu!");
+      }
+    });
   }
 
   return (

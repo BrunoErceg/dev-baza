@@ -18,26 +18,27 @@ export function DashboardStats() {
 
 async function DashboardStatsContent() {
   const session = await auth();
-  const { stats } = await getDashboardStats(session.user.id);
+  const { data } = await getDashboardStats(session.user.id);
+  if (!data) return null;
   const statsConfig = [
     {
       title: "Sveukupni pregledi",
-      value: stats.totalViews,
+      value: data.totalViews,
       Icon: EyeIcon,
     },
     {
       title: "Sveukupni lajkovi",
-      value: stats.totalLikes,
+      value: data.totalLikes,
       Icon: ThumbsUp,
     },
     {
       title: "Mjesečni lajkovi",
-      value: stats.thisMonthLikes,
+      value: data.thisMonthLikes,
       Icon: ThumbsUp,
     },
     {
       title: "Nagrade",
-      value: stats.totalAwards,
+      value: data.totalAwards,
       Icon: Trophy,
     },
   ];

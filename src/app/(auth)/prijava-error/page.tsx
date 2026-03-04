@@ -1,10 +1,19 @@
 "use client";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 import { H2, P } from "@ui/typography";
 
 export default function AuthErrorPage() {
+  return (
+    <Suspense fallback={<div>Učitavanje...</div>}>
+      <AuthErrorContent />
+    </Suspense>
+  );
+}
+
+export function AuthErrorContent() {
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
 

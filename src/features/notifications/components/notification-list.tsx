@@ -16,12 +16,13 @@ export function NotificationList({
       <div className="flex flex-col gap-3 px-3">
         {notifications.map((notification) => {
           const { Icon, twClass } = USER_NOTIFICATION_MAP[notification.type];
+          const timeAgo = formatRelativeDate(notification.createdAt);
           return (
             <Alert key={notification.id} className={twClass}>
               <Icon />
               <AlertTitle>{notification.message}</AlertTitle>
               <AlertDescription>
-                Prije {formatRelativeDate(notification.createdAt)}
+                {timeAgo === "Upravo" ? "Upravo" : `Prije ${timeAgo}`}
               </AlertDescription>
             </Alert>
           );

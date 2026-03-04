@@ -1,4 +1,6 @@
-import { useServerAction } from "@hooks/use-server-action";
+import { useTransition } from "react";
+
+import { toast } from "sonner";
 
 import { acceptWebsite } from "@features/admin/actions";
 
@@ -6,9 +8,20 @@ import { Button } from "@ui/button";
 import { Spinner } from "@ui/spinner";
 
 export function ApprovedWebsiteButton({ websiteId }: { websiteId: string }) {
-  const { isPending, action } = useServerAction(acceptWebsite);
+  const [isPending, startTransition] = useTransition();
+  const onApprove = () => {
+    startTransition(async () => {
+      const { error } = await acceptWebsite(websiteId);
+
+      if (error) {
+        toast.error(error);
+      } else {
+        toast.success("Uspješno ste odobrili web stranicu!");
+      }
+    });
+  };
   return (
-    <Button onClick={() => action(websiteId)} className="w-22">
+    <Button onClick={() => onApprove()} className="w-22">
       {isPending ? <Spinner /> : "Odobri"}
     </Button>
   );

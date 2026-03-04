@@ -1,47 +1,43 @@
 "use client";
 import Image from "next/image";
-import { useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useEffect, useTransition } from "react";
+import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Category,
-  ColorStyle,
-  PrimaryColor,
-  Style,
-  Technology,
-} from "@prisma/client";
+import { Category, ColorStyle, Style, Technology } from "@prisma/client";
+import { AlertCircleIcon } from "lucide-react";
+import { start } from "repl";
 import { toast } from "sonner";
 
 import { createWebsite } from "@features/websites/actions";
 import {
   CATEGORY_MAP,
   COLOR_STYLE_MAP,
-  PRIMARY_COLOR_MAP,
   STYLE_MAP,
   TECH_MAP,
 } from "@features/websites/constants";
 import { WebsiteFormValues, websiteSchema } from "@features/websites/schemas";
 
-import { useServerAction } from "@/hooks/use-server-action";
 import { UploadButton } from "@/lib/uploadthing";
 
+import { AlertState } from "@ui/alert-state";
 import { AspectRatio } from "@ui/aspect-ratio";
 import { Button } from "@ui/button";
 import { Field } from "@ui/field";
 import { FormInput } from "@ui/form-input";
 import { FormSelectField } from "@ui/form-select-field";
-import { Spinner } from "@ui/spinner";
 
 export function AddWebsiteForm({
   onLoadingChange,
 }: {
   onLoadingChange: (loading: boolean) => void;
 }) {
-  const { isPending, action } = useServerAction(createWebsite);
+  const [isPending, startTransition] = useTransition();
+
   useEffect(() => {
     onLoadingChange(isPending);
   }, [isPending]);
+
   const {
     register,
     handleSubmit,
@@ -49,6 +45,7 @@ export function AddWebsiteForm({
     watch,
     setValue,
     control,
+    reset,
     formState: { errors },
   } = useForm<WebsiteFormValues>({
     resolver: zodResolver(websiteSchema),
@@ -64,7 +61,17 @@ export function AddWebsiteForm({
   });
   const imageUrl = watch("image");
   async function onSubmit(data: WebsiteFormValues) {
-    action(data);
+    startTransition(async () => {
+      const { error } = await createWebsite(data);
+      if (error) {
+        setError("root", {
+          type: "server",
+          message: error,
+        });
+      } else {
+        reset();
+      }
+    });
   }
 
   return (
@@ -73,6 +80,7 @@ export function AddWebsiteForm({
       className="mt-5 flex flex-col gap-5"
       onSubmit={handleSubmit(onSubmit)}
     >
+      {errors.root && <AlertState title={errors.root.message} />}
       <div className="flex flex-col gap-5 md:grid md:grid-cols-2">
         <FormInput
           label="Naziv"

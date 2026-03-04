@@ -4,10 +4,6 @@ import Link from "next/link";
 
 import { Website } from "@prisma/client";
 
-import { acceptWebsite } from "@features/admin/actions";
-
-import { useServerAction } from "@/hooks/use-server-action";
-
 import { ActionDialog } from "@ui/action-dialog";
 import { Button } from "@ui/button";
 

@@ -1,11 +1,14 @@
 "use server";
 import nodemailer from "nodemailer";
 
-import { actionValidation, handleActionError } from "@/lib/auth-utils";
+import { actionValidation, handleError } from "@/lib/auth-utils";
+import { DataResponse } from "@/types/actions";
 
 import { helpSchema } from "./schema";
 
-export async function sendSupportTicket(rawData: unknown) {
+export async function sendSupportTicket(
+  rawData: unknown,
+): Promise<DataResponse<any>> {
   try {
     const data = await actionValidation(rawData, helpSchema);
 
@@ -23,9 +26,9 @@ export async function sendSupportTicket(rawData: unknown) {
       subject: `Help: ${data.subject}`,
       html: data.message,
     };
-    await transporter.sendMail(mailOptions);
-    return { success: "Email poslan uspješno!" };
+    const result = await transporter.sendMail(mailOptions);
+    return { data: result, error: null };
   } catch (error) {
-    return handleActionError(error, "SEND_EMAIL_ERROR");
+    return handleError(error, "SEND_EMAIL_ERROR");
   }
 }

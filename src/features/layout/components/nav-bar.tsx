@@ -74,9 +74,6 @@ export async function Navbar() {
             <Button>
               <Link href="/prijava">Prijavi se</Link>
             </Button>
-            <Button variant="secondary" className="hidden md:flex">
-              <Link href="/prijava">Napravi Račun</Link>
-            </Button>
           </>
         )}
       </div>

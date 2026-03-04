@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { FiUpload } from "react-icons/fi";
 import { IoCameraOutline } from "react-icons/io5";
@@ -10,7 +10,6 @@ import { toast } from "sonner";
 import { updateAvatar } from "@features/users/actions";
 import { AvatarFormValues, avatarSchema } from "@features/users/schema";
 
-import { useServerAction } from "@/hooks/use-server-action";
 import { UploadButton } from "@/lib/uploadthing";
 import { cn } from "@/lib/utils";
 
@@ -22,7 +21,7 @@ import { Field } from "@components/ui/field";
 import { ProfileAvatar } from "../profile-avatar";
 
 export function UpdateAvatarForm({ userImage }: { userImage: string }) {
-  const { isPending, action } = useServerAction(updateAvatar);
+  const [isPending, startTransition] = useTransition();
   const [isUploading, setIsUploading] = useState(false);
   const form = useForm<AvatarFormValues>({
     resolver: zodResolver(avatarSchema),
@@ -32,7 +31,13 @@ export function UpdateAvatarForm({ userImage }: { userImage: string }) {
   });
 
   async function onSubmit(data: AvatarFormValues) {
-    action({ image: data.image });
+    startTransition(async () => {
+      const { error } = await updateAvatar(data);
+
+      if (error) {
+        toast.error(error);
+      }
+    });
   }
 
   return (

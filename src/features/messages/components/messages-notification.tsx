@@ -36,8 +36,6 @@ export function MessagesNotification({
     initialUnreadCount,
     userId,
   });
-  console.log("INITIAL_UNREAD_COUNT", initialUnreadCount);
-  console.log("UNREAD_COUNT", unreadCount);
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger>

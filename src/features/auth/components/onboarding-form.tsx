@@ -32,15 +32,14 @@ export function OnboardingForm() {
 
   const onSubmit = async (data: OnboardingFormValues) => {
     startTransition(async () => {
-      const result = await onboardingUpdate(data);
-      if (result?.error) {
+      const { error } = await onboardingUpdate(data);
+      if (error) {
         setError("username", {
           type: "server",
-          message: result.error,
+          message: error,
         });
-      } else if (result?.success) {
+      } else {
         await update({ onboarding: true, username: data.username });
-
         router.push("/dashboard");
       }
     });

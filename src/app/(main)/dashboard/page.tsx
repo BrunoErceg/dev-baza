@@ -1,5 +1,3 @@
-import { Suspense } from "react";
-
 import { auth } from "@/auth";
 
 import { PendingWebsitesOverview } from "@features/admin/components/pending-website-overview/pending-websites-overview";

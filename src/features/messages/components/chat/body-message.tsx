@@ -7,7 +7,7 @@ import { Muted } from "@ui/typography";
 export function UserMessage({ message }: { message: Message }) {
   return (
     <div key={message.id} className="flex flex-col items-end">
-      <div className="flex max-w-2/3 items-center gap-2 self-end">
+      <div className="flex max-w-full items-center gap-2 self-end md:max-w-2/3">
         <div className="flex items-center">
           <Muted className="text-xs">
             {formatRelativeDate(message.createdAt)}
@@ -25,7 +25,7 @@ export function UserMessage({ message }: { message: Message }) {
 
 export function OtherUserMessage({ message }: { message: Message }) {
   return (
-    <div className="flex max-w-1/2 flex-col items-start self-start">
+    <div className="flex max-w-full flex-col items-start self-start md:max-w-2/3">
       <div className="flex items-center">
         <div className="rounded-xl bg-blue-200 px-4 py-2">
           {message.content}

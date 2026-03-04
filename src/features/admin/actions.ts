@@ -2,6 +2,7 @@
 import { revalidatePath } from "next/cache";
 
 import { auth } from "@/auth";
+import { Website } from "@prisma/client";
 
 import { createNotification } from "@features/notifications/actions";
 
@@ -11,13 +12,16 @@ import {
   ensureAuthenticated,
   ensureWebsiteExists,
   getWebsiteNameAndUserId,
-  handleActionError,
+  handleError,
 } from "@/lib/auth-utils";
 import { prisma } from "@/lib/prisma";
+import { DataResponse } from "@/types/actions";
 
 import { awardSchema, rejectReasonSchema } from "./schemas";
 
-export async function acceptWebsite(websiteId: string) {
+export async function acceptWebsite(
+  websiteId: string,
+): Promise<DataResponse<Website | null>> {
   const session = await auth();
 
   try {
@@ -26,7 +30,7 @@ export async function acceptWebsite(websiteId: string) {
     await ensureWebsiteExists(websiteId);
     const website = await getWebsiteNameAndUserId(websiteId);
 
-    await prisma.website.update({
+    const updatedWebsite = await prisma.website.update({
       where: { id: websiteId },
       data: { status: "APPROVED" },
     });
@@ -37,13 +41,16 @@ export async function acceptWebsite(websiteId: string) {
     });
 
     revalidatePath("/", "layout");
-    return { success: "Web stranica uspješno prihvaćena!" };
+    return { data: updatedWebsite, error: null };
   } catch (error: any) {
-    return handleActionError(error, "ACCEPT_WEBSITE_ERROR");
+    return handleError(error, "ACCEPT_WEBSITE_ERROR");
   }
 }
 
-export async function rejectWebsite(websiteId: string, rawData: unknown) {
+export async function rejectWebsite(
+  websiteId: string,
+  rawData: unknown,
+): Promise<DataResponse<Website | null>> {
   const session = await auth();
 
   try {
@@ -53,7 +60,7 @@ export async function rejectWebsite(websiteId: string, rawData: unknown) {
     const website = await getWebsiteNameAndUserId(websiteId);
     const data = await actionValidation(rawData, rejectReasonSchema);
 
-    await prisma.website.update({
+    const updatedWebsite = await prisma.website.update({
       where: { id: websiteId },
       data: { status: "REJECTED", rejectionReason: data.reason },
     });
@@ -63,13 +70,16 @@ export async function rejectWebsite(websiteId: string, rawData: unknown) {
     });
 
     revalidatePath("/", "layout");
-    return { success: "Web stranica uspješno odbijena!" };
+    return { data: updatedWebsite, error: null };
   } catch (error: any) {
-    return handleActionError(error, "REJECT_WEBSITE_ERROR");
+    return handleError(error, "REJECT_WEBSITE_ERROR");
   }
 }
 
-export async function awardWebsite(websiteId: string, rawData: unknown) {
+export async function awardWebsite(
+  websiteId: string,
+  rawData: unknown,
+): Promise<DataResponse<Website | null>> {
   const session = await auth();
 
   try {
@@ -79,7 +89,7 @@ export async function awardWebsite(websiteId: string, rawData: unknown) {
     const website = await getWebsiteNameAndUserId(websiteId);
     const data = await actionValidation(rawData, awardSchema);
 
-    await prisma.website.update({
+    const updatedWebsite = await prisma.website.update({
       where: { id: websiteId },
       data: {
         award: data.award,
@@ -90,30 +100,35 @@ export async function awardWebsite(websiteId: string, rawData: unknown) {
       message: website.name + "  je dobilo priznanje: " + data.award,
     });
     revalidatePath("/", "layout");
-    return { success: "Priznanje je uspješno dodano!" };
+    return { data: updatedWebsite, error: null };
   } catch (error) {
-    return handleActionError(error, "AWARD_WEBSITE_ERROR");
+    return handleError(error, "AWARD_WEBSITE_ERROR");
   }
 }
 
-export async function deleteAward(websiteId: string) {
+export async function deleteAward(
+  websiteId: string,
+): Promise<DataResponse<Website | null>> {
   const session = await auth();
 
   try {
     ensureAuthenticated(session);
     ensureAdmin(session);
-    await prisma.website.update({
+
+    const updatedWebsite = await prisma.website.update({
       where: { id: websiteId },
       data: { award: null },
     });
     revalidatePath("/", "layout");
-    return { success: "Priznanje uspješno obrisana!" };
+    return { data: updatedWebsite, error: null };
   } catch (error) {
-    return handleActionError(error, "DELETE_AWARD_ERROR");
+    return handleError(error, "DELETE_AWARD_ERROR");
   }
 }
 
-export default async function adminDeleteWebsite(websiteId: string) {
+export default async function adminDeleteWebsite(
+  websiteId: string,
+): Promise<DataResponse<Website | null>> {
   const session = await auth();
 
   try {
@@ -122,7 +137,7 @@ export default async function adminDeleteWebsite(websiteId: string) {
     await ensureAdmin(session);
     const website = await getWebsiteNameAndUserId(websiteId);
 
-    await prisma.website.delete({
+    const deletedWebsite = await prisma.website.delete({
       where: { id: websiteId },
     });
 
@@ -131,8 +146,8 @@ export default async function adminDeleteWebsite(websiteId: string) {
       message: website.name + " je izbrisana!",
     });
     revalidatePath("/", "layout");
-    return { success: "Web stranica uspješno obrisana!" };
+    return { data: deletedWebsite, error: null };
   } catch (error) {
-    return handleActionError(error, "DELETE_WEBSITE_ERROR");
+    return handleError(error, "DELETE_WEBSITE_ERROR");
   }
 }

@@ -7,7 +7,6 @@ import { LayersPlus } from "lucide-react";
 import { Button } from "@ui/button";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
   SheetFooter,
@@ -30,12 +29,12 @@ export function AddWebsiteSheet({ className }: { className?: string }) {
             <span className="hidden md:inline-block"> Dodaj web stranicu</span>
           </Button>
         </SheetTrigger>
-        <SheetContent>
+        <SheetContent className="w-[90vw] md:max-w-lg">
           <SheetHeader>
             <SheetTitle>Dodaj web stranicu</SheetTitle>
             <SheetDescription>Ispunite sva polja u nastavku</SheetDescription>
           </SheetHeader>
-          <div className="no-scrollbar overflow-y-auto px-4">
+          <div className="overflow-y-auto px-4">
             <AddWebsiteForm onLoadingChange={(val) => setLoading(val)} />
           </div>
           <SheetFooter>

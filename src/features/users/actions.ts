@@ -3,22 +3,23 @@
 import { revalidatePath } from "next/cache";
 
 import { auth, signOut } from "@/auth";
-import nodemailer from "nodemailer";
+import { User } from "@prisma/client";
 
 import {
   actionValidation,
   ensureAuthenticated,
   ensureUserNameDoesNotExist,
   getUserName,
-  handleActionError,
   handleError,
 } from "@/lib/auth-utils";
 import { prisma } from "@/lib/prisma";
+import { DataResponse } from "@/types/actions";
 
-import { avatarSchema, profileContactSchema, profileSchema } from "./schema";
-import { getEmailTemplate } from "./utils";
+import { avatarSchema, profileSchema } from "./schema";
 
-export const updateProfile = async (rawData: unknown) => {
+export const updateProfile = async (
+  rawData: unknown,
+): Promise<DataResponse<User | null>> => {
   const session = await auth();
 
   try {
@@ -46,20 +47,22 @@ export const updateProfile = async (rawData: unknown) => {
   }
 };
 
-export async function updateAvatar(rawData: unknown) {
+export async function updateAvatar(
+  rawData: unknown,
+): Promise<DataResponse<User | null>> {
   const session = await auth();
 
   try {
     ensureAuthenticated(session);
     const data = await actionValidation(rawData, avatarSchema);
-    await prisma.user.update({
+    const user = await prisma.user.update({
       where: { id: session.user.id },
       data: { image: data.image },
     });
     revalidatePath("/", "layout");
-    return { success: "Slika uspješno ažurirana!" };
+    return { data: user, error: null };
   } catch (error) {
-    return handleActionError(error, "UPDATE_AVATAR_ERROR");
+    return handleError(error, "UPDATE_AVATAR_ERROR");
   }
 }
 
@@ -69,38 +72,7 @@ export async function deleteAuthUser() {
     ensureAuthenticated(session);
     await prisma.user.delete({ where: { id: session.user.id } });
   } catch (error) {
-    return handleActionError(error, "DELETE_USER_ERROR");
+    return handleError(error, "DELETE_USER_ERROR");
   }
   await signOut({ redirectTo: "/" });
-}
-
-export async function sendMailToProfile(rawData: unknown) {
-  const session = await auth();
-  try {
-    ensureAuthenticated(session);
-    const data = await actionValidation(rawData, profileContactSchema);
-
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    const mailOptions = {
-      from: data.fromEmail,
-      to: data.toEmail,
-      subject: `Nova poruka od ${data.name}`,
-      html: getEmailTemplate({
-        name: data.name,
-        fromEmail: data.fromEmail,
-        message: data.message,
-      }),
-    };
-    await transporter.sendMail(mailOptions);
-    return { success: "Email poslan uspješno!" };
-  } catch (error) {
-    return handleActionError(error, "SEND_EMAIL_ERROR");
-  }
 }

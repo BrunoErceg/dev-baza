@@ -50,7 +50,7 @@ export async function getNewChatCandidates(
         NOT: {
           id: currentUserId,
         },
-        // 2. Izbaci korisnike s kojima već imam razgovor
+
         conversations: {
           none: {
             conversation: {

@@ -1,8 +1,9 @@
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useServerAction } from "@hooks/use-server-action";
 import { cn } from "@lib/utils";
+import { toast } from "sonner";
 
 import { awardWebsite } from "@features/admin/actions";
 import { AwardFormValues, awardSchema } from "@features/admin/schemas";
@@ -20,11 +21,20 @@ export function AddAwardForm({ websiteId }: { websiteId: string }) {
     },
   });
 
-  const { isPending, action } = useServerAction(awardWebsite);
+  const [isPending, startTransition] = useTransition();
 
   async function onSubmit(data: AwardFormValues) {
-    action(websiteId, data);
+    startTransition(async () => {
+      const { error } = await awardWebsite(websiteId, data);
+
+      if (error) {
+        toast.error(error);
+      } else {
+        toast.success("Uspješno ste izbrisali priznanje!");
+      }
+    });
   }
+
   return (
     <form
       id="form-award-website"
@@ -37,7 +47,7 @@ export function AddAwardForm({ websiteId }: { websiteId: string }) {
         <Field data-invalid={!!form.formState.errors.award}>
           <FieldLabel htmlFor="award">Opis Priznanja</FieldLabel>
           <Input
-            {...form.register("award")} // Ovo mijenja cijeli Controller blok
+            {...form.register("award")}
             id="award"
             placeholder="Unesite priznanje..."
             autoComplete="off"

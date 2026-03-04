@@ -21,7 +21,7 @@ export function useNotifications({
   const [unreadCount, setUnreadCount] = useState(initialUnreadCount);
 
   useEffect(() => {
-    const channel = pusherClient.subscribe(`user-${userId}`);
+    const channel = pusherClient.subscribe(`user-notifications-${userId}`);
     channel.bind("new-notification", (newNotif: Notification) => {
       toast("Nova obavijest", { description: newNotif.message });
       setNotifications((prev) => [{ ...newNotif }, ...prev]);

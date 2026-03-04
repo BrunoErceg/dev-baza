@@ -35,6 +35,7 @@ export async function getConversations() {
 
     return { data: formattedConvs || [], error: null };
   } catch (error) {
+    console.log("GET_CONVERSATIONS_ERROR:", error);
     return { data: [], error: "Greška pri hvatanju podataka" };
   }
 }
@@ -63,6 +64,7 @@ export async function getConversation(id: string) {
 
     return { data: conversation, error: null };
   } catch (error) {
+    console.log("GET_CONVERSATION_ERROR:", error);
     return { data: null, error: "Greška pri hvatanju podataka" };
   }
 }
@@ -77,6 +79,7 @@ export async function getConversationParticipants(
 
     return { data: participants || [], error: null };
   } catch (error) {
+    console.log("GET_CONVERSATION_PARTICIPANTS_ERROR:", error);
     return { data: [], error: "Greška pri hvatanju podataka" };
   }
 }
@@ -92,6 +95,7 @@ export async function getConversationMessages(id: string) {
     });
     return { data: messages, error: null };
   } catch (error) {
+    console.log("GET_CONVERSATION_MESSAGES_ERROR:", error);
     return { data: [], error: "Greska pri hvatanju podataka" };
   }
 }

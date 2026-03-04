@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 import { auth } from "@/auth";
+import { Like, Website } from "@prisma/client";
 
 import { createNotification } from "@features/notifications/actions";
 import { websiteSchema } from "@features/websites/schemas";
@@ -15,20 +16,23 @@ import {
   ensureWebsiteExists,
   ensureWebsiteOwner,
   getWebsiteNameAndUserId,
-  handleActionError,
+  handleError,
 } from "@/lib/auth-utils";
 import { prisma } from "@/lib/prisma";
+import { DataResponse } from "@/types/actions";
 
 import { GridConfig } from "./types";
 
-export async function createWebsite(rawData: unknown) {
+export async function createWebsite(
+  rawData: unknown,
+): Promise<DataResponse<Website | null>> {
   const session = await auth();
 
   try {
     ensureAuthenticated(session);
     const data = await actionValidation(rawData, websiteSchema);
 
-    await prisma.website.create({
+    const website = await prisma.website.create({
       data: {
         userId: session.user.id,
         name: data.name,
@@ -45,15 +49,15 @@ export async function createWebsite(rawData: unknown) {
       message: `${data.name} čeka na odobrenje!`,
     });
     revalidatePath("/", "layout");
-    return {
-      success: "Web stranica je uspješno dodana!",
-    };
+    return { data: website, error: null };
   } catch (error) {
-    return handleActionError(error, "CREATE_WEBSITE_ERROR");
+    return handleError(error, "CREATE_WEBSITE_ERROR");
   }
 }
 
-export async function deleteWebsite(websiteId: string) {
+export async function deleteWebsite(
+  websiteId: string,
+): Promise<DataResponse<Website | null>> {
   const session = await auth();
 
   try {
@@ -62,7 +66,7 @@ export async function deleteWebsite(websiteId: string) {
     const website = await getWebsiteNameAndUserId(websiteId);
     await ensureWebsiteOwner(websiteId, session.user.id);
 
-    await prisma.website.delete({
+    const result = await prisma.website.delete({
       where: { id: websiteId },
     });
 
@@ -71,10 +75,9 @@ export async function deleteWebsite(websiteId: string) {
       message: website.name + " je izbrisana!",
     });
     revalidatePath("/", "layout");
-
-    return { success: "Web stranica uspješno obrisana!" };
+    return { data: result, error: null };
   } catch (error) {
-    return handleActionError(error, "DELETE_WEBSITE_ERROR");
+    return handleError(error, "DELETE_WEBSITE_ERROR");
   }
 }
 
@@ -89,23 +92,27 @@ export async function addView(websiteId: string) {
   }
 }
 
-export async function deleteLike(websiteId: string) {
+export async function deleteLike(
+  websiteId: string,
+): Promise<DataResponse<number | null>> {
   const session = await auth();
 
   try {
     ensureAuthenticated(session);
     await ensureLikeExists(websiteId, session.user.id);
-    await prisma.like.deleteMany({
+    const result = await prisma.like.deleteMany({
       where: { userId: session.user.id, websiteId: websiteId },
     });
     revalidatePath("/", "layout");
-    return { success: "Lajk uspješno obrisan!" };
+    return { data: result.count, error: null };
   } catch (error: any) {
-    return handleActionError(error, "DELETE_LIKE_ERROR");
+    return handleError(error, "DELETE_LIKE_ERROR");
   }
 }
 
-export async function createLike(websiteId: string) {
+export async function createLike(
+  websiteId: string,
+): Promise<DataResponse<Like | null>> {
   const session = await auth();
 
   try {
@@ -113,7 +120,7 @@ export async function createLike(websiteId: string) {
     await ensureLikeDoesNotExist(websiteId, session.user.id);
     const website = await getWebsiteNameAndUserId(websiteId);
 
-    await prisma.like.create({
+    const result = await prisma.like.create({
       data: { websiteId: websiteId, userId: session.user.id },
     });
 
@@ -125,9 +132,9 @@ export async function createLike(websiteId: string) {
     }
 
     revalidatePath("/", "layout");
-    return { success: "Lajk uspješno dodan!" };
+    return { data: result, error: null };
   } catch (error: any) {
-    return handleActionError(error, "CREATE_LIKE_ERROR");
+    return handleError(error, "CREATE_LIKE_ERROR");
   }
 }
 

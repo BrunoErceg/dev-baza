@@ -1,11 +1,5 @@
 import { prisma } from "@lib/prisma";
-import {
-  Category,
-  ColorStyle,
-  PrimaryColor,
-  Style,
-  Technology,
-} from "@prisma/client";
+import { Category, ColorStyle, Style, Technology } from "@prisma/client";
 
 import { DataResponse } from "@/types/actions";
 

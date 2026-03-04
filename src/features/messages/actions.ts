@@ -5,10 +5,11 @@ import {
   actionValidation,
   ensureAuthenticated,
   ensureConversationParticipant,
+  handleError,
 } from "@lib/auth-utils";
 import { prisma } from "@lib/prisma";
 import { pusherServer } from "@lib/pusher";
-import { Message } from "@prisma/client";
+import { Conversation, Message } from "@prisma/client";
 
 import { DataResponse } from "@/types/actions";
 
@@ -61,8 +62,7 @@ export async function createConversation(
 
     return { data: formattedConv, error: null };
   } catch (error) {
-    console.log("CREATE_CONVERSATION_ERROR:", error);
-    return { data: null, error: "Greška pri kreiranju razgovora." };
+    return handleError(error, "CREATE_CONVERSATION_ERROR");
   }
 }
 
@@ -70,7 +70,7 @@ export async function deleteConversation(
   conversationId: string,
   userId: string,
   otherUserId: string,
-) {
+): Promise<DataResponse<Conversation | null>> {
   const session = await auth();
   try {
     ensureAuthenticated(session);
@@ -92,8 +92,7 @@ export async function deleteConversation(
 
     return { data: result, error: null };
   } catch (error) {
-    console.log("DELETE_CONVERSATION_ERROR:", error);
-    return { data: null, error: "Greška pri brisanju razgovora." };
+    return handleError(error, "DELETE_CONVERSATION_ERROR");
   }
 }
 
@@ -147,15 +146,14 @@ export async function sendMessage(
 
     return { data: newMessage, error: null };
   } catch (error) {
-    console.log("SEND_MESSAGE_ERROR:", error);
-    return { data: null, error: "Greška pri slanju poruke." };
+    return handleError(error, "SEND_MESSAGE_ERROR");
   }
 }
 
 export async function setMessagesAsRead(
   conversationId: string,
   userId: string,
-) {
+): Promise<DataResponse<number | null>> {
   const session = await auth();
   try {
     ensureAuthenticated(session);
@@ -169,12 +167,10 @@ export async function setMessagesAsRead(
 
       data: { isRead: true },
     });
-    console.log("SET_MESSAGES_AS_READ_RESULT:", result.count);
     await notifyConversationIsRead(userId, conversationId, result.count);
 
     return { data: result.count, error: null };
   } catch (error) {
-    console.log("SET_MESSAGES_AS_READ_ERROR:", error);
-    return { data: null, error: "Greška pri postavljanju obavijesti." };
+    return handleError(error, "SET_MESSAGES_AS_READ_ERROR");
   }
 }
