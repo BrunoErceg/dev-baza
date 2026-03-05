@@ -13,7 +13,7 @@ import {
 import { UserNotifications } from "@features/notifications/components/user-notifications";
 import { getUserNotifications } from "@features/notifications/data";
 import { UserNavDropdown } from "@features/users/components/user-nav-dropdown";
-import { AddWebsiteSheet } from "@features/websites/components/add-website-sheet/add-website-sheet";
+import { AddWebsite } from "@features/websites/components/add-website/add-website";
 
 import { Button } from "@ui/button";
 
@@ -46,7 +46,7 @@ export async function Navbar() {
       <div className="flex items-center gap-6">
         {user ? (
           <>
-            <AddWebsiteSheet className="hidden md:block" />
+            <AddWebsite className="hidden md:block" />
 
             {user && (
               <MessagesNotification

@@ -8,7 +8,7 @@ import { EmptyState } from "@ui/empty-state";
 import { SectionCard } from "@ui/section-card";
 import { Skeleton } from "@ui/skeleton";
 
-import { AddWebsiteSheet } from "../add-website-sheet/add-website-sheet";
+import { AddWebsite } from "../add-website/add-website";
 import { UserWebsiteTable } from "./user-websites-table";
 
 export function UserWebsitesOverview() {
@@ -28,7 +28,7 @@ async function WebsitesOverviewContent() {
       <SectionCard
         title="Vaše web stranice"
         description="Upravljajte svojim projektima."
-        cta={<AddWebsiteSheet />}
+        cta={<AddWebsite />}
       >
         {isEmpty ? (
           <EmptyState
