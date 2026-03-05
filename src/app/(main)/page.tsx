@@ -3,8 +3,6 @@ import {
   WebsiteGridData,
   WebsiteGridWrapper,
 } from "@features/websites/components/website-list/website-grid-data";
-import { GridToggle } from "@features/websites/components/website-list/website-list-navigation/grid-toggle";
-import { OrderBySelect } from "@features/websites/components/website-list/website-list-navigation/select-filters";
 import { WebsiteCategoryList } from "@features/websites/components/website-list/website-list-navigation/website-category-list";
 import { WebsiteListNavigation } from "@features/websites/components/website-list/website-list-navigation/website-list-navigation";
 import { WebsiteListWrapper } from "@features/websites/components/website-list/website-list-wrapper";

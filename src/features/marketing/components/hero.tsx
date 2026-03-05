@@ -33,6 +33,7 @@ export default async function Hero({ className }: { className?: string }) {
         DevBaza je dom za projekte koji podižu ljestvicu digitalnog razvoja u
         Hrvatskoj.
       </P>
+
       <div className="mt-5 grid grid-cols-2 gap-2 md:mt-10 md:grid-cols-4 md:gap-4">
         {highlights.map((highlight) => (
           <Card className="px-0 py-2" key={highlight}>

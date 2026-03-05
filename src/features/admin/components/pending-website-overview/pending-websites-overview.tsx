@@ -1,7 +1,5 @@
 import { Suspense } from "react";
 
-import { auth } from "@/auth";
-
 import { EmptyState } from "@ui/empty-state";
 import { SectionCard } from "@ui/section-card";
 import { Skeleton } from "@ui/skeleton";

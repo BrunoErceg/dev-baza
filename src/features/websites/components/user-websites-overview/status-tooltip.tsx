@@ -18,9 +18,9 @@ export function StatusTooltip({
 
   const displayText = {
     PENDING: `Stranica čeka pregled. Bit će javno vidljiva nakon odobrenja (obično unutar 48h).`,
-    APPROVED: `Razlog: ${rejectReason}`,
-    REJECTED:
+    APPROVED:
       "Provjera uspješna. Vaša web stranica je sada javno vidljiva svim korisnicima.",
+    REJECTED: `Razlog: ${rejectReason}`,
   };
 
   return (

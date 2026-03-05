@@ -32,6 +32,7 @@ export function LoginForm() {
       });
     });
   };
+
   return (
     <form className="w-full space-y-4" onSubmit={handleSubmit(onSubmit)}>
       <FormInput

@@ -12,6 +12,7 @@ export function WebsiteGrid({ websites }: { websites: GridWebsiteData[] }) {
   const { gridConfig } = useWebsites();
   const { data: session } = useSession();
   const isAdmin = (session?.user as any)?.role === "ADMIN";
+
   return (
     <div
       className={cn(
