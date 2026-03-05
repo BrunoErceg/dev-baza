@@ -9,6 +9,7 @@ import { DropdownMenuItem } from "@ui/dropdown-menu";
 
 export function DeleteWebsiteMenuItem({ websiteId }: { websiteId: string }) {
   const [isPending, startTransition] = useTransition();
+
   const onDelete = () => {
     startTransition(async () => {
       const { error } = await deleteWebsite(websiteId);

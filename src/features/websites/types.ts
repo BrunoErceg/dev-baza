@@ -1,5 +1,8 @@
 import { Prisma } from "@prisma/client";
 
+export type Order = "asc" | "desc";
+export type SortBy = "likes" | "views" | "name";
+
 export type GridConfig = "small" | "big";
 
 export type DashboardData = {

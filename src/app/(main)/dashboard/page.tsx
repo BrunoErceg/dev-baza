@@ -6,7 +6,7 @@ import { DashboardHeader } from "@features/dashboard/components/dashboard-header
 import { Container } from "@features/layout/components/container";
 import { ProfileSettingsSection } from "@features/users/components/profile-settings-card/profile-settings-section";
 import { DeleteAccountSection } from "@features/users/components/user-delete-card/delete-account-section";
-import { UserWebsitesOverview } from "@features/websites/components/user-websites-section/user-websites-overview";
+import { UserWebsitesOverview } from "@features/websites/components/user-websites-overview/user-websites-overview";
 
 export const metadata = {
   title: "Dashboard",

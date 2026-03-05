@@ -13,28 +13,26 @@ export function StatusTooltip({
   rejectReason?: string | null;
 }) {
   const Icon = WEBSITE_STATUS_MAP[status].Icon;
+  const label = WEBSITE_STATUS_MAP[status].label;
+  const color = WEBSITE_STATUS_MAP[status].color;
+
+  const displayText = {
+    PENDING: `Stranica čeka pregled. Bit će javno vidljiva nakon odobrenja (obično unutar 48h).`,
+    APPROVED: `Razlog: ${rejectReason}`,
+    REJECTED:
+      "Provjera uspješna. Vaša web stranica je sada javno vidljiva svim korisnicima.",
+  };
+
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Badge variant="outline" className={WEBSITE_STATUS_MAP[status].color}>
+        <Badge variant="outline" className={color}>
           <Icon />
-          {WEBSITE_STATUS_MAP[status].label}{" "}
+          {label}
         </Badge>
       </TooltipTrigger>
       <TooltipContent>
-        {status === "PENDING" ? (
-          <p>
-            Stranica je dodana i čeka pregled. Bit će javno
-            <br /> vidljiva nakon odobrenja (obično unutar 48h).
-          </p>
-        ) : status === "REJECTED" ? (
-          <p>Razlog: {rejectReason}</p>
-        ) : (
-          <p>
-            Provjera uspješna. Vaša web stranica je sada javno vidljiva svim
-            korisnicima.
-          </p>
-        )}
+        <p>{displayText[status]}</p>
       </TooltipContent>
     </Tooltip>
   );

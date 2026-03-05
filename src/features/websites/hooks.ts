@@ -1,9 +1,6 @@
 import { useState } from "react";
 
-import { UserWebsitesTableData } from "./types";
-
-type Order = "asc" | "desc";
-type SortBy = "likes" | "views" | "name";
+import { Order, SortBy, UserWebsitesTableData } from "./types";
 
 export function useOderWebsiteTable(websites: UserWebsitesTableData[]) {
   const [sortBy, setSortBy] = useState<SortBy>("name");
