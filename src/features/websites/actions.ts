@@ -15,6 +15,8 @@ import {
 import { createNotification } from "@features/notifications/actions";
 import { websiteSchema } from "@features/websites/schemas";
 
+import { utDeleteFileAction } from "@actions/uploadthing";
+
 import {
   actionValidation,
   ensureAuthenticated,
@@ -28,6 +30,7 @@ import {
 import { prisma } from "@/lib/prisma";
 import { DataResponse } from "@/types/actions";
 
+import { getWebsite } from "./data";
 import { GridConfig } from "./types";
 
 export async function createWebsite(
@@ -70,17 +73,24 @@ export async function deleteWebsite(
   try {
     ensureAuthenticated(session);
     await ensureWebsiteExists(websiteId);
-    const website = await getWebsiteNameAndUserId(websiteId);
     await ensureWebsiteOwner(websiteId, session.user.id);
+    const { data: website } = await getWebsite(websiteId);
+
+    if (website?.imageUrl) {
+      await utDeleteFileAction(website.imageUrl);
+    }
 
     const result = await prisma.website.delete({
       where: { id: websiteId },
     });
 
-    await createNotification(session.user.id, {
-      type: "NEGATIVE",
-      message: website.name + " je izbrisana!",
-    });
+    if (website) {
+      await createNotification(session.user.id, {
+        type: "NEGATIVE",
+        message: website.name + " je izbrisana!",
+      });
+    }
+
     revalidatePath("/", "layout");
     return { data: result, error: null };
   } catch (error) {

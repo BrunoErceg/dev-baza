@@ -55,6 +55,7 @@ export async function updateAvatar(
   try {
     ensureAuthenticated(session);
     const data = await actionValidation(rawData, avatarSchema);
+
     const user = await prisma.user.update({
       where: { id: session.user.id },
       data: { image: data.image },

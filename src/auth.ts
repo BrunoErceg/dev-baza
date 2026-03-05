@@ -6,8 +6,6 @@ import Resend from "next-auth/providers/resend";
 
 import { PrismaAdapter } from "@auth/prisma-adapter";
 
-import { createNotification } from "@features/notifications/actions";
-
 import { prisma } from "@/lib/prisma";
 
 // @ts-expect-error - NextAuth v5 beta types are broken
@@ -45,10 +43,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       trigger: string;
       session: any;
     }) {
-      if (trigger === "update") {
+      if (trigger === "update" || session?.username || session?.onboarding) {
         if (session?.username) token.username = session.username;
         if (session?.onboarding !== undefined)
           token.onboarding = session.onboarding;
+      }
+      if (trigger === "update" || session?.image) {
+        token.picture = session?.image;
       }
       if (user) {
         token.username = (user as any).username;
@@ -84,7 +85,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           console.log(`Email: ${identifier}`);
           console.log(`URL: ${url}`);
           console.log("-----------------------\n");
-          return; // Ovo sprječava slanje pravog maila preko Resenda dok si na localhostu
+          return;
         }
       },
     }),

@@ -5,6 +5,9 @@ import { auth } from "@/auth";
 import type { Website } from "@prisma/client";
 
 import { createNotification } from "@features/notifications/actions";
+import { getWebsite } from "@features/websites/data";
+
+import { utDeleteFileAction } from "@actions/uploadthing";
 
 import {
   actionValidation,
@@ -135,16 +138,23 @@ export default async function adminDeleteWebsite(
     ensureAuthenticated(session);
     await ensureWebsiteExists(websiteId);
     await ensureAdmin(session);
-    const website = await getWebsiteNameAndUserId(websiteId);
+
+    const { data: website } = await getWebsite(websiteId);
+
+    if (website?.imageUrl) {
+      await utDeleteFileAction(website.imageUrl);
+    }
 
     const deletedWebsite = await prisma.website.delete({
       where: { id: websiteId },
     });
 
-    await createNotification(session.user.id, {
-      type: "NEGATIVE",
-      message: website.name + " je izbrisana!",
-    });
+    if (website) {
+      await createNotification(session.user.id, {
+        type: "NEGATIVE",
+        message: website.name + " je izbrisana!",
+      });
+    }
     revalidatePath("/", "layout");
     return { data: deletedWebsite, error: null };
   } catch (error) {

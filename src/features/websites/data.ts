@@ -1,5 +1,11 @@
 import { prisma } from "@lib/prisma";
-import { Category, ColorStyle, Style, Technology } from "@prisma/client";
+import {
+  Category,
+  ColorStyle,
+  Style,
+  Technology,
+  Website,
+} from "@prisma/client";
 
 import { DataResponse } from "@/types/actions";
 
@@ -92,6 +98,20 @@ export async function getUserWebsitesTableData(
   } catch (error) {
     console.error("GET_USER_LIKED_WEBSITES_ERROR:", error);
     return { data: [], error: "Greška pri hvatanju podataka." };
+  }
+}
+
+export async function getWebsite(
+  websiteId: string,
+): Promise<DataResponse<Website | null>> {
+  try {
+    const website = await prisma.website.findUnique({
+      where: { id: websiteId },
+    });
+    return { data: website, error: null };
+  } catch (error) {
+    console.error("GET_WEBSITE_ERROR:", error);
+    return { data: null, error: "Greška pri hvatanju podataka." };
   }
 }
 

@@ -20,9 +20,10 @@ import { AddWebsiteForm } from "./add-website-form";
 
 export function AddWebsiteSheet({ className }: { className?: string }) {
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   return (
     <div className={cn(className)}>
-      <Sheet>
+      <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button>
             <LayersPlus />
@@ -34,9 +35,11 @@ export function AddWebsiteSheet({ className }: { className?: string }) {
             <SheetTitle>Dodaj web stranicu</SheetTitle>
             <SheetDescription>Ispunite sva polja u nastavku</SheetDescription>
           </SheetHeader>
-          <div className="overflow-y-auto px-4">
-            <AddWebsiteForm onLoadingChange={(val) => setLoading(val)} />
-          </div>
+
+          <AddWebsiteForm
+            onLoadingChange={(val) => setLoading(val)}
+            onSuccess={() => setOpen(false)}
+          />
           <SheetFooter>
             <div className="flex justify-end">
               <Button
