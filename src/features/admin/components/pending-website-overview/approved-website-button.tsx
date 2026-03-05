@@ -21,7 +21,7 @@ export function ApprovedWebsiteButton({ websiteId }: { websiteId: string }) {
     });
   };
   return (
-    <Button onClick={() => onApprove()} className="w-22">
+    <Button disabled={isPending} onClick={() => onApprove()} className="w-22">
       {isPending ? <Spinner /> : "Odobri"}
     </Button>
   );

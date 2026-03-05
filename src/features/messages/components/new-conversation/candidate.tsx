@@ -7,6 +7,7 @@ import { CirclePlus } from "lucide-react";
 import { createConversation } from "@features/messages/actions";
 import { ProfileAvatar } from "@features/users/components/profile-avatar";
 
+import { Button } from "@ui/button";
 import { Spinner } from "@ui/spinner";
 import { Large } from "@ui/typography";
 
@@ -27,9 +28,13 @@ export function Candidate({ user }: { user: User }) {
     >
       <ProfileAvatar image={user.image} className="size-8" />
       <Large>@{user.username}</Large>
-      <div className="flex flex-1 items-center justify-end">
+      <Button
+        variant="ghost"
+        disabled={isPending}
+        className="flex flex-1 items-center justify-end"
+      >
         {isPending ? <Spinner /> : <CirclePlus />}
-      </div>
+      </Button>
     </li>
   );
 }

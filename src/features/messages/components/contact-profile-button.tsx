@@ -26,6 +26,7 @@ export function ContactProfileButton({ userId }: { userId: string }) {
   return (
     <Button
       size="lg"
+      disabled={isPending}
       className="w-35"
       onClick={() => {
         handelNewConversation();

@@ -62,7 +62,9 @@ export function OnboardingForm() {
         {...register("username")}
       />
 
-      <Button className="w-full">{isPending ? <Spinner /> : "Nastavi"}</Button>
+      <Button disabled={isPending} className="w-full">
+        {isPending ? <Spinner /> : "Nastavi"}
+      </Button>
     </form>
   );
 }

@@ -1,11 +1,13 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { VscHeart } from "react-icons/vsc";
 import { VscHeartFilled } from "react-icons/vsc";
 
 import { Like } from "@prisma/client";
+import { toast } from "sonner";
+import { set } from "zod";
 
 import { createLike, deleteLike } from "@features/websites/actions";
 import { useWebsites } from "@features/websites/websites-context";
@@ -17,9 +19,14 @@ import { WebsiteDialog } from "./website-dialog";
 interface LikeButtonProps {
   websiteId: string;
   likes: Like[];
+  onLike: Dispatch<SetStateAction<number>>;
 }
 
-export function WebsiteLikeButton({ websiteId, likes }: LikeButtonProps) {
+export function WebsiteLikeButton({
+  websiteId,
+  likes,
+  onLike,
+}: LikeButtonProps) {
   const { userId } = useWebsites();
   const router = useRouter();
   const userLiked = likes.some((like) => like.userId === userId);
@@ -28,13 +35,24 @@ export function WebsiteLikeButton({ websiteId, likes }: LikeButtonProps) {
   const toggleLike = async () => {
     if (!userId) return;
     if (isLiked) {
-      await deleteLike(websiteId);
       setIsLiked(false);
+      onLike((prev) => prev - 1);
+      const { error } = await deleteLike(websiteId);
+      if (error) {
+        setIsLiked(true);
+        onLike((prev) => prev + 1);
+        toast.error(error);
+      }
     } else {
-      await createLike(websiteId);
       setIsLiked(true);
+      onLike((prev) => prev + 1);
+      const { error } = await createLike(websiteId);
+      if (error) {
+        setIsLiked(false);
+        onLike((prev) => prev - 1);
+        toast.error(error);
+      }
     }
-    router.refresh();
   };
 
   return (

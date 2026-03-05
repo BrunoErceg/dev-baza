@@ -23,6 +23,7 @@ export function DeleteWebsiteMenuItem({ websiteId }: { websiteId: string }) {
     <DropdownMenuItem
       variant="destructive"
       className="cursor-pointer"
+      disabled={isPending}
       onSelect={() => onDelete()}
     >
       <TrashIcon />

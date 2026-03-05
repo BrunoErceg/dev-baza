@@ -21,10 +21,7 @@ export function DeleteWebsiteAwardItem({ websiteId }: { websiteId: string }) {
     });
   };
   return (
-    <DropdownMenuItem
-      onClick={() => onDelete()}
-      onSelect={(e) => e.preventDefault()}
-    >
+    <DropdownMenuItem disabled={isPending} onSelect={() => onDelete()}>
       <Trophy />
       {isPending ? "Brisanje..." : "Ukloni Priznanje"}
     </DropdownMenuItem>

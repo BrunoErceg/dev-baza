@@ -46,7 +46,7 @@ export function ChatFooter() {
           {...register("message")}
           autoComplete="off"
         />
-        <Button type="submit" className="w-20">
+        <Button disabled={isPending} type="submit" className="w-20">
           {isPending ? <Spinner /> : <Send />}
         </Button>
       </form>

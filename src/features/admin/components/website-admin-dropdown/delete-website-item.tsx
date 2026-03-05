@@ -23,8 +23,8 @@ export function DeleteWebsiteItem({ websiteId }: { websiteId: string }) {
   return (
     <DropdownMenuItem
       variant="destructive"
-      onClick={() => onDelete()}
-      onSelect={(e) => e.preventDefault()}
+      disabled={isPending}
+      onSelect={() => onDelete()}
     >
       <TrashIcon />
       {isPending ? "Brisanje..." : "Izbriši"}
