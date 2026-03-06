@@ -2,14 +2,12 @@ import Link from "next/link";
 import { ReactNode } from "react";
 
 import { auth } from "@/auth";
+import { LockIcon, LockOpen } from "lucide-react";
 
 import { NavMenu } from "@features/layout/components/nav-menu";
 import { NavigationSheet } from "@features/layout/components/navigation-sheet";
 import { MessagesNotification } from "@features/messages/components/messages-notification";
-import {
-  getConversations,
-  getUnreadMessagesCount,
-} from "@features/messages/data";
+import { getUnreadMessagesCount } from "@features/messages/data";
 import { UserNotifications } from "@features/notifications/components/user-notifications";
 import { getUserNotifications } from "@features/notifications/data";
 import { UserNavDropdown } from "@features/users/components/user-nav-dropdown";
@@ -71,8 +69,10 @@ export async function Navbar() {
           </>
         ) : (
           <>
-            <Button>
-              <Link href="/prijava">Prijavi se</Link>
+            <Button size="lg">
+              <Link href="/prijava" className="flex items-center gap-2">
+                <LockOpen /> Prijavi se
+              </Link>
             </Button>
           </>
         )}

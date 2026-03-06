@@ -5,6 +5,7 @@ import Google from "next-auth/providers/google";
 import Resend from "next-auth/providers/resend";
 
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import { DEFAULT_PROFILE_IMG } from "@lib/constants";
 
 import { prisma } from "@/lib/prisma";
 
@@ -22,8 +23,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         await prisma.user.update({
           where: { id: user.id },
           data: {
-            image:
-              "https://jrgxq33rwp.ufs.sh/f/BNaNzrQS3KNeOIpQ9sfX6YjFCOQ0PUb84RtzAZJkh3B95pvN",
+            image: DEFAULT_PROFILE_IMG,
           },
         });
       } catch (error) {
@@ -56,9 +56,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.role = user.role;
         token.id = user.id;
         token.onboarding = user.onboarding;
-        token.picture =
-          "https://jrgxq33rwp.ufs.sh/f/BNaNzrQS3KNeOIpQ9sfX6YjFCOQ0PUb84RtzAZJkh3B95pvN";
+        token.picture = DEFAULT_PROFILE_IMG;
         return token;
+      }
+
+      if (!token.picture || token.picture === "") {
+        token.picture = DEFAULT_PROFILE_IMG;
       }
       return token;
     },
