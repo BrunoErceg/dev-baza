@@ -71,7 +71,14 @@ export async function deleteAuthUser() {
   const session = await auth();
   try {
     ensureAuthenticated(session);
-    await prisma.user.delete({ where: { id: session.user.id } });
+
+    await prisma.$transaction(async (tx) => {
+      await tx.conversation.deleteMany({
+        where: { participants: { some: { userId: session.user.id } } },
+      });
+
+      await tx.user.delete({ where: { id: session.user.id } });
+    });
   } catch (error) {
     return handleError(error, "DELETE_USER_ERROR");
   }

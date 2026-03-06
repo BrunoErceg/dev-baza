@@ -9,10 +9,8 @@ export async function notifyNewMessage(
   const participantIds = participants.map((p) => `user-${p.userId}`);
 
   return Promise.all([
-    // 1. Kanali za oba korisnika (update liste razgovora)
     pusherServer.trigger(participantIds, "update-conversation", newMessage),
 
-    // 2. Kanal samog chata (nova poruka)
     pusherServer.trigger(
       `conversation-${newMessage.conversationId}`,
       "new-message",
@@ -20,8 +18,6 @@ export async function notifyNewMessage(
     ),
 
     pusherServer.trigger(`user-${receiver.userId}`, "new-message", newMessage),
-
-    // 3. Brojač za primatelja
 
     pusherServer.trigger(
       `user-messages-notification-${receiver.userId}`,

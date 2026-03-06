@@ -99,15 +99,18 @@ export async function deleteConversation(
 export async function sendMessage(
   conversationId: string,
   rawData: unknown,
+  userId?: string,
 ): Promise<DataResponse<Message | null>> {
   const session = await auth();
+
+  let currentUser = userId ? userId : session.user.id;
 
   try {
     ensureAuthenticated(session);
 
     const [validatedData] = await Promise.all([
       actionValidation(rawData, messageSchema),
-      ensureConversationParticipant(conversationId, session.user.id),
+      ensureConversationParticipant(conversationId, currentUser),
     ]);
 
     const newMessage = await prisma.$transaction(async (tx) => {
@@ -115,7 +118,7 @@ export async function sendMessage(
         tx.message.create({
           data: {
             conversationId: conversationId,
-            senderId: session.user.id,
+            senderId: currentUser,
             content: validatedData.message,
           },
           include: {
