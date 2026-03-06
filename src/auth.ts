@@ -56,7 +56,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.role = user.role;
         token.id = user.id;
         token.onboarding = user.onboarding;
-        token.picture = DEFAULT_PROFILE_IMG;
         return token;
       }
 
