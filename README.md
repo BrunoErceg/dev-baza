@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏆 Dev-baza | The Premier Showcase for Croatian Digital Talent
 
-## Getting Started
+dev baza is the ultimate showcase platform for the Croatian creative community. Inspired by the excellence of Awwwards and Dribbble, it provides a high-end space where the best local web designers and developers display their work, connect, and push the boundaries of the domestic digital scene.
 
-First, run the development server:
+## 🎨 Creative & Technical Philosophy
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+dev baza is built on a Feature-Based Folder Structure, mirroring the modularity of high-end design systems. This architecture ensures that as the community grows, the platform remains fast, scalable, and easy to maintain.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Modular Features:** Every core experience—from User Portfolios to the Messaging System—is encapsulated in its own feature directory.
+- **Performance-First UI:** Optimized for showcasing high-resolution assets with seamless Next.js 15 Server Components.
+- **Designer-Centric DX:** Clean code for a clean UI.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+&nbsp;
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔥 Key Platform Features
 
-## Learn More
+### 🔐 Elite Authentication (NextAuth v5)
 
-To learn more about Next.js, take a look at the following resources:
+- **One-Click Entry:** Fast Google/GitHub login so creators can start sharing instantly.
+- **Identity Sync:** Smart JWT callbacks that fetch real-time profile data, ensuring a consistent identity across the showcase.
+- **Onboarding Flow: DX:** A dedicated process to ensure every creator has a complete profile before going live.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+&nbsp;
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 💬 Community & Real-time Interaction
 
-## Deploy on Vercel
+- **Direct Networking:** A real-time messaging engine for collaborations and feedback.
+- **Automated Curated Welcome:** Every new creator is greeted by an automated "Admin Welcome" system.
+- **Safe Data Lifecycle:** Robust Prisma Transactions that handle user data with care—when a creator leaves, their data is wiped cleanly with zero orphans.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+&nbsp;
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 🖼️ Showcase & Discovery
+
+- **Curated Fallbacks:** Advanced logic for profile images, ensuring every creator looks professional with smart default avatars.
+- **Relational Database Integrity:** Powered by PostgreSQL, every interaction and design link is strictly validated.
+
+## 🛠️ The Tech Behind the Talent
+
+- **Framework:** Next.js 15 (App Router)
+- **Database/ORM:** PostgreSQL & Prisma
+- **Authentication:** NextAuth.js v5
+- **Styling:** Tailwind CSS & Lucide Icons
+
+Developed by Bruno Erceg
